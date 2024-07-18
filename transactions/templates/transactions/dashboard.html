@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<script type="module">
+    let data = JSON.parse('{{cummulative_sum}}')
+    console.log(data)
+
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    let graph_container = document.getElementById("sum-graph")
+    // Declare the chart dimensions and margins.
+    const width = graph_container.clientWidth;
+    const height = graph_container.clientHeight;
+
+    
+    const marginTop = 20;
+    const marginRight = 20;
+    const marginBottom = 30;
+    const marginLeft = 40;
+    
+    // Declare the x (horizontal position) scale.
+    const x = d3.scaleUtc()
+        .domain([new Date("2023-01-01"), new Date("2024-01-01")])
+        .range([marginLeft, width - marginRight]);
+    
+    // Declare the y (vertical position) scale.
+    const y = d3.scaleLinear()
+        .domain([0, 100])
+        .range([height - marginBottom, marginTop]);
+    
+    // Create the SVG container.
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height);
+    
+    // Add the x-axis.
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x));
+    
+    // Add the y-axis.
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y));
+    
+    // Append the SVG element.
+    document.getElementById("sum-graph").append(svg.node());
+    
+</script>
+
+{% load static%}
+<link rel="stylesheet" href="{% static 'transactions/variables.css' %}">
+
+<link rel="stylesheet" href="{% static 'transactions/dashboard.css' %}">
+<main>
+    <div class="top-container">
+        <div class="add-container">
+            <form id="add-trans-form" method="post">
+                {%csrf_token%}
+                {{form}}
+        
+                <button type="submit"> Add Transaction</button>
+            </form>
+        </div>
+
+        <div class="graph-container" id="sum-graph">
+
+        </div>
+        
+    </div>
+    
+    <div class="total-container">    
+        <div class="total-box {{sum_state}}">
+            <p><b>Total: {{sum}} {{sum_currency}}</b></p>
+        </div>
+    </div>
+    {% for trans in transactions %}
+    <div class="transaction {{trans.direction}}">
+        <div class="transaction-text">
+            <p><b>{{trans.name}}</b></p>
+            <p class="transaction-date">{{trans.date}}</p>
+        </div>
+        <div class="transaction-amt">
+            <p>{{trans.amount}}</p>
+            <p>{{trans.currency}}</p>
+        </div>
+
+    </div>
+
+    {%endfor%}
+    <div class="total-container">    
+        <div class="total-box {{sum_state}}">
+            <p><b>Total: {{sum}} {{sum_currency}}</b></p>
+        </div>
+    </div>
+</main>

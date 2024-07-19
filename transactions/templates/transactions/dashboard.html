@@ -46,10 +46,28 @@
     
 </script>
 
+<script>
+    function toggleDropdown(e) {
+        console.log(e)
+        let dropdown = e.target.parentElement.parentElement.nextElementSibling
+        
+        if (dropdown.classList.contains("dropdown-open")) {
+            dropdown.classList.remove("dropdown-open")
+            dropdown.classList.add("dropdown-closed")
+        } else {
+            dropdown.classList.remove("dropdown-closed")
+            dropdown.classList.add("dropdown-open")
+        }
+    }
+</script>
+
 {% load static%}
 <link rel="stylesheet" href="{% static 'transactions/variables.css' %}">
 
 <link rel="stylesheet" href="{% static 'transactions/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'transactions/dropdown-menu.css' %}">
+
+
 <main>
     <div class="top-container">
         <div class="add-container">
@@ -73,17 +91,30 @@
         </div>
     </div>
     {% for trans in transactions %}
-    <div class="transaction {{trans.direction}}">
-        <div class="transaction-text">
-            <p><b>{{trans.name}}</b></p>
-            <p class="transaction-date">{{trans.date}}</p>
+    <div class="dropdown-menu-container">
+        <div class="transaction {{trans.direction}} ">
+            <div class="transaction-text">
+                <p><b>{{trans.name}}</b></p>
+                <p class="transaction-date">{{trans.date}}</p>
+            </div>
+            <div class="transaction-amt">
+                <p>{{trans.amount}}</p>
+                <p>{{trans.currency}}</p>
+                <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
+            </div>
+            
         </div>
-        <div class="transaction-amt">
-            <p>{{trans.amount}}</p>
-            <p>{{trans.currency}}</p>
+        <div class="dropdown-content dropdown-closed">
+            {{trans.description}}
+            {% if trans.sender %}
+            <p>Sender: {{trans.sender}}</p>
+            {% endif %}
+            {% if trans.receiver %}
+            <p>Receiver: {{trans.receiver}}</p>
+            {% endif %}
         </div>
-
     </div>
+    
 
     {%endfor%}
     <div class="total-container">    

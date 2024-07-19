@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 
-from .models import Transaction
+from .models import Recipient, Tag, Transaction, TransactionTag
 from .forms import NewTransactionForm
 
 # Create your views here.
@@ -18,6 +18,7 @@ def dashboard(request):
         return HttpResponseRedirect("/")
 
 def dashboard_handle_post(request):
+    # Grab all the data from the insert form
     name = request.POST.get("name", "")
     description = request.POST.get("description", "")
 
@@ -29,7 +30,25 @@ def dashboard_handle_post(request):
 
     date = parser.parse(day + " " + time)
 
-    Transaction.objects.create(name=name, description=description, amount=amount, date=date, currency=currency)
+    receiver = request.POST.get("receiver", "")
+    sender = request.POST.get("sender", "")
+
+    # Since these are still seperate checks, if it was give, query for it
+    if receiver:
+        receiver = Recipient.objects.get_or_create(name=receiver)[0]
+    else:
+        receiver = None
+
+    if sender:
+        sender = Recipient.objects.get_or_create(name=sender)[0]
+    else:
+        sender = None
+
+    tag = request.POST.get("tag", "")
+
+    # Create the transaction
+    transaction = Transaction.objects.create(name=name, description=description, amount=amount, date=date, currency=currency, receiver=receiver, sender=sender)
+    TransactionTag.objects.create(transaction=transaction, tag=Tag.objects.get_or_create(tag=tag)[0])
 
     return HttpResponseRedirect("/")
 
@@ -40,6 +59,7 @@ def dashboard_handle_get(request):
         ]
     }
 
+
     sum = 0
     cummulative_sum = [0]
     for trans in db_transactions:
@@ -49,7 +69,9 @@ def dashboard_handle_get(request):
             'description': trans.description,
             'currency': trans.currency,
             'date': trans.date,
-            'direction': "positive" if trans.amount >= 0 else "negative"
+            'direction': "positive" if trans.amount >= 0 else "negative",
+            'sender': trans.sender.name if trans.sender else None,
+            'receiver': trans.receiver.name if trans.receiver else None
         })
         amount_tuple = trans.amount.as_integer_ratio()
 
@@ -58,7 +80,10 @@ def dashboard_handle_get(request):
 
 
     context['sum'] = sum
-    context['sum_currency'] = db_transactions[0].currency
+    if len(db_transactions) > 0:
+        context['sum_currency'] = db_transactions[0].currency
+    else:
+        context['sum_currency'] = "EUR"
     context['sum_state'] = "positive" if sum >= 0 else "negative"
     context['cummulative_sum'] = json.dumps(cummulative_sum)
 

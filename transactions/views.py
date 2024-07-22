@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 
-from .models import Recipient, Tag, Transaction, TransactionTag
+from .models import Recipient, Tag, Transaction, TransactionToTag
 from .forms import NewTransactionForm
 
 # Create your views here.
@@ -48,7 +48,7 @@ def dashboard_handle_post(request):
 
     # Create the transaction
     transaction = Transaction.objects.create(name=name, description=description, amount=amount, date=date, currency=currency, receiver=receiver, sender=sender)
-    TransactionTag.objects.create(transaction=transaction, tag=Tag.objects.get_or_create(tag=tag)[0])
+    TransactionToTag.objects.create(transaction=transaction, tag=Tag.objects.get_or_create(tag=tag)[0])
 
     return HttpResponseRedirect("/")
 
@@ -63,6 +63,10 @@ def dashboard_handle_get(request):
     sum = 0
     cummulative_sum = [0]
     for trans in db_transactions:
+        try:
+            tag = TransactionToTag.objects.get(transaction = trans).tag
+        except:
+            tag = None
         context['transactions'].append({
             'name': trans.name,
             'amount': trans.amount,
@@ -71,7 +75,9 @@ def dashboard_handle_get(request):
             'date': trans.date,
             'direction': "positive" if trans.amount >= 0 else "negative",
             'sender': trans.sender.name if trans.sender else None,
-            'receiver': trans.receiver.name if trans.receiver else None
+            'receiver': trans.receiver.name if trans.receiver else None,
+            'tag': tag.tag if tag else None,
+            'tag_color': tag.colour if tag else None
         })
         amount_tuple = trans.amount.as_integer_ratio()
 

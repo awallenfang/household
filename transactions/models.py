@@ -32,7 +32,10 @@ class Tag(models.Model):
     def __str__(self):
         return f'{self.tag}'
     
-class TransactionTag(models.Model):
+def get_all_tags():
+    return {tag.tag:tag.tag for tag in Tag.objects.all()}
+
+class TransactionToTag(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     

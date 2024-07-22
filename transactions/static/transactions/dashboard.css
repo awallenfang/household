@@ -88,3 +88,8 @@ main {
     height: 1.5rem;
 }
 
+.transaction-tag {
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+}
+

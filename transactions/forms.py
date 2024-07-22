@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from .models import get_currencies, Tag
+from .models import get_currencies, Tag, get_all_tags
 
 
 class NewTransactionForm(forms.Form):
@@ -12,4 +12,4 @@ class NewTransactionForm(forms.Form):
     currency = forms.ChoiceField(choices=get_currencies, required=True)
     sender = forms.CharField(max_length=100, required=False)
     receiver = forms.CharField(max_length=100, required=False)
-    tag = forms.ChoiceField(choices={tag.tag:tag.tag for tag in Tag.objects.all()}, required=False)
+    tag = forms.ChoiceField(choices=get_all_tags, required=False)

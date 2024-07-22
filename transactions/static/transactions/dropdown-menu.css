@@ -7,15 +7,23 @@
 
 .dropdown-content {
     transition: height 0.5s;
+    width: 100%;
 }
 
 .dropdown-open {
     height: 10rem;
+    background-color: var(--light-bg);
+    z-index: -1;
+    padding-top: 1rem;
     width: 100%;
+    border-radius: 0.25rem;
 }
 
 .dropdown-closed {
-    height: 0;
+    height: 0rem;
     overflow: hidden;
+    background-color: var(--light-bg);
+
+
     width: 100%;
 }

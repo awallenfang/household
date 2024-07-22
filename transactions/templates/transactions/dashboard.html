@@ -5,7 +5,20 @@
 
 <link rel="stylesheet" href="{% static 'transactions/dashboard.css' %}">
 <link rel="stylesheet" href="{% static 'transactions/dropdown-menu.css' %}">
+<script>
+    function toggleDropdown(e) {
+        console.log(e)
+        let dropdown = e.target.parentElement.parentElement.nextElementSibling
 
+        if (dropdown.classList.contains("dropdown-open")) {
+            dropdown.classList.remove("dropdown-open")
+            dropdown.classList.add("dropdown-closed")
+        } else {
+            dropdown.classList.remove("dropdown-closed")
+            dropdown.classList.add("dropdown-open")
+        }
+    }
+</script>
 
 <main>
     <div class="top-container">
@@ -17,8 +30,6 @@
                 <button type="submit"> Add Transaction</button>
             </form>
         </div>
-
-        <!-- <div class="graph-container" id="sum-graph"> -->
 
         </div>
         
@@ -35,7 +46,11 @@
             <div class="transaction-text">
                 <p><b>{{trans.name}}</b></p>
                 <p class="transaction-date">{{trans.date}}</p>
+                {% if trans.tag%}
+                    <div class="transaction-tag" style="background-color: {{trans.tag_color}}">{{trans.tag}}</div>
+                {%endif%}
             </div>
+            
             <div class="transaction-amt">
                 <p>{{trans.amount}}</p>
                 <p>{{trans.currency}}</p>

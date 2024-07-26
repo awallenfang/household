@@ -1,6 +1,50 @@
+* {
+    --light: rgba(244,250,255,1);
+    --light-bg: #DEE3E1;
+    --mid-bg: #B7C5BB;
+    --dark-bg: #303935;
+    --text: #191710;
+    --strong-highlight: rgba(53,255,146,1);
+    --light-highlight: #90FFD1;
+    --error-bg: #ff3c3c;
+    --negative-bg: #ebbbbb;
+    --positive-bg: #cdebbb;
+    margin: 0;
+}
+
 header {
+    margin: 0;
     display: flex;
     align-items: center;
     flex-direction: row;
     gap: 1rem;
+    height: 4rem;
+    background-color: var(--mid-bg);
+    padding: 1rem;
+}
+
+.button {
+    background-color: var(--light-highlight);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.button:link {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.button:visited {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.button:hover {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.button:active {
+    color: var(--text);
+    text-decoration: none;
 }

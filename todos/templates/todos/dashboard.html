@@ -1,11 +1,11 @@
-{%extends "hub/base.html" %}
-
-{% load static%}
-
-{% block css_links%}
-<link rel="stylesheet" href="{% static 'todos/todos.css' %}">
-{% endblock %}
-
 {% block content %}
-Hello
+<div id="todo-block"
+    hx-confirm="Are you sure you would like to delete this todo?"
+    hx-target="#todo-block"
+    hx-swap="outerHTML">
+    {% for todo in todos%}
+    {% include "todos/components/todo.html"%}
+    {% endfor %}
+</div>
+
 {% endblock %}

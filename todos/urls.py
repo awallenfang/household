@@ -20,6 +20,6 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('', views.empty, name="todos"),
-
+    path('', views.dashboard, name="todos"),
+    path('<int:id>/delete/', views.delete_todo, name="delete_todo")
 ]

@@ -1,0 +1,4 @@
+<div class="todo">
+    {{forloop.counter}} {{ todo.name }} {{todo.description}} 
+    <a class="button btn-small" hx-delete="{% url 'todos:delete_todo' todo.id %}">Delete!</a>
+</div>

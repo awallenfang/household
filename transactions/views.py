@@ -103,7 +103,7 @@ def dashboard_handle_get(request):
 
     context['possible_recipients'] = existing_recipient_names
 
-    return render(request, "transactions/dashboard.html", context)
+    return render(request, "transactions/dashboard_full.html", context)
 
 
 def get_all_elements_with_map(model: models.Model, map_lambda):

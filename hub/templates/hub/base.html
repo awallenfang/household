@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static%}
+
+{% load django_htmx %}
 <head>
     <link rel="stylesheet" href="{% static 'hub/base.css' %}">
     <title>{% block title %}Household Planner{% endblock %}</title>
     {% block css_links %}{% endblock %}
 </head>
+{% comment %} 
+    hx-headers sets the csrf token for htmx, so that all HTTP request types can be used
+{% endcomment %}
 <body>
+    <script src="https://unpkg.com/htmx.org@1.1.0"></script>
+    {% django_htmx_script %}
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+          event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+    </script> 
     {% block header %}
     <header>
         <a href="{% url 'hub:hub' %}" class="button">Hub</a>

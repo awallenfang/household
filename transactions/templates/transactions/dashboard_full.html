@@ -44,35 +44,7 @@
         </div>
     </div>
     {% for trans in transactions %}
-    <div class="dropdown-menu-container">
-        <div class="transaction {{trans.direction}} ">
-            <div class="transaction-text">
-                <p><b>{{trans.name}}</b></p>
-                <p class="transaction-date">{{trans.date}}</p>
-                {% if trans.tag%}
-                    <div class="transaction-tag" style="background-color: {{trans.tag_color}}">{{trans.tag}}</div>
-                {%endif%}
-            </div>
-            
-            <div class="transaction-amt">
-                <p>{{trans.amount}}</p>
-                <p>{{trans.currency}}</p>
-                <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
-            </div>
-            
-        </div>
-        <div class="dropdown-content dropdown-closed">
-            {{trans.description}}
-            {% if trans.sender %}
-            <p>Sender: {{trans.sender}}</p>
-            {% endif %}
-            {% if trans.receiver %}
-            <p>Receiver: {{trans.receiver}}</p>
-            {% endif %}
-        </div>
-    </div>
-    
-
+    {% include "transactions/components/transaction.html" %}
     {%endfor%}
     <div class="total-container">    
         <div class="total-box {{sum_state}}">

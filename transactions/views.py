@@ -4,6 +4,8 @@ from dateutil import parser
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.db import models
+
 
 from .models import Recipient, Tag, Transaction, TransactionToTag
 from .forms import NewTransactionForm
@@ -30,8 +32,8 @@ def dashboard_handle_post(request):
 
     date = parser.parse(day + " " + time)
 
-    receiver = request.POST.get("receiver", "")
-    sender = request.POST.get("sender", "")
+    receiver = request.POST.get("receiver", "").lower()
+    sender = request.POST.get("sender", "").lower()
 
     # Since these are still seperate checks, if it was give, query for it
     if receiver:
@@ -97,4 +99,28 @@ def dashboard_handle_get(request):
     transaction_form.date = timezone.now()
     context['form'] = transaction_form
 
+    existing_recipient_names = get_all_elements_with_map(Recipient, lambda rec: rec.name)
+
+    context['possible_recipients'] = existing_recipient_names
+
     return render(request, "transactions/dashboard.html", context)
+
+
+def get_all_elements_with_map(model: models.Model, map_lambda):
+    return list(map(map_lambda, list(model.objects.all())))
+
+def recipient_page(request, recipient_name):
+    context = {
+        "transactions": []
+    }
+    recipient_name = recipient_name.lower()
+    recipient = Recipient()
+    try:
+        recipient = Recipient.objects.get(name = recipient_name)
+    except:
+        HttpResponseRedirect("/")
+
+    received_transactions = Transaction.objects.filter(receiver = recipient.id) 
+    sent_transactions = Transaction.objects.filter(sender=recipient.id)
+
+    return render(request, "transactions/recipient.html", context)

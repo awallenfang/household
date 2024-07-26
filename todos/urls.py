@@ -17,12 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-import transactions
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('transactions/', include(("transactions.urls", "transactions"), namespace="transactions")),
-    path('todos/', include(("todos.urls", "urls"), namespace="todos")),
-    path('', include(("hub.urls", "hub"), namespace="hub")),
+    path('', views.empty, name="todos"),
 
 ]

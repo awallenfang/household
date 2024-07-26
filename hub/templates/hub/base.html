@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static%}
+<head>
+    <link rel="stylesheet" href="{% static 'hub/base.css' %}">
+    <title>{% block title %}Household Planner{% endblock %}</title>
+    {% block css_links %}{% endblock %}
+</head>
+<body>
+    {% block header %}
+    <header>
+        <a href="{% url 'hub:hub' %}" class="button">Hub</a>
+
+        <a href="{% url 'transactions:transactions' %}" class="button">Transactions</a>
+        <a href="{% url 'todos:todos' %}" class="button">Todos</a>
+        
+    </header>
+    {% endblock %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

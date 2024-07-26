@@ -1,10 +1,15 @@
-<!DOCTYPE html>
+{%extends "hub/base.html" %}
 
 {% load static%}
+
+{% block css_links %}
 <link rel="stylesheet" href="{% static 'transactions/variables.css' %}">
 
 <link rel="stylesheet" href="{% static 'transactions/dashboard.css' %}">
 <link rel="stylesheet" href="{% static 'transactions/dropdown-menu.css' %}">
+{% endblock %}
+
+{% block content %}
 <script>
     function toggleDropdown(e) {
         console.log(e)
@@ -20,7 +25,7 @@
     }
 </script>
 
-<main>
+
     <div class="top-container">
         <div class="add-container">
             <form id="add-trans-form" method="post">
@@ -76,4 +81,5 @@
             <p><b>Total: {{sum}} {{sum_currency}}</b></p>
         </div>
     </div>
-</main>
+
+{%endblock%}

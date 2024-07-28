@@ -8,48 +8,5 @@
 {% endblock %}
 
 {% block content %}
-<script>
-    function toggleDropdown(e) {
-        console.log(e)
-        let dropdown = e.target.parentElement.parentElement.nextElementSibling
-
-        if (dropdown.classList.contains("dropdown-open")) {
-            dropdown.classList.remove("dropdown-open")
-            dropdown.classList.add("dropdown-closed")
-        } else {
-            dropdown.classList.remove("dropdown-closed")
-            dropdown.classList.add("dropdown-open")
-        }
-    }
-</script>
-
-
-    <div class="top-container">
-        <div class="add-container">
-            <form id="add-trans-form" method="post">
-                {%csrf_token%}
-                {{form}}
-        
-                <button type="submit"> Add Transaction</button>
-            </form>
-        </div>
-
-        </div>
-        
-    </div>
-    
-    <div class="total-container">    
-        <div class="total-box {{sum_state}}">
-            <p><b>Total: {{sum}} {{sum_currency}}</b></p>
-        </div>
-    </div>
-    {% for trans in transactions %}
-    {% include "transactions/components/transaction.html" %}
-    {%endfor%}
-    <div class="total-container">    
-        <div class="total-box {{sum_state}}">
-            <p><b>Total: {{sum}} {{sum_currency}}</b></p>
-        </div>
-    </div>
-
+{% include "transactions/dashboard.html" %}
 {%endblock%}

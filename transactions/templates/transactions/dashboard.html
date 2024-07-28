@@ -1,0 +1,19 @@
+<script>
+    function toggleDropdown(e) {
+        console.log(e)
+        let dropdown = e.target.parentElement.parentElement.nextElementSibling
+
+        if (dropdown.classList.contains("dropdown-open")) {
+            dropdown.classList.remove("dropdown-open")
+            dropdown.classList.add("dropdown-closed")
+        } else {
+            dropdown.classList.remove("dropdown-closed")
+            dropdown.classList.add("dropdown-open")
+        }
+    }
+</script>
+
+{% include "transactions/components/add_trans_form.html" %}
+
+
+{% include "transactions/components/transaction_list.html" %}

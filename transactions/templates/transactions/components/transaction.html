@@ -1,4 +1,4 @@
-<div class="dropdown-menu-container">
+<div class="collapsible-container">
     <div class="transaction {{trans.direction}} ">
         <div class="transaction-text">
             <p><b>{{trans.name}}</b></p>
@@ -15,7 +15,7 @@
         </div>
         
     </div>
-    <div class="dropdown-content dropdown-closed">
+    <div class="collapsible-content dropdown-closed">
         {{trans.description}}
         {% if trans.sender %}
         <p>Sender: {{trans.sender}}</p>

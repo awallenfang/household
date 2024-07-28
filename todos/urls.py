@@ -21,5 +21,7 @@ from . import views
 
 urlpatterns = [
     path('', views.dashboard, name="todos"),
-    path('<int:id>/delete/', views.delete_todo, name="delete_todo")
+    path('<int:id>/delete/', views.delete_todo, name="delete_todo"),
+    path('add/', views.add_todo, name="add_todo")
+
 ]

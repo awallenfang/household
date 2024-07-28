@@ -9,7 +9,10 @@
     --error-bg: #ff3c3c;
     --negative-bg: #ebbbbb;
     --positive-bg: #cdebbb;
+
+
     margin: 0;
+    box-sizing: border-box
 }
 
 header {
@@ -21,7 +24,10 @@ header {
     height: 4rem;
     background-color: var(--mid-bg);
     padding: 1rem;
+    margin-bottom: 1rem;
 }
+
+/* Buttons */
 
 .button {
     background-color: var(--light-highlight);
@@ -50,5 +56,32 @@ header {
 }
 
 .btn-small {
-    padding: 0.2rem;
+    padding: 0.5rem;
+    margin: 0.2rem;
+}
+
+/* Drop down menus */
+
+.collapsible-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.collapsible-content {
+    height: 10rem;
+    background-color: var(--light-bg);
+    width: 100%;
+    border-radius: 0.25rem;
+    padding: 1rem;;
+}
+
+.dropdown-open {
+    display: block;
+    
+}
+
+.dropdown-closed {
+    display: none;
 }

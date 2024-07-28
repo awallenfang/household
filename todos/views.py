@@ -17,4 +17,10 @@ def dashboard(request):
 def delete_todo(request, id):
     Todo.objects.filter(id=id).delete()
     todos = Todo.objects.all()
-    return render(request, "todos/dashboard.html", {'todos': todos})
+    return render(request, "todos/components/todo_list.html", {'todos': todos})
+
+@require_http_methods(['POST'])
+def add_todo(request):
+    Todo.objects.create(name = "New todo", description = "Bababooey")
+    todos = Todo.objects.all()
+    return render(request, "todos/components/todo_list.html", {"todos": todos})

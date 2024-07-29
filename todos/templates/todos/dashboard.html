@@ -2,26 +2,19 @@
 <script>
     function toggleDropdown(e) {
         console.log(e)
-        let dropdown = e.target.parentElement.nextElementSibling
+        let dropdown = e.target.parentElement.parentElement.nextElementSibling
 
         if (dropdown.classList.contains("dropdown-open")) {
             dropdown.classList.remove("dropdown-open")
             dropdown.classList.add("dropdown-closed")
-            dropdown.style.display = "none"
         } else {
             dropdown.classList.remove("dropdown-closed")
             dropdown.classList.add("dropdown-open")
 
-            dropdown.style.display = "flex"
-
         }
     }
 </script>
-<div class="new-todo-container">
-    <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}"
-hx-target="#todo-block"
-hx-swap="outerHTML">New Todo</a>
-</div>
+
 
 
 {% include "todos/components/todo_list.html" %}

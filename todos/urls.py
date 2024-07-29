@@ -22,6 +22,8 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name="todos"),
     path('<int:id>/delete/', views.delete_todo, name="delete_todo"),
-    path('add/', views.add_todo, name="add_todo")
+    path('add/', views.add_todo, name="add_todo"),
+    path('<int:id>/edit/', views.edit_todo, name="edit_todo"),
+    path('<int:id>/finish_edit/', views.finish_edit_todo, name="finish_todo_edit"),
 
 ]

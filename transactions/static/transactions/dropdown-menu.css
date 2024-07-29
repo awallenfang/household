@@ -13,7 +13,6 @@
 .dropdown-open {
     height: 10rem;
     background-color: var(--light-bg);
-    z-index: -1;
     padding-top: 1rem;
     width: 100%;
     border-radius: 0.25rem;

@@ -105,10 +105,6 @@ def dashboard_handle_get(request):
 
     return render(request, "transactions/dashboard_full.html", context)
 
-
-def get_all_elements_with_map(model: models.Model, map_lambda):
-    return list(map(map_lambda, list(model.objects.all())))
-
 def recipient_page(request, recipient_name):
     context = {
         "transactions": []
@@ -124,3 +120,10 @@ def recipient_page(request, recipient_name):
     sent_transactions = Transaction.objects.filter(sender=recipient.id)
 
     return render(request, "transactions/recipient.html", context)
+
+
+
+
+# Helper functions
+def get_all_elements_with_map(model: models.Model, map_lambda):
+    return list(map(map_lambda, list(model.objects.all())))

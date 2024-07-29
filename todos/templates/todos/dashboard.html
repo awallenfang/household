@@ -1,3 +1,4 @@
+{% block content %}
 <script>
     function toggleDropdown(e) {
         console.log(e)
@@ -9,11 +10,13 @@
         } else {
             dropdown.classList.remove("dropdown-closed")
             dropdown.classList.add("dropdown-open")
+
         }
     }
 </script>
 
-{% include "transactions/components/add_trans_form.html" %}
 
 
-{% include "transactions/components/transaction_list.html" %}
+{% include "todos/components/todo_list.html" %}
+
+{% endblock %}

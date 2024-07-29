@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-import transactions
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('transactions/', include(("transactions.urls", "transactions"), namespace="transactions")),
-    path('todos/', include(("todos.urls", "urls"), namespace="todos")),
-    path('', include(("hub.urls", "hub"), namespace="hub")),
+    path('', views.dashboard, name="todos"),
+    path('<int:id>/delete/', views.delete_todo, name="delete_todo"),
+    path('add/', views.add_todo, name="add_todo"),
+    path('<int:id>/edit/', views.edit_todo, name="edit_todo"),
+    path('<int:id>/finish_edit/', views.finish_edit_todo, name="finish_todo_edit"),
 
 ]

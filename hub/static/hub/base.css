@@ -1,0 +1,93 @@
+* {
+    --light: rgba(244,250,255,1);
+    --light-bg: #DEE3E1;
+    --mid-bg: #B7C5BB;
+    --dark-bg: #303935;
+    --text: #191710;
+    --strong-highlight: rgba(53,255,146,1);
+    --light-highlight: #90FFD1;
+    --error-bg: #ff3c3c;
+    --negative-bg: #ebbbbb;
+    --positive-bg: #cdebbb;
+
+
+    margin: 0;
+    box-sizing: border-box
+}
+
+header {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+    height: 4rem;
+    background-color: var(--mid-bg);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+
+.button {
+    background-color: var(--light-highlight);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.button:link {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.button:visited {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.button:hover {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.button:active {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.btn-small {
+    padding: 0.5rem;
+    margin: 0.2rem;
+    max-height: 2.2rem;
+}
+
+/* Drop down menus */
+
+.collapsible-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.collapsible-content {
+    height: 15rem;
+    background-color: var(--light-bg);
+    width: 100%;
+    border-radius: 0.25rem;
+    padding: 1rem;;
+}
+
+.dropdown-open {
+    display: block;
+    
+}
+
+.dropdown-closed {
+    display: none;
+}
+
+.dropdown-button {
+    width: 2rem;
+    height: 2rem;
+}

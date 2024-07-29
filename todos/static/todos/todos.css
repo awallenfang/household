@@ -1,0 +1,68 @@
+#todo-block {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.todo {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-items: center;
+    padding: 0.5rem;
+    width: 30vw;
+    background-color: var(--light-bg);
+    justify-content: space-between;
+    border-radius: 0.5rem;
+}
+
+main {
+    margin: 2rem;
+
+}
+
+.new-todo-container {
+    width: 30vw;
+    display: flex;
+    justify-content: space-around;
+}
+
+.todo-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
+    align-items: center;
+}
+
+.todo-collapsible-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+.todo-description-container {
+    width: 75%;
+}
+
+.todo-additional-info {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-center-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.todo-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

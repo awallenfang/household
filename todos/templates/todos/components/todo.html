@@ -1,0 +1,38 @@
+
+<div class="collapsible-container">
+    <div class="todo">
+        <div class="todo-header">
+            {% comment %} <p class="todo-index">{{forloop.counter}} </p> {% endcomment %}
+            <p class="todo-name">{{ todo.name }}</p>
+        </div>
+        <div class="todo-buttons">
+            <a class="button btn-small" hx-get="{% url 'todos:edit_todo' todo.id %}"
+            hx-target="closest .collapsible-container"
+            hx-swap="outerHTML">Edit</a>
+            <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
+        </div>
+        
+    </div>
+
+    <div class="collapsible-content dropdown-closed">
+        <div class="todo-collapsible-content">
+                <div class="todo-description-container">
+                    <p class="todo-description">{{todo.description}} </p>
+                </div>
+                
+                <div class="todo-additional-info">
+                    <div class="button-center-container">
+                        <a class="button btn-small" 
+                        hx-delete="{% url 'todos:delete_todo' todo.id %}" 
+                        hx-confirm="Are you sure you would like to delete this todo?"
+                        hx-target="#todo-block"
+                        >
+                            Delete!
+                        </a>
+                    </div>
+                    <p>Assigned user:</p>
+                    <p>No one :(</p>
+                </div>
+        </div>
+    </div>
+</div>

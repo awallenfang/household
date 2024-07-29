@@ -1,0 +1,15 @@
+<div class="total-container">    
+    <div class="total-box {{sum_state}}">
+        <p><b>Total: {{sum}} {{sum_currency}}</b></p>
+    </div>
+</div>
+
+{% for trans in transactions %}
+    {% include "transactions/components/transaction.html" %}
+{%endfor%}
+
+<div class="total-container">    
+    <div class="total-box {{sum_state}}">
+        <p><b>Total: {{sum}} {{sum_currency}}</b></p>
+    </div>
+</div>

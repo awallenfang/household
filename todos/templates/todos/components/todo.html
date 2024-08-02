@@ -1,35 +1,22 @@
-<div class="collapsible-container">
+{% load static%}
+<div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
     <div class="todo">
         <div class="todo-header">
-            {% comment %} <p class="todo-index">{{forloop.counter}} </p> {% endcomment %}
+            <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
             <p class="todo-name">{{ todo.name }}</p>
         </div>
         <div class="todo-buttons">
-            
             <a class="button btn-small" hx-post="{% url 'todos:edit_todo' todo.id %}"
             hx-target="closest .collapsible-container"
             hx-swap="outerHTML">Edit</a>
-            {% if todo.done %}
-                <a class="button btn-small" hx-post="{% url 'todos:open_todo' todo.id %}"
-                hx-target="#todo-list"
-                hx-swap="outerHTML">Open</a>
-            {% else %}
-                <a class="button btn-small" hx-post="{% url 'todos:close_todo' todo.id %}"
-                hx-target="#todo-list"
-                hx-swap="outerHTML">Done</a>
-            {% endif %}
-            
             <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
         </div>
-        
     </div>
-
     <div class="collapsible-content dropdown-closed">
         <div class="todo-collapsible-content">
                 <div class="todo-description-container">
                     <p class="todo-description">{{todo.description}} </p>
                 </div>
-                
                 <div class="todo-additional-info">
                     <div class="button-center-container">
                         <a class="button btn-small" 

@@ -1,22 +1,6 @@
+
+{% load static %}
 {% block content %}
-<script>
-    function toggleDropdown(e) {
-        console.log(e)
-        let dropdown = e.target.parentElement.parentElement.nextElementSibling
-
-        if (dropdown.classList.contains("dropdown-open")) {
-            dropdown.classList.remove("dropdown-open")
-            dropdown.classList.add("dropdown-closed")
-        } else {
-            dropdown.classList.remove("dropdown-closed")
-            dropdown.classList.add("dropdown-open")
-
-        }
-    }
-</script>
-
-
-
+<script src="{% static 'todos/todos.js' %}"></script>
 {% include "todos/components/todo_list.html" %}
-
 {% endblock %}

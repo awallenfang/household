@@ -2,8 +2,11 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
     gap: 1rem;
 }
+
 
 .todo {
     display: flex;
@@ -11,11 +14,12 @@
     gap: 1rem;
     justify-items: center;
     padding: 0.5rem;
-    width: 30vw;
+    width: 25vw;
     background-color: var(--light-bg);
     justify-content: space-between;
     border-radius: 0.5rem;
     font-weight: 600;
+    height: 3.5rem;
 }
 
 main {
@@ -24,7 +28,7 @@ main {
 }
 
 .new-todo-container {
-    width: 30vw;
+    width: 25vw;
     display: flex;
     justify-content: space-around;
 }
@@ -72,3 +76,20 @@ h2  {
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
 }
+
+.todo_drag_handle:hover {
+    background-color: var(--mid-bg);
+    border-radius: 0.5rem;
+    cursor: grab;
+}
+
+.todo-drop-spot {
+    background-color: var(--light-bg);
+    width: 1vw;
+    border-style: dashed;
+    border-radius: 0.5rem;
+    border-color: var(--mid-bg);
+    height: 3.5rem;
+    display: none;
+}
+

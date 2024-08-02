@@ -12,7 +12,9 @@
 
 
     margin: 0;
-    box-sizing: border-box
+    box-sizing: border-box;
+    font-family: 'Albert Sans', sans-serif;
+
 }
 
 header {
@@ -33,6 +35,9 @@ header {
     background-color: var(--light-highlight);
     padding: 1rem;
     border-radius: 0.5rem;
+    font-family: 'Albert Sans', sans-serif;
+    font-weight: 800;
+    max-height: 3.2rem;
 }
 
 .button:link {
@@ -48,6 +53,7 @@ header {
 .button:hover {
     color: var(--text);
     text-decoration: none;
+    cursor: pointer;
 }
 
 .button:active {

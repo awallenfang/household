@@ -4,8 +4,15 @@ from django.db import models
 class Todo(models.Model):
     name = models.CharField(max_length=500, blank=False, null=False)
     description = models.CharField(max_length=2000, blank=False, null=False)
+    done = models.BooleanField(default=False)
     def __str__(self):
         return f'{self.name}: {self.description}'
+    
+    def create_default(self):
+        """
+        Create a todo with the name "New Todo" and an empty description
+        """
+        self.objects.create(name="New Todo", description = "")
 
 class SubTask(models.Model):
     title = models.CharField(max_length=500, blank=False, null=False)

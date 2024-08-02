@@ -1,10 +1,23 @@
-<div id="todo-block">
-    {% for todo in todos%}
-    {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
-    {% endfor %}
-    <div class="new-todo-container">
-        <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}"
-        hx-target="#todo-block"
-        hx-swap="outerHTML">New Todo</a>
+<div id="todo-list">
+    <h2>Open Todos</h2>
+    <div id="todo-block">
+        {% for todo in todos%}
+        {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
+        {% endfor %}
+        <div class="new-todo-container">
+            <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}"
+            hx-target="#todo-list"
+            hx-swap="outerHTML">New Todo</a>
+        </div>
     </div>
+    
+    <h2>Finished Todos</h2>
+    
+    <div id="todo-block">
+        {% for todo in finished_todos%}
+        {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
+        {% endfor %}
+    </div>
+
 </div>
+

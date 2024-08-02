@@ -1,10 +1,82 @@
-<div id="todo-block">
-    {% for todo in todos%}
-    {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
-    {% endfor %}
-    <div class="new-todo-container">
-        <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}"
-        hx-target="#todo-block"
-        hx-swap="outerHTML">New Todo</a>
+
+{% load filters %}
+<div id="todo-list">
+
+    <h2>Open Todos</h2>
+    <div id="todo-block">
+
+        {% for todo in todos%}
+            <div class="todo-drop-spot" 
+            ondrop="drop(event)"  
+            ondragover="allowDrop(event)" 
+            {% comment %} This is definitely not pretty. But this avoids pushing extra empty space {% endcomment %}
+            left="{% if forloop.counter0 == 0 %}-1{%else%}{{todos|prev:forloop.counter0|position}}{%endif%}"
+            right = "{{todo.position}}"
+            todo-status="open"></div>
+
+            {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
+        {% endfor %}
+
+        {% comment %} Edge Case if the todos are empty. If there's nothing at all, there's nothing to move anyways {% endcomment %}
+        {% if todos|length == 0 and finished_todos|length > 0%}
+            <div class="todo-drop-spot" 
+            ondrop="drop(event)"  
+            ondragover="allowDrop(event)"
+            left="{{finished_todos|last|position}}"
+            right="-1"
+            todo-status="open"
+            ></div>
+        {% elif  todos|length > 0%}
+            <div class="todo-drop-spot" 
+            ondrop="drop(event)"  
+            ondragover="allowDrop(event)"
+            left="{{todos|last|position}}"
+            right="-1"
+            todo-status="open"
+            ></div>
+        {%endif%}
+
+        <div class="new-todo-container">
+            <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}"
+            hx-target="#todo-list"
+            hx-swap="outerHTML">New Todo</a>
+        </div>
     </div>
+
+    <h2>Finished Todos</h2>
+    <div id="todo-block">
+        {% for todo in finished_todos%}
+            <div class="todo-drop-spot" 
+            ondrop="drop(event)"  
+            ondragover="allowDrop(event)" 
+            {% comment %} This is definitely not pretty. But this avoids pushing extra empty space {% endcomment %}
+            left="{% if forloop.counter0 == 0 %}-1{%else%}{{finished_todos|prev:forloop.counter0|position}}{%endif%}"
+            right = "{{todo.position}}"
+            todo-status="done"></div>
+
+            {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
+        {% endfor %}
+
+        {% comment %} Edge Case if the todos are empty. If there's nothing at all, there's nothing to move anyways {% endcomment %}
+        {% if finished_todos|length == 0 and todos|length > 0%}
+            <div class="todo-drop-spot" 
+            ondrop="drop(event)"  
+            ondragover="allowDrop(event)"
+            left="{{todos|last|position}}"
+            right="-1"
+            todo-status="done"
+            ></div>
+        {% elif  finished_todos|length > 0%}
+            <div class="todo-drop-spot" 
+            ondrop="drop(event)"  
+            ondragover="allowDrop(event)"
+            left="{{finished_todos|last|position}}"
+            right="-1"
+            todo-status="done"
+            ></div>
+        {%endif%}
+        
+    </div>
+
 </div>
+

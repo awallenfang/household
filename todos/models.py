@@ -4,8 +4,23 @@ from django.db import models
 class Todo(models.Model):
     name = models.CharField(max_length=500, blank=False, null=False)
     description = models.CharField(max_length=2000, blank=False, null=False)
+    done = models.BooleanField(default=False)
+    position = models.IntegerField()
+
     def __str__(self):
-        return f'{self.name}: {self.description}'
+        return f'{self.name}: {self.description} | Position: {self.position} | Done: {self.done}'
+    
+    def create_default():
+        """
+        Create a todo with the name "New Todo" and an empty description
+        """
+        Todo.objects.create(name="New Todo", description = "", position = len(Todo.objects.all()))
+
+    def get_open():
+        return Todo.objects.filter(done=False).order_by("position")
+    
+    def get_closed():
+        return Todo.objects.filter(done=True).order_by("position")
 
 class SubTask(models.Model):
     title = models.CharField(max_length=500, blank=False, null=False)

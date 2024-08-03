@@ -100,5 +100,6 @@ header {
 }
 
 .form-text-input {
-    border-radius: 0.25rem;
+    border-radius: 0.1rem;
+    height: 2rem
 }

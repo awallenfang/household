@@ -1,8 +1,11 @@
 {%load static%}
 <div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
-    <form action="{% url 'todos:finish_todo_edit' todo.id %}" method="post" id="todo-edit" hx-post="{% url 'todos:finish_todo_edit' todo.id %}"
-        hx-target="closest .collapsible-container"
-        hx-swap="outerHTML">
+    <form action="{% url 'todos:finish_todo_edit' todo.id %}" 
+    method="post" id="todo-edit" 
+    hx-post="{% url 'todos:finish_todo_edit' todo.id %}"
+    hx-target="closest .collapsible-container"
+    hx-swap="outerHTML"
+    class="collapsible-container">
         {% csrf_token %}
         <div class="todo">
             <div class="todo-header">

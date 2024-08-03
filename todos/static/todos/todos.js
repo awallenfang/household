@@ -1,5 +1,4 @@
 function toggleDropdown(e) {
-    console.log(e)
     let dropdown = e.target.parentElement.parentElement.nextElementSibling
 
     if (dropdown.classList.contains("dropdown-open")) {
@@ -20,7 +19,6 @@ function drop(ev) {
     let status = ev.target.getAttribute("todo-status")
     let id = ev.dataTransfer.getData('todo-id')
     let url = `/todos/${id}/${left}/${right}/${status}/reorder`
-    console.log(url)
     htmx.ajax("POST", url, {target:'#todo-list', swap:'outerHTML'})
 }
 
@@ -65,6 +63,5 @@ document.addEventListener("DOMContentLoaded", function(e) {
 })
 
 document.addEventListener('htmx:afterSwap', function(e) {
-    console.log("HTMX Swap")
     setupDragEnv(e)
 });

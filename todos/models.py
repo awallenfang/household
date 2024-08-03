@@ -14,7 +14,6 @@ class Todo(models.Model):
         """
         Create a todo with the name "New Todo" and an empty description
         """
-        print(len(Todo.objects.all()))
         max_pos = Todo.objects.all().order_by('-position')[0].position
         Todo.objects.create(name="New Todo", description = "", position = max_pos+1)
 

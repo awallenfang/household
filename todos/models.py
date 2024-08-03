@@ -18,11 +18,23 @@ class Todo(models.Model):
         max_pos = Todo.objects.all().order_by('-position')[0].position
         Todo.objects.create(name="New Todo", description = "", position = max_pos+1)
 
+        Todo.minimize_positions()
+
     def get_open():
         return Todo.objects.filter(done=False).order_by("position")
     
     def get_closed():
         return Todo.objects.filter(done=True).order_by("position")
+    
+    def minimize_positions():
+        """
+        This minimizes all the values for the positions to not leave any holes
+        """
+        todos = Todo.objects.all().order_by('position')
+
+        for (i,t) in enumerate(todos):
+            t.position = i
+            t.save()
 
 class SubTask(models.Model):
     title = models.CharField(max_length=500, blank=False, null=False)

@@ -71,5 +71,6 @@ document.addEventListener("DOMContentLoaded", function(e) {
 })
 
 document.addEventListener('htmx:afterSwap', function(e) {
+    console.log("HTMX Swap")
     setupDragEnv(e)
 });

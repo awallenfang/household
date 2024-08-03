@@ -38,6 +38,7 @@ header {
     font-family: 'Albert Sans', sans-serif;
     font-weight: 800;
     max-height: 3.2rem;
+    border: none;
 }
 
 .button:link {
@@ -96,4 +97,8 @@ header {
 .dropdown-button {
     width: 2rem;
     height: 2rem;
+}
+
+.form-text-input {
+    border-radius: 0.25rem;
 }

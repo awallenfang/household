@@ -116,24 +116,7 @@ def reorder(request, id, left, right, status):
     """
     # Move position
     changed_todo = Todo.objects.get(id=int(id))
-    # Left border
-    if left == "-1":
-        changed_todo.position = int(right)
-
-        todos_to_increment = Todo.objects.filter(position__gte=int(right))
-        todos_to_increment.update(position=F('position') + 1)
-    # Right border
-    elif right == "-1":
-        changed_todo.position = int(left)+1
-        
-        todos_to_increment = Todo.objects.filter(position__gte=int(left)+1)
-        todos_to_increment.update(position=F('position') + 1)
-    else:
-        todos_to_increment = Todo.objects.filter(position__gte=int(right))
-
-        todos_to_increment.update(position=F('position') + 1)
-
-        changed_todo.position = int(right)
+    changed_todo.reorder(int(left), int(right))
 
     changed_todo.done = False if status == "open" else True
 

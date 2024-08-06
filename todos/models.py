@@ -1,4 +1,6 @@
-from django.db import models
+from django.db import models, transaction
+from django.db.models import F
+
 
 class Todo(models.Model):
     name = models.CharField(max_length=500, blank=False, null=False)
@@ -13,10 +15,14 @@ class Todo(models.Model):
         """
         Create a todo with the name "New Todo" and an empty description
         """
-        max_pos = Todo.objects.all().order_by('-position')[0].position
+        todos = Todo.objects.all()
+        max_pos = 0
+        if len(todos) > 0:
+            Todo.minimize_positions()
+            max_pos = Todo.objects.all().order_by('-position')[0].position
         Todo.objects.create(name="New Todo", description = "", position = max_pos+1)
 
-        Todo.minimize_positions()
+        
 
     def get_open():
         return Todo.objects.filter(done=False).order_by("position")
@@ -33,6 +39,31 @@ class Todo(models.Model):
         for (i,t) in enumerate(todos):
             t.position = i
             t.save()
+
+    @transaction.atomic
+    def reorder(self, left: int, right: int):
+        # Left border
+        if left == -1:
+            self.position = int(right)
+
+            todos_to_increment = Todo.objects.filter(position__gte=int(right))
+            todos_to_increment.update(position=F('position') + 1)
+        # Right border
+        elif right == -1:
+            self.position = int(left)+1
+            
+            todos_to_increment = Todo.objects.filter(position__gte=int(left)+1)
+            todos_to_increment.update(position=F('position') + 1)
+        else:
+            todos_to_increment = Todo.objects.filter(position__gte=int(right))
+
+            todos_to_increment.update(position=F('position') + 1)
+
+            self.position = int(right)
+        
+        self.save()
+
+        Todo.minimize_positions()
 
 class SubTask(models.Model):
     title = models.CharField(max_length=500, blank=False, null=False)

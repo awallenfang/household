@@ -1,7 +1,8 @@
 asgiref==3.8.1
-Django==5.0.7
-python-dateutil==2.9.0.post0
+Django==5.0.8
+python-dateutil==2.9.0
 six==1.16.0
 sqlparse==0.5.1
 typing_extensions==4.12.2
-django-htmx
+coverage==7.6.1
+django-htmx==1.19.0

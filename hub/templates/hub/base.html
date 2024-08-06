@@ -24,10 +24,14 @@
     </script> 
     {% block header %}
     <header>
-        <a href="{% url 'hub:hub' %}" class="button">Hub</a>
-
-        <a href="{% url 'transactions:transactions' %}" class="button">Transactions</a>
-        <a href="{% url 'todos:todos' %}" class="button">Todos</a>
+        <div class="header-section">
+            <a href="{% url 'hub:hub' %}" class="button">Hub</a>
+            <a href="{% url 'transactions:transactions' %}" class="button">Transactions</a>
+            <a href="{% url 'todos:todos' %}" class="button">Todos</a>
+        </div>
+        <div class="header-section">
+            <a href="{% url 'hub:logout' %}" class="button">Logout</a>
+        </div>
         
     </header>
     {% endblock %}

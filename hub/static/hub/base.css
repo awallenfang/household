@@ -22,6 +22,7 @@ header {
     display: flex;
     align-items: center;
     flex-direction: row;
+    justify-content: space-between;
     gap: 1rem;
     height: 4rem;
     background-color: var(--mid-bg);
@@ -38,6 +39,7 @@ header {
     font-family: 'Albert Sans', sans-serif;
     font-weight: 800;
     max-height: 3.2rem;
+    border: none;
 }
 
 .button:link {
@@ -96,4 +98,21 @@ header {
 .dropdown-button {
     width: 2rem;
     height: 2rem;
+}
+
+.form-text-input {
+    border-radius: 0.1rem;
+    height: 2rem
+}
+
+.header-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+label {
+    /* Make labels align to the left instead of the center */
+    margin-right: auto;
 }

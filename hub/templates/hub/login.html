@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static%}
+
+{% load django_htmx %}
+<head>
+    <link rel="stylesheet" href="{% static 'hub/base.css' %}">
+    <link rel="stylesheet" href="{% static 'hub/login.css' %}">
+
+    <title>{% block title %}Household Planner{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=albert-sans:400,600,800" rel="stylesheet" />
+</head>
+
+<body>
+    <script src="https://unpkg.com/htmx.org@1.1.0"></script>
+    {% django_htmx_script %}
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+          event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+    </script> 
+
+    <main>
+        <div id="login-container">
+            <div id="login">
+                <h1>Login</h1>
+                <form method="post" id="login-form">
+                    {% csrf_token %}
+                    {%if error_message%}
+                        <p id="error-message">{{error_message}}</p>
+                    {%endif%}
+                    {{form}}
+                    <button id="submit" type="submit">Login</button>
+                </form>
+            </div>
+            
+            <div id="signup">
+                <p>Don't have an account? <a href="{% url 'hub:signup' %}">Sign Up</a></p>
+            </div>
+        </div>
+            
+    </main>
+</body>
+</html>
+
+
+
+

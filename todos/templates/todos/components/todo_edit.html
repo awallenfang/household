@@ -1,14 +1,19 @@
-<div class="collapsible-container">
-    <form action="{% url 'todos:finish_todo_edit' todo.id %}" method="post" id="todo-edit" hx-post="{% url 'todos:finish_todo_edit' todo.id %}"
-        hx-target="closest .collapsible-container"
-        hx-swap="outerHTML">
+{%load static%}
+<div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
+    <form action="{% url 'todos:finish_todo_edit' todo.id %}" 
+    method="post" id="todo-edit" 
+    hx-post="{% url 'todos:finish_todo_edit' todo.id %}"
+    hx-target="closest .collapsible-container"
+    hx-swap="outerHTML"
+    class="collapsible-container">
         {% csrf_token %}
         <div class="todo">
             <div class="todo-header">
-                <input type="text" value="{{ todo.name }}" name="todo_name">
+                <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+                <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
             </div>
             <div class="todo-buttons">
-                <input type="submit" value="Save">
+                <input type="submit" value="Save" class="button btn-small">
                 <button type="button" class="dropdown-button" onclick="toggleDropdown(event)">...</button>
             </div>
         </div>

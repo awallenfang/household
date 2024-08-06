@@ -1,5 +1,4 @@
 function toggleDropdown(e) {
-    console.log(e)
     let dropdown = e.target.parentElement.parentElement.nextElementSibling
 
     if (dropdown.classList.contains("dropdown-open")) {
@@ -20,7 +19,6 @@ function drop(ev) {
     let status = ev.target.getAttribute("todo-status")
     let id = ev.dataTransfer.getData('todo-id')
     let url = `/todos/${id}/${left}/${right}/${status}/reorder`
-    console.log(url)
     htmx.ajax("POST", url, {target:'#todo-list', swap:'outerHTML'})
 }
 
@@ -31,16 +29,12 @@ function allowDrop(ev) {
 function setupDragEnv(e) {
     let handles = document.getElementsByClassName("todo_drag_handle")
     let drop_spots = document.getElementsByClassName("todo-drop-spot")
-    console.log(drop_spots)
-    console.log("wsf")
-    console.log(handles)
 
     for (let handle of handles) {
         let draggable_elem = handle.closest('.draggable-container')
 
         handle.onmousedown = function(e) {
             draggable_elem.setAttribute('draggable', 'true');
-            console.log("Dragstart")
             
         }
         handle.onmouseup = function(e) {
@@ -52,14 +46,12 @@ function setupDragEnv(e) {
             e.dataTransfer.setData('todo-id', todo_id)
             e.dataTransfer.setData('text/plain', 'handle');
             for (let drop_spot of drop_spots) {
-                console.log("B")
                 drop_spot.style.display = "block"
             }
         }
         draggable_elem.ondragend = function(e) {
             e.target.setAttribute('draggable', 'false')
             for (let drop_spot of drop_spots) {
-                console.log("A")
                 drop_spot.style.display = "none"
             }
       };

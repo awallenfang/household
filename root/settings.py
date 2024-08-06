@@ -131,3 +131,5 @@ CURRENCIES = [
     "EUR",
     "USD"
 ]
+
+LOGIN_URL = "/login"

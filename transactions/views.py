@@ -5,12 +5,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.db import models
+from django.contrib.auth.decorators import login_required
 
 
 from .models import Recipient, Tag, Transaction, TransactionToTag
 from .forms import NewTransactionForm
 
-# Create your views here.
+@login_required
 def dashboard(request):
     if request.method == "GET":
         return dashboard_handle_get(request)
@@ -19,6 +20,7 @@ def dashboard(request):
     else:
         return HttpResponseRedirect("/")
 
+@login_required
 def dashboard_handle_post(request):
     # Grab all the data from the insert form
     name = request.POST.get("name", "")
@@ -54,6 +56,7 @@ def dashboard_handle_post(request):
 
     return HttpResponseRedirect("/")
 
+@login_required
 def dashboard_handle_get(request):
     db_transactions = Transaction.objects.all().order_by("-date")
     context = {
@@ -105,6 +108,7 @@ def dashboard_handle_get(request):
 
     return render(request, "transactions/dashboard_full.html", context)
 
+@login_required
 def recipient_page(request, recipient_name):
     context = {
         "transactions": []

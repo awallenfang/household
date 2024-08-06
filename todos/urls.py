@@ -3,6 +3,8 @@ from django.urls import include, path
 
 from . import views
 
+app_name = "todos"
+
 urlpatterns = [
     path('', views.dashboard, name="todos"),
     path('<int:id>/delete/', views.delete_todo, name="delete_todo"),

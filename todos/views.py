@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.db.models import F
+from django.contrib.auth.decorators import login_required
 
 from .models import Todo
 
-# Create your views here.
+@login_required
 def dashboard(request):
     """
     The initial dashboard to show the todos
@@ -16,6 +17,7 @@ def dashboard(request):
 
     return render(request, "todos/dashboard_full.html", {'todos': todos, 'finished_todos': finished_todos})
 
+@login_required
 @require_http_methods(['DELETE'])
 def delete_todo(request, id):
     """
@@ -29,6 +31,7 @@ def delete_todo(request, id):
 
     return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
 
+@login_required
 @require_http_methods(['POST'])
 def add_todo(request):
     """
@@ -42,6 +45,7 @@ def add_todo(request):
 
     return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
 
+@login_required
 @require_http_methods(['POST'])
 def edit_todo(request, id):
     """
@@ -50,6 +54,7 @@ def edit_todo(request, id):
     todo = Todo.objects.get(id = id)
     return render(request, "todos/components/todo_edit.html", {"todo": todo})
 
+@login_required
 @require_http_methods(['POST'])
 def finish_edit_todo(request, id):
     """
@@ -67,6 +72,7 @@ def finish_edit_todo(request, id):
 
     return render(request, "todos/components/todo.html", {"todo": todo})
 
+@login_required
 @require_http_methods(['POST'])
 def close_todo(request, id):
     """
@@ -83,6 +89,7 @@ def close_todo(request, id):
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
+@login_required
 @require_http_methods(['POST'])
 def open_todo(request, id):
     """
@@ -99,6 +106,7 @@ def open_todo(request, id):
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
+@login_required
 @require_http_methods(['POST'])
 def reorder(request, id, left, right, status):
     """

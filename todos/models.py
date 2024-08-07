@@ -14,7 +14,7 @@ class Todo(models.Model):
     def __str__(self):
         return f'{self.name}: {self.description} | Position: {self.position} | Done: {self.done}'
     
-    def create_default():
+    def create_in_space(space):
         """
         Create a todo with the name "New Todo" and an empty description
         """
@@ -23,7 +23,7 @@ class Todo(models.Model):
         if len(todos) > 0:
             Todo.minimize_positions()
             max_pos = Todo.objects.all().order_by('-position')[0].position
-        Todo.objects.create(name="New Todo", description = "", position = max_pos+1)
+        Todo.objects.create(name="New Todo", description = "", position = max_pos+1, space=space)
 
         
 

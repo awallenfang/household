@@ -4,6 +4,8 @@ from django.views.decorators.http import require_http_methods
 from django.db.models import F
 from django.contrib.auth.decorators import login_required
 
+from hub.models import User
+
 from .models import Todo
 
 @login_required
@@ -37,7 +39,8 @@ def add_todo(request):
     """
     Add a new todo with default values
     """
-    Todo.create_default()
+    space = User.objects.get(auth_user = request.user).selected_space
+    Todo.create_in_space(space)
 
     todos = Todo.get_open()
 

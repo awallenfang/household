@@ -1,12 +1,15 @@
 from django.db import models, transaction
 from django.db.models import F
 
+from hub.models import SharedSpace
+
 
 class Todo(models.Model):
     name = models.CharField(max_length=500, blank=False, null=False)
     description = models.CharField(max_length=2000, blank=False, null=False)
     done = models.BooleanField(default=False)
     position = models.IntegerField()
+    space = models.ForeignKey(SharedSpace, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.name}: {self.description} | Position: {self.position} | Done: {self.done}'

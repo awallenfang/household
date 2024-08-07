@@ -116,3 +116,28 @@ label {
     /* Make labels align to the left instead of the center */
     margin-right: auto;
 }
+
+.space-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.quick-space-container {
+    position: absolute;
+    display: none;
+    min-width: 15vw;
+    top: 3rem;
+    background-color: var(--mid-bg);
+    padding: 1rem;
+    right: 0;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.space-row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+}

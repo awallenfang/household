@@ -1,7 +1,7 @@
 from django.db import models, transaction
 from django.db.models import F
 
-from hub.models import SharedSpace
+from hub.models import SharedSpace, User
 
 
 class Todo(models.Model):
@@ -27,11 +27,16 @@ class Todo(models.Model):
 
         
 
-    def get_open():
-        return Todo.objects.filter(done=False).order_by("position")
+    def get_open(request):
+        user = User.objects.get(auth_user = request.user)
+        space = user.selected_space
+        return Todo.objects.filter(done=False, space=space).order_by("position")
     
-    def get_closed():
-        return Todo.objects.filter(done=True).order_by("position")
+    def get_closed(request):
+        user = User.objects.get(auth_user = request.user)
+        space = user.selected_space
+
+        return Todo.objects.filter(done=True, space=space).order_by("position")
     
     def minimize_positions():
         """

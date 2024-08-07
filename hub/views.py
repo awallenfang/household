@@ -72,7 +72,6 @@ def signup(request):
                 return render(request, "hub/signup.html", {"form": form, "error_message": "The username is already taken."})
             else:
                 # If the auth_user was created, also create out user model
-                print(auth_user)
                 User.objects.create(auth_user=auth_user)
 
             # If everything was successful return to the hub
@@ -90,10 +89,8 @@ def logout(request):
 @require_http_methods(['GET', 'POST'])
 def select_space(request, space_id):
     user = User.objects.get(auth_user = request.user)
-    print(user.selected_space.id)
 
     user.select_space(space_id)
-    print(user.selected_space.id)
     return HttpResponseRedirect("/")
 
 @login_required
@@ -104,7 +101,6 @@ def create_space(request):
     SharedSpace.join(user, space.invite_token)
 
     if user.selected_space == None:
-        print("Went here")
         user.select_space(space.id)
         return HttpResponseRedirect("/")
     

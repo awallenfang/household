@@ -6,7 +6,7 @@ from .models import Todo
 class TodosTest(TestCase):
     def create_test_todos(self, n):
         for _ in range(n):
-            Todo.create_default()
+            Todo.create_in_space()
 
     def test_creation(self):
         self.create_test_todos(10)

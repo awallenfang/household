@@ -6,16 +6,21 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.models import User as AuthUser
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+
 
 
 from .forms import LoginForm, SignupForm
-from .models import User
+from .models import SharedSpace, User
 
 
 
 def hub(request):
     if request.user.is_authenticated:
-        return render(request, "hub/base.html")
+        user = User.objects.get(auth_user = request.user)
+        user_spaces = user.spaces.all()
+        selected_space = user.selected_space
+        return render(request, "hub/base.html", {"user_spaces": user_spaces, "selected_space": selected_space})
     else:
         return HttpResponseRedirect("/login")
 
@@ -78,4 +83,25 @@ def signup(request):
 @login_required
 def logout(request):
     auth.logout(request)
+    return HttpResponseRedirect("/")
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def select_space(request, space_id):
+    user = User.objects.get(auth_user = request.user)
+
+    user.select_space(space_id)
+    return HttpResponseRedirect("/")
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def create_space(request):
+    space = SharedSpace.create_space("My Space")
+    user = User.objects.get(auth_user = request.user)
+    SharedSpace.join(user, space.invite_token)
+
+    if user.selected_space == None:
+        user.select_space(space.id)
+        return HttpResponseRedirect("/")
+    
     return HttpResponseRedirect("/")

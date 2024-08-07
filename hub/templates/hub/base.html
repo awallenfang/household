@@ -22,6 +22,7 @@
           event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
         })
     </script> 
+    <script src="{% static "hub/header.js" %}"></script>
     {% block header %}
     <header>
         <div class="header-section">
@@ -30,6 +31,11 @@
             <a href="{% url 'todos:todos' %}" class="button">Todos</a>
         </div>
         <div class="header-section">
+            <div class="space-dropdown">
+                <a class="button space-button" onclick="toggleQuickspace(event)">Spaces</a>
+                {% include "hub/components/quick_space.html" %}
+            </div>
+            
             <a href="{% url 'hub:logout' %}" class="button">Logout</a>
         </div>
         

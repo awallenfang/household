@@ -1,0 +1,13 @@
+<div class="quick-space-container" style="display:none">
+    {% for space in user_spaces %}
+        <div class="space-row">
+            {% if selected_space.id == space.id %}
+                <p>Selected</p>
+            {% endif %}
+            <a class="button"
+            href="{% url 'hub:select_space' space.id %}">{{space.name}}</a>
+        </div>
+   
+    {% endfor %}
+    <a href="{% url 'hub:create_space' %}"  class="button">Create Space</a>
+</div>

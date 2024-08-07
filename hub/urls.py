@@ -12,4 +12,7 @@ urlpatterns = [
     path('login/', views.login, name="login"),
     path('signup/', views.signup, name="signup"),
     path('logout/', views.logout, name="logout"),
+    path('select_space/<int:space_id>', views.select_space, name="select_space"),
+    path('create_space', views.create_space, name="create_space"),
+
 ]

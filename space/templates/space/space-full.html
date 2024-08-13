@@ -1,0 +1,12 @@
+{%extends "hub/base.html" %}
+
+
+{% load static%}
+
+{% block css_links%}
+<link rel="stylesheet" href="{% static 'space/space.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% include "space/space.html" %}
+{%endblock content%}

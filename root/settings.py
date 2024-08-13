@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django_htmx',
     'transactions',
     'hub',
-    'todos'
+    'todos',
+    'space'
 ]
 
 MIDDLEWARE = [

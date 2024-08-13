@@ -85,23 +85,3 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
 
-@login_required
-@require_http_methods(['GET', 'POST'])
-def select_space(request, space_id):
-    user = User.objects.get(auth_user = request.user)
-
-    user.select_space(space_id)
-    return HttpResponseRedirect("/")
-
-@login_required
-@require_http_methods(['GET', 'POST'])
-def create_space(request):
-    space = SharedSpace.create_space("My Space")
-    user = User.objects.get(auth_user = request.user)
-    SharedSpace.join(user, space.invite_token)
-
-    if user.selected_space == None:
-        user.select_space(space.id)
-        return HttpResponseRedirect("/")
-    
-    return HttpResponseRedirect("/")

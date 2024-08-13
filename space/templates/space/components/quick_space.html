@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="quick-space-container" style="display:none">
+    {% for space in user_spaces %}
+        <div class="space-row">
+            {% if selected_space.id == space.id %}
+                <img src="{% static 'space/assets/door.svg' %}" alt="Selected Space" style="width: 2rem;">
+            {% endif %}
+            <a class="button"
+            href="{% url 'space:select_space' space.id %}">{{space.name}}</a>
+            <a class="quick-select-settings-button" href="{% url 'space:space_view' space.id %}">
+                <img src="{% static 'space/assets/settings.svg' %}" alt="Settings">
+            </a>
+        </div>
+   
+    {% endfor %}
+    <div class="horizontal-line"></div>
+    <form action="join_space" method="post" id="quick-space-form">
+        {% csrf_token %}
+        <input type="text" name="space_token" placeholder="Invite Token">
+        <input class="button" type="submit" value="Join Space">
+    </form>
+    <a href="{% url 'space:create_space' %}"  class="button">Create Space</a>
+</div>

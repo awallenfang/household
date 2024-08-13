@@ -1,0 +1,53 @@
+
+.space-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.quick-space-container {
+    position: absolute;
+    display: none;
+    min-width: 15vw;
+    max-width: 30vw;
+    top: 3rem;
+    background-color: var(--mid-bg);
+    padding: 1rem;
+    right: 0;
+    
+
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.25rem;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+
+}
+
+.quick-space-container .button {
+    max-width: 20vw;
+    white-space: nowrap;
+}
+
+.space-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+#quick-space-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.space-form {
+    display:flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.right-side {
+    right: 0
+}

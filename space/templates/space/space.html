@@ -1,0 +1,13 @@
+{% load static %}
+{% block content %}
+    <form action="{% url 'space:space_view' space.id %}" method="post" class="space-form">
+        {% csrf_token %}
+        <div class="center-container"><h2>Space Settings and Information</h2></div>
+        <input class="button btn-small" type="submit" value="Save">
+        <label for="space-name">Name:</label>
+        <input type="text" name="name" id="space-name" value="{{space.name}}">
+        <div class="invite-token-container">
+            <b>Invite Token: {{space.invite_token}}</b>
+        </div>
+    </form>
+{% endblock %}

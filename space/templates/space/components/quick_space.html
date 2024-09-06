@@ -1,10 +1,13 @@
 {% load static %}
 
 <div class="quick-space-container" style="display:none">
-    {% for space in user_spaces %}
+    <div class="quick-space-selector-box">
+        {% for space in user_spaces %}
         <div class="space-row">
             {% if selected_space.id == space.id %}
                 <img src="{% static 'space/assets/door.svg' %}" alt="Selected Space" style="width: 2rem;">
+            {% else %}
+                <img src="{% static 'space/assets/door.svg' %}" alt="Select Space" style="width: 2rem; visibility:hidden;">
             {% endif %}
             <a class="button"
             href="{% url 'space:select_space' space.id %}">{{space.name}}</a>
@@ -14,8 +17,10 @@
         </div>
    
     {% endfor %}
+    </div>
+    
     <div class="horizontal-line"></div>
-    <form action="join_space" method="post" id="quick-space-form">
+    <form action="{% url 'space:join_space' %}" method="post" id="quick-space-form">
         {% csrf_token %}
         <input type="text" name="space_token" placeholder="Invite Token">
         <input class="button" type="submit" value="Join Space">

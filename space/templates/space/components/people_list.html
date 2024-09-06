@@ -1,0 +1,20 @@
+{% load static %}
+
+<div id="joined-people-container">
+    {% for person in joined_people %}
+        <div class="space-person">
+            <b>{{person.auth_user.username}}</b>
+            {% if selected_space.owner == person %}
+                <span class="space-owner">Owner</span>
+            {% endif %}
+            {% if selected_space.owner == user or person == user %}
+                <a href="{% url 'space:kick_from_space' space.id person.auth_user.username%}">
+                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Kick {{person.auth_user.username}}">
+                </a>
+            {% else %}
+                <div></div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+

@@ -20,7 +20,8 @@ def select_space(request, space_id):
 @login_required
 @require_http_methods(['GET', 'POST'])
 def create_space(request):
-    space = SharedSpace.create_space("My Space")
+    user = User.objects.get(auth_user = request.user)
+    space = SharedSpace.create_space("My Space", user)
     user = User.objects.get(auth_user = request.user)
     SharedSpace.join(user, space.invite_token)
 
@@ -45,6 +46,29 @@ def join_space(request):
     return HttpResponseRedirect("/")
 
 @login_required
+@require_http_methods(['GET'])
+def kick_from_space(request, space_id, username):
+    user = User.objects.get(auth_user = request.user)
+    space = SharedSpace.objects.get(id = space_id)
+    user_to_kick = User.objects.get(auth_user__username = username)
+    # Only the owner can kick people
+    if user == space.owner:
+        if user_to_kick in space.joined_people():
+
+            # If the owner is leaving, assign the space to the next person
+            if user_to_kick == space.owner:
+                try:
+                    space.owner = space.joined_people()[1]
+                    space.save()    
+                except:
+                    # Space is empty now, so remove it
+                    space.delete_space()
+                    return HttpResponseRedirect("/")
+                
+            space.leave(user_to_kick)
+    return HttpResponseRedirect("/space/" + str(space_id))
+
+@login_required
 @require_http_methods(['GET', 'POST'])
 def space_view(request, space_id):
     if request.method == "GET":
@@ -55,8 +79,15 @@ def space_view(request, space_id):
         user_spaces = user.spaces.all()
         selected_space = user.selected_space
 
+        joined_people = space.joined_people()
+
         if user.spaces.contains(space):
-            return render(request, "space/space-full.html", {"user": user, "space": space, "user_spaces": user_spaces, "selected_space": selected_space})
+            return render(request, "space/space-full.html", 
+                          {"user": user, 
+                           "space": space, 
+                           "user_spaces": user_spaces, 
+                           "selected_space": selected_space, 
+                           'joined_people': joined_people})
 
         return HttpResponseRedirect("/")
     else:

@@ -7,7 +7,7 @@ from space.models import SharedSpace
 class User(models.Model):
     auth_user = models.OneToOneField(AuthUser, null=False, on_delete=models.CASCADE)
     spaces = models.ManyToManyField(SharedSpace)
-    selected_space = models.ForeignKey(SharedSpace, on_delete=models.CASCADE, related_name="selected_space", null=True, blank=True)
+    selected_space = models.ForeignKey(SharedSpace, on_delete=models.SET_NULL, related_name="selected_space", null=True, blank=True)
 
     def __str__(self):
         return f'User: {self.auth_user.username}'

@@ -43,9 +43,10 @@ def add_todo(request):
     """
     Add a new todo with default values
     """
-    space = User.objects.get(auth_user = request.user).selected_space
-    Todo.create_in_space(space)
+    user  = User.objects.get(auth_user = request.user)
 
+    todo = Todo.create_in_space(user.selected_space)
+    todo.assign_user(user)
     todos = Todo.get_open(request)
 
     finished_todos = Todo.get_closed(request)

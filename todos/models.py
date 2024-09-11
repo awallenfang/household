@@ -5,29 +5,29 @@ from hub.models import SharedSpace, User
 
 ######## Recurrent Todo helpers
 
-class _OrderedUser(models.Model):
-    user = models.ForeignKey("hub.User")
-    recurrent_todo = models.ForeignKey("todos.TodoRecurrency")
+class OrderedUser(models.Model):
+    user = models.ForeignKey("hub.User", on_delete=models.CASCADE)
+    recurrent_todo = models.ForeignKey("todos.TodoRecurrency", on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
 
-class _TodoRecurrency(models.Model):
-    assigned_users = models.ManyToManyField("hub.User", through=_OrderedUser)
+class TodoRecurrency(models.Model):
+    assigned_users = models.ManyToManyField("hub.User", through=OrderedUser)
     recurrency_turn = models.IntegerField(default=0, blank=False, null=False)
     started_at = models.DateField(auto_created=True)
     day_rotation = models.IntegerField(default=7)
 
     def create_with_settings(users, rate):
-        recurrency = _TodoRecurrency.objects.create(recurrency_turn = 0, day_rotation = rate)
+        recurrency = TodoRecurrency.objects.create(recurrency_turn = 0, day_rotation = rate)
 
         for (i, user) in enumerate(users):
-            _OrderedUser(user=user, recurrent_todo = recurrency, order = i)
-            _OrderedUser.save()
+            OrderedUser(user=user, recurrent_todo = recurrency, order = i)
+            OrderedUser.save()
 
         return recurrency
     
     def add_user(self,user):
-        _OrderedUser(user=user, recurrent_todo = self, order = len(_OrderedUser.objects.all(recurrent_todo = self)))
-        _OrderedUser.save()
+        OrderedUser(user=user, recurrent_todo = self, order = len(OrderedUser.objects.all(recurrent_todo = self)))
+        OrderedUser.save()
 
 #######
 
@@ -37,7 +37,7 @@ class Todo(models.Model):
     done = models.BooleanField(default=False)
     position = models.IntegerField()
     space = models.ForeignKey(SharedSpace, on_delete=models.CASCADE)
-    recurrent_state = models.ForeignKey(_TodoRecurrency, on_delete=models.CASCADE, blank=True, null=True)
+    recurrent_state = models.ForeignKey(TodoRecurrency, on_delete=models.CASCADE, blank=True, null=True)
     assigned_user = models.ForeignKey("hub.User", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
@@ -52,7 +52,9 @@ class Todo(models.Model):
         if len(todos) > 0:
             Todo.minimize_positions()
             max_pos = Todo.objects.all().order_by('-position')[0].position
-        Todo.objects.create(name="New Todo", description = "", position = max_pos+1, space=space)
+        todo = Todo.objects.create(name="New Todo", description = "", position = max_pos+1, space=space)
+
+        return todo
 
     def get_open(request):
         user = User.objects.get(auth_user = request.user)
@@ -102,7 +104,7 @@ class Todo(models.Model):
         self.save()
 
         Todo.minimize_positions()
-        
+
     def assign_user(self, user):
         """
         Assign a user to a todo that isn't recurrent
@@ -117,7 +119,7 @@ class Todo(models.Model):
         Turn the todo into a recurrent todo with the specified users and the specified rate.
         The users are ordered
         """
-        recurrency = _TodoRecurrency.create_with_settings(users, rate)
+        recurrency = TodoRecurrency.create_with_settings(users, rate)
 
         self.recurrent_state = recurrency
         self.save()

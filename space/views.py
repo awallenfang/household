@@ -96,3 +96,12 @@ def space_view(request, space_id):
         space.name = name
         space.save()
         return HttpResponseRedirect("/space/" + str(space_id))
+
+@login_required
+def delete_space(request, space_id):
+    user = User.objects.get(auth_user = request.user)
+    space = SharedSpace.objects.get(id = space_id)
+
+    if space.owner == user:
+        space.delete_space()
+    return HttpResponseRedirect("/")

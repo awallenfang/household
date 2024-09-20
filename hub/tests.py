@@ -1,24 +1,26 @@
 from django.test import TestCase
 from django.contrib.auth.models import User as AuthUser
-from .models import InvalidTokenError, User, SharedSpace
+from space.models import InvalidTokenError, SharedSpace
+from .models import User
 # Create your tests here.
 class UserTest(TestCase):
-    def create_testuser(self):
-        auth_user = AuthUser.objects.create_user(username="testname", password="test")
+    def create_testuser(self, name):
+        auth_user = AuthUser.objects.create_user(username=name, password="test")
         user = User.objects.create(auth_user=auth_user)
         return user
 
     def test_user_creation(self):
-        user = self.create_testuser()
+        user = self.create_testuser("test1")
         self.assertTrue(isinstance(user, User))
-        self.assertEqual(user.__str__(), "User: testname")
+        self.assertEqual(user.__str__(), "User: test1")
 
 class SharedSpaceTest(TestCase):
     def create_testspace(self):
-        return SharedSpace.create_space("test space")
+        user = self.create_testuser("test2")
+        return SharedSpace.create_space("test space", user)
     
-    def create_testuser(self):
-        auth_user = AuthUser.objects.create_user(username="testname1", password="test")
+    def create_testuser(self, name):
+        auth_user = AuthUser.objects.create_user(username=name, password="test")
         user = User.objects.create(auth_user=auth_user)
         return user
     
@@ -30,7 +32,7 @@ class SharedSpaceTest(TestCase):
 
     def test_space_user_connection(self):
         space = self.create_testspace()
-        user = self.create_testuser()
+        user = self.create_testuser("test3")
 
         SharedSpace.join(user, space.invite_token)
 

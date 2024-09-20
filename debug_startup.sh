@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running debug build"
+
 echo "Building migrations"
 python ./manage.py makemigrations
 

@@ -22,7 +22,7 @@ def select_space(request, space_id):
 def create_space(request):
     user = User.objects.get(auth_user = request.user)
     space = SharedSpace.create_space("My Space", user)
-    user = User.objects.get(auth_user = request.user)
+
     SharedSpace.join(user, space.invite_token)
 
     if user.selected_space == None:

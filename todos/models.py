@@ -1,33 +1,55 @@
+import datetime
+
 from django.db import models, transaction
 from django.db.models import F
+from django.utils.timezone import localtime, now
 
 from hub.models import SharedSpace, User
 
 ######## Recurrent Todo helpers
 
 class OrderedUser(models.Model):
-    user = models.ForeignKey("hub.User", on_delete=models.CASCADE)
+    user = models.ForeignKey("hub.User", on_delete=models.CASCADE, null=True, blank=True)
     recurrent_todo = models.ForeignKey("todos.TodoRecurrency", on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
+    empty = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'OrderedUser: {self.user} - {self.recurrent_todo} | {self.order}'
 
 class TodoRecurrency(models.Model):
     assigned_users = models.ManyToManyField("hub.User", through=OrderedUser)
     recurrency_turn = models.IntegerField(default=0, blank=False, null=False)
-    started_at = models.DateField(auto_created=True)
+    started_at = models.DateField(auto_created=True, auto_now_add=True)
     day_rotation = models.IntegerField(default=7)
 
     def create_with_settings(users, rate):
         recurrency = TodoRecurrency.objects.create(recurrency_turn = 0, day_rotation = rate)
 
         for (i, user) in enumerate(users):
-            OrderedUser(user=user, recurrent_todo = recurrency, order = i)
-            OrderedUser.save()
+            if user:
+                user = OrderedUser(user=user, recurrent_todo = recurrency, order = i)
+                user.save()
+            else:
+                user = OrderedUser(empty = True, recurrent_todo = recurrency, order = i)
+                user.save()
+
 
         return recurrency
     
     def add_user(self,user):
         OrderedUser(user=user, recurrent_todo = self, order = len(OrderedUser.objects.all(recurrent_todo = self)))
         OrderedUser.save()
+
+    def add_empty(self):
+        OrderedUser(empty = True, recurrent_todo = self, order = len(OrderedUser.objects.all(recurrent_todo = self)))
+        OrderedUser.save()
+
+    def get_user_at_day(self,n) -> User:
+        users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        idx = (n // self.day_rotation) % len(users)
+        return users[idx].user
+
 
 #######
 
@@ -132,6 +154,26 @@ class Todo(models.Model):
         if recurrency:
             recurrency.add_user(user)
             recurrency.save()
+
+    def get_currently_assigned_user(self) -> User:
+        if self.recurrent_state:
+            current_time = localtime(now()).date()
+            start_time = self.recurrent_state.started_at
+
+            passed_time = current_time - start_time
+            return self.recurrent_state.get_user_at_day(passed_time.days)
+        else:
+            return self.assigned_user
+        
+    def get_next_assigned_user(self) -> User:
+        if self.recurrent_state:
+            current_time = localtime(now()).date()
+            start_time = self.recurrent_state.started_at
+
+            passed_time = current_time - start_time
+            return self.recurrent_state.get_user_at_day(passed_time.days + self.recurrent_state.day_rotation)
+        else:
+            return self.assigned_user
 
     
 

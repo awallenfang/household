@@ -1,4 +1,3 @@
-import datetime
 
 from django.db import models, transaction
 from django.db.models import F

@@ -25,7 +25,7 @@ def create_space(request):
 
     SharedSpace.join(user, space.invite_token)
 
-    if user.selected_space == None:
+    if user.selected_space is None:
         user.select_space(space.id)
         return HttpResponseRedirect("/")
     
@@ -36,7 +36,7 @@ def create_space(request):
 def join_space(request):
     user = User.objects.get(auth_user = request.user)
     space_id = request.POST.get("space_token", None)
-    if space_id == None:
+    if space_id is None:
         return HttpResponseRedirect("/")
     try:
         SharedSpace.join(user, space_id)
@@ -90,12 +90,13 @@ def space_view(request, space_id):
                            'joined_people': joined_people})
 
         return HttpResponseRedirect("/")
-    else:
-        name = request.POST.get("name", "My Space")
-        space = SharedSpace.objects.get(id = space_id)
-        space.name = name
-        space.save()
-        return HttpResponseRedirect("/space/" + str(space_id))
+    
+
+    name = request.POST.get("name", "My Space")
+    space = SharedSpace.objects.get(id = space_id)
+    space.name = name
+    space.save()
+    return HttpResponseRedirect("/space/" + str(space_id))
 
 @login_required
 def delete_space(request, space_id):

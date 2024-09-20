@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from .models import get_currencies, Tag, get_all_tags
+from .models import get_currencies, get_all_tags
 
 
 class NewTransactionForm(forms.Form):

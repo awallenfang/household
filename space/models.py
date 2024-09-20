@@ -26,17 +26,15 @@ class SharedSpace(models.Model):
         while len(spaces) > 0:
             invite_token = ''.join(random.choice(string.ascii_uppercase) for _ in range(10))
             spaces = SharedSpace.objects.filter(invite_token = invite_token)
-        
-        # Avoid circular dependencies
-        from hub.models import User
+    
 
         return SharedSpace.objects.create(name=name, invite_token=invite_token, owner=owner)
     
     def join(user, token):
         try:
             space_with_token = SharedSpace.objects.get(invite_token = token)
-        except:
-            raise InvalidTokenError("There is no space with the given token")
+        except Exception as exc:
+            raise InvalidTokenError("There is no space with the given token") from exc
         else:
             user.spaces.add(space_with_token)
             user.save()
@@ -47,7 +45,7 @@ class SharedSpace(models.Model):
             try:
                 self.owner = self.joined_people()[0]
                 self.save()
-            except:
+            except IndexError:
                 # Space is empty now, so remove it
                 self.delete_space()
         user.save()

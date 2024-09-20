@@ -136,7 +136,7 @@ class Todo(models.Model):
             self.assigned_user = user
             self.save()
 
-    def make_recurrent(self, users=[], rate=7):
+    def make_recurrent(self, users=[None], rate=7):
         """
         Turn the todo into a recurrent todo with the specified users and the specified rate.
         The users are ordered
@@ -162,8 +162,8 @@ class Todo(models.Model):
 
             passed_time = current_time - start_time
             return self.recurrent_state.get_user_at_day(passed_time.days)
-        else:
-            return self.assigned_user
+        
+        return self.assigned_user
         
     def get_next_assigned_user(self) -> User:
         if self.recurrent_state:
@@ -172,8 +172,8 @@ class Todo(models.Model):
 
             passed_time = current_time - start_time
             return self.recurrent_state.get_user_at_day(passed_time.days + self.recurrent_state.day_rotation)
-        else:
-            return self.assigned_user
+        
+        return self.assigned_user
 
     
 

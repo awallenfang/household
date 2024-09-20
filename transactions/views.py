@@ -113,15 +113,15 @@ def recipient_page(request, recipient_name):
     context = {
         "transactions": []
     }
-    recipient_name = recipient_name.lower()
-    recipient = Recipient()
-    try:
-        recipient = Recipient.objects.get(name = recipient_name)
-    except:
-        HttpResponseRedirect("/")
+    # recipient_name = recipient_name.lower()
+    # recipient = Recipient()
+    # try:
+    #     recipient = Recipient.objects.get(name = recipient_name)
+    # except Recipient.DoesNotExist:
+    #     HttpResponseRedirect("/")
 
-    received_transactions = Transaction.objects.filter(receiver = recipient.id) 
-    sent_transactions = Transaction.objects.filter(sender=recipient.id)
+    # received_transactions = Transaction.objects.filter(receiver = recipient.id) 
+    # sent_transactions = Transaction.objects.filter(sender=recipient.id)
 
     return render(request, "transactions/recipient.html", context)
 
@@ -130,4 +130,5 @@ def recipient_page(request, recipient_name):
 
 # Helper functions
 def get_all_elements_with_map(model: models.Model, map_lambda):
-    return list(map(map_lambda, list(model.objects.all())))
+    return [map_lambda(elem) for elem in model.objects.all()]
+    # return list(map(map_lambda, list(model.objects.all())))

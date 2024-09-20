@@ -33,7 +33,11 @@
         </div>
         <div class="header-section">
             <div class="space-dropdown">
-                <a class="button space-button" onclick="toggleQuickspace(event)">Spaces</a>
+                {% if selected_space%}
+                    <a class="button space-button" onclick="toggleQuickspace(event)">{{selected_space.name}}</a>
+                {% else %}
+                    <a class="button space-button" onclick="toggleQuickspace(event)">Spaces</a>
+                {% endif %}
                 {% include "space/components/quick_space.html" %}
             </div>
             

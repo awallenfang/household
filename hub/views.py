@@ -20,7 +20,9 @@ def hub(request):
         user = User.objects.get(auth_user = request.user)
         user_spaces = user.spaces.all()
         selected_space = user.selected_space
-        return render(request, "hub/base.html", {"user_spaces": user_spaces, "selected_space": selected_space})
+        return render(request, 
+                      "hub/base.html", 
+                      {"user_spaces": user_spaces, "selected_space": selected_space})
     else:
         return HttpResponseRedirect("/login")
 

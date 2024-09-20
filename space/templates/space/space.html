@@ -1,0 +1,23 @@
+{% load static %}
+{% block content %}
+    <script>
+        function confirmDelete() {
+
+        }
+    </script>
+    <form action="{% url 'space:space_view' space.id %}" method="post" class="space-form">
+        {% csrf_token %}
+        <div class="center-container"><h2>Space Settings and Information</h2></div>
+        <label for="space-name">Name:</label>
+        <input type="text" name="name" id="space-name" value="{{space.name}}">
+        <div class="invite-token-container">
+            <b>Invite Token: {{space.invite_token}}</b>
+        </div>
+        <input class="button btn-small" type="submit" value="Save">
+    </form>
+
+    {% include "space/components/people_list.html" %}
+    {% if selected_space.owner == user%}
+        <a class="button delete-button" href="{% url 'space:delete_space' space.id%}" onclick="return confirm('Are you sure?')">DELETE SPACE</a>
+    {% endif %}
+{% endblock %}

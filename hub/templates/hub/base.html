@@ -5,6 +5,7 @@
 {% load django_htmx %}
 <head>
     <link rel="stylesheet" href="{% static 'hub/base.css' %}">
+    <link rel="stylesheet" href="{% static 'space/space.css' %}">
     <title>{% block title %}Household Planner{% endblock %}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -27,13 +28,13 @@
     <header>
         <div class="header-section">
             <a href="{% url 'hub:hub' %}" class="button">Hub</a>
-            <a href="{% url 'transactions:transactions' %}" class="button">Transactions</a>
+            {% comment %} <a href="{% url 'transactions:transactions' %}" class="button">Transactions</a> {% endcomment %}
             <a href="{% url 'todos:todos' %}" class="button">Todos</a>
         </div>
         <div class="header-section">
             <div class="space-dropdown">
                 <a class="button space-button" onclick="toggleQuickspace(event)">Spaces</a>
-                {% include "hub/components/quick_space.html" %}
+                {% include "space/components/quick_space.html" %}
             </div>
             
             <a href="{% url 'hub:logout' %}" class="button">Logout</a>

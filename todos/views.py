@@ -13,11 +13,15 @@ def dashboard(request):
     """
     The initial dashboard to show the todos
     """
-    todos = Todo.get_open()
+    todos = Todo.get_open(request)
 
-    finished_todos = Todo.get_closed()
+    finished_todos = Todo.get_closed(request)
 
-    return render(request, "todos/dashboard_full.html", {'todos': todos, 'finished_todos': finished_todos})
+    user = User.objects.get(auth_user = request.user)
+    user_spaces = user.spaces.all()
+    selected_space = user.selected_space
+
+    return render(request, "todos/dashboard_full.html", {'todos': todos, 'finished_todos': finished_todos, 'user_spaces': user_spaces, 'selected_space': selected_space})
 
 @login_required
 @require_http_methods(['DELETE'])
@@ -27,9 +31,9 @@ def delete_todo(request, id):
     """
     Todo.objects.filter(id=id).delete()
 
-    todos = Todo.get_open()
+    todos = Todo.get_open(request)
 
-    finished_todos = Todo.get_closed()
+    finished_todos = Todo.get_closed(request)
 
     return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
 
@@ -39,12 +43,13 @@ def add_todo(request):
     """
     Add a new todo with default values
     """
-    space = User.objects.get(auth_user = request.user).selected_space
-    Todo.create_in_space(space)
+    user  = User.objects.get(auth_user = request.user)
 
-    todos = Todo.get_open()
+    todo = Todo.create_in_space(user.selected_space)
+    todo.assign_user(user)
+    todos = Todo.get_open(request)
 
-    finished_todos = Todo.get_closed()
+    finished_todos = Todo.get_closed(request)
 
     return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
 
@@ -86,9 +91,9 @@ def close_todo(request, id):
     todo.done = True
     todo.save()
 
-    todos = Todo.get_open()
+    todos = Todo.get_open(request)
 
-    finished_todos = Todo.get_closed()
+    finished_todos = Todo.get_closed(request)
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
@@ -103,9 +108,9 @@ def open_todo(request, id):
     todo.done = False
     todo.save()
 
-    todos = Todo.get_open()
+    todos = Todo.get_open(request)
 
-    finished_todos = Todo.get_closed()
+    finished_todos = Todo.get_closed(request)
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
@@ -125,8 +130,8 @@ def reorder(request, id, left, right, status):
 
     changed_todo.save()
 
-    todos = Todo.get_open()
+    todos = Todo.get_open(request)
 
-    finished_todos = Todo.get_closed()
+    finished_todos = Todo.get_closed(request)
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})

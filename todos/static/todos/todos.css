@@ -38,8 +38,19 @@ main {
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    margin-bottom: 0.25rem;
     align-items: center;
+    justify-content: space-between;
+}
+
+.todo-header div {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.collapsible-content {
+    max-width: 25vw;
 }
 
 .todo-collapsible-content {
@@ -47,6 +58,7 @@ main {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    max-width: 25vw;
 }
 
 
@@ -93,3 +105,14 @@ h2  {
     display: none;
 }
 
+
+textarea {
+    max-width: 15vw
+}
+
+.recurrency-editor-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}

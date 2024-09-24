@@ -1,0 +1,19 @@
+{% load static%}
+<div class="recurrency-editor-container">
+    <div class="recurrency-list">
+        <div class="recurrency-item">
+            <p class="recurrency-user-name">User</p>
+            <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+        </div>
+    </div>
+    <div class="recurrency-settings">
+        <div class="add-user-container">
+
+        </div>
+        <div class="recurrency-parameter">
+            <p>Rate in days:</p>
+            <input type="number" class="recurrency-rate" value="7">
+        </div>
+        <div class="button">Remove recurrency</div>
+    </div>
+</div>

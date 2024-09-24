@@ -9,22 +9,29 @@
         {% csrf_token %}
         <div class="todo">
             <div class="todo-header">
-                <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
-                <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
+                <div >
+                    <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+                    <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
+                </div>
+                <p>{{todo.assigned_user.auth_user.username}}</p>
+
             </div>
             <div class="todo-buttons">
-                <input type="submit" value="Save" class="button btn-small">
                 <button type="button" class="dropdown-button" onclick="toggleDropdown(event)">...</button>
             </div>
         </div>
-        <div class="collapsible-content dropdown-closed">
+        <div class="collapsible-content dropdown-open">
             <div class="todo-collapsible-content">
                     <div class="todo-description-container">
-                        <textarea name="todo_description" rows="10" cols="30">{{todo.description}}</textarea> 
+
+                        <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea> 
                     </div>
                     
                     <div class="todo-additional-info">
+                        <input type="submit" value="Save" class="button btn-small">
+
                         <div class="button-center-container">
+
                             <a class="button btn-small" 
                             hx-delete="{% url 'todos:delete_todo' todo.id %}" 
                             hx-confirm="Are you sure you would like to delete this todo?"

@@ -133,3 +133,15 @@ def reorder(request, todo_id, left, right, status):
     finished_todos = Todo.get_closed(request)
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
+
+@login_required
+@require_http_methods(['GET'])
+def recurrency_editor(request, todo_id):
+    """
+    Show the recurrency editor for the given todo
+    """
+    todo = Todo.objects.get(id = todo_id)
+    space_users = todo.space.users.all()
+    existing_order = todo.recurrent_state.get_full_order()
+    current_assignment = todo.recurrent_state.get_current_rotation()
+    return render(request, "todos/components/recurrency_editor.html", {"todo": todo, "available_users": space_users, "existing_order": existing_order, "current_assignment_idx": current_assignment})

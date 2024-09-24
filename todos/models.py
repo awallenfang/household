@@ -48,6 +48,26 @@ class TodoRecurrency(models.Model):
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         idx = (n // self.day_rotation) % len(users)
         return users[idx].user
+    
+    def get_full_order(self):
+        """
+        Returns the full list of users as a list of user objects. Empty users are shown as None
+        """
+        ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        return [ou.user for ou in ordered_users]
+    
+    def get_current_rotation(self):
+        """
+        Returns the current index of the user that is assigned to the todo
+        """
+        users = OrderedUser.objects.filter(recurrent_todo = self)
+
+        current_time = localtime(now()).date()
+        start_time = self.recurrent_state.started_at
+
+        passed_days = (current_time - start_time).days
+        return (passed_days // self.day_rotation) % len(users)
+
 
 
 #######

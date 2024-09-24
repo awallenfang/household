@@ -2,13 +2,13 @@
 <div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
     <div class="todo">
         <div class="todo-header">
-            <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
-            <p class="todo-name">{{ todo.name }}</p>
+            <div >
+                <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+                <p class="todo-name">{{ todo.name }}</p>
+            </div>
+            <p>{{todo.assigned_user.auth_user.username}}</p>
         </div>
         <div class="todo-buttons">
-            <a class="button btn-small" hx-post="{% url 'todos:edit_todo' todo.id %}"
-            hx-target="closest .collapsible-container"
-            hx-swap="outerHTML">Edit</a>
             <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
         </div>
     </div>
@@ -18,6 +18,9 @@
                     <p class="todo-description">{{todo.description}} </p>
                 </div>
                 <div class="todo-additional-info">
+                    <a class="button btn-small" hx-post="{% url 'todos:edit_todo' todo.id %}"
+                    hx-target="closest .collapsible-container"
+                    hx-swap="outerHTML">Edit</a>
                     <div class="button-center-container">
                         <a class="button btn-small" 
                         hx-delete="{% url 'todos:delete_todo' todo.id %}" 

@@ -134,14 +134,53 @@ def reorder(request, todo_id, left, right, status):
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
+def render_recurrency_editor(request, todo_id):
+    todo = Todo.objects.get(id = todo_id)
+    user = User.objects.get(auth_user = request.user)
+    # TODO: Make this just not return anything once the building of it is done
+    if todo.recurrent_state is None:
+        todo.make_recurrent([user])
+    space_users = todo.space.joined_people()
+    existing_order = todo.recurrent_state.get_full_order()
+    current_assignment = todo.recurrent_state.get_current_rotation()
+    rate = todo.recurrent_state.day_rotation
+    return render(request, "todos/components/recurrency_editor.html", {"todo": todo, "available_users": space_users, "existing_order": existing_order, "current_assignment_idx": current_assignment, "rate": rate})
+
 @login_required
 @require_http_methods(['GET'])
 def recurrency_editor(request, todo_id):
     """
     Show the recurrency editor for the given todo
     """
+    return render_recurrency_editor(request, todo_id)
+
+@login_required
+@require_http_methods(['POST'])
+def recurrency_add_users(request, todo_id):
+    # TODO: Figure out why the parameter isn't caught
+    path = request.get_full_path()
+    users = path.split("?users=")
+    if len(users) > 1:
+        added_list = users[1].split(",")
+        ids = [int(id) for id in added_list]
+
+        todo = Todo.objects.get(id = todo_id)
+        for user_id in ids:
+            if user_id == -1:
+                todo.recurrent_state.add_empty()
+            else:
+                user = User.objects.get(id = user_id)
+                todo.recurrent_state.add_user(user)
+
+    return render_recurrency_editor(request, todo_id)
+
+@login_required
+@require_http_methods(['POST'])
+def recurrency_rate_change(request, todo_id, rate):
     todo = Todo.objects.get(id = todo_id)
-    space_users = todo.space.users.all()
-    existing_order = todo.recurrent_state.get_full_order()
-    current_assignment = todo.recurrent_state.get_current_rotation()
-    return render(request, "todos/components/recurrency_editor.html", {"todo": todo, "available_users": space_users, "existing_order": existing_order, "current_assignment_idx": current_assignment})
+    if todo.recurrent_state is None:
+        return render_recurrency_editor(request, todo_id)
+    
+    todo.recurrent_state.day_rotation = rate
+    todo.recurrent_state.save()
+    return render_recurrency_editor(request, todo_id)

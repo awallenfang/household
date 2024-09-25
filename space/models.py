@@ -35,9 +35,8 @@ class SharedSpace(models.Model):
             space_with_token = SharedSpace.objects.get(invite_token = token)
         except Exception as exc:
             raise InvalidTokenError("There is no space with the given token") from exc
-        else:
-            user.spaces.add(space_with_token)
-            user.save()
+        user.spaces.add(space_with_token)
+        user.save()
 
     def leave(self, user):
         user.spaces.remove(self)

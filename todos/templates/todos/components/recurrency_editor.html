@@ -1,18 +1,49 @@
 {% load static%}
+<script>
+    let checks = document.getElementsByClassName("user-add-check")
+    console.log(checks)
+
+    for (let check of checks) {
+        check.addEventListener("change", (event) => {
+            userChecked(event)
+        })
+    }
+
+    document.getElementById("rate-change-input").addEventListener("change", (event) => {
+        rateChanged(event)
+    })
+</script>
 <div class="recurrency-editor-container">
     <div class="recurrency-list">
-        <div class="recurrency-item">
-            <p class="recurrency-user-name">User</p>
-            <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
-        </div>
+        {% for user in existing_order%}
+            <div class="recurrency-item">
+                <p class="recurrency-user-name">{{user.auth_user.username}}</p>
+                <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+            </div>
+        {%endfor%}
     </div>
+    <div class="vertical-line" style="background-color: var(--mid-bg)"></div>
     <div class="recurrency-settings">
         <div class="add-user-container">
-
+            <div class="user-list">
+                <div class="selectable-user">
+                    <p>Empty space</p>
+                    <input  class="user-add-check" type="checkbox" name="-1_checked" id="-1" change="userChecked(event)">
+                </div>
+                {% for user in available_users%}
+                <div class="selectable-user">
+                    <p>{{user.auth_user.username}}</p>
+                    <input  class="user-add-check" type="checkbox" name="{{user.id}}_checked" id="{{user.id}}" change="userChecked(event)">
+                </div>
+                    
+                {% endfor %}
+            </div>
+            <a onclick="addSelectedUsers(event)" class="button" todo-id="{{todo.id}}">Add Selected Users</a>
         </div>
+        <div class="horizontal-line" style="background-color: var(--mid-bg); margin: 0.5rem 0;"></div>
         <div class="recurrency-parameter">
             <p>Rate in days:</p>
-            <input type="number" class="recurrency-rate" value="7">
+            <input type="number" class="recurrency-rate" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
         </div>
         <div class="button">Remove recurrency</div>
     </div>

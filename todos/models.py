@@ -37,12 +37,14 @@ class TodoRecurrency(models.Model):
         return recurrency
     
     def add_user(self,user):
-        OrderedUser(user=user, recurrent_todo = self, order = len(OrderedUser.objects.all(recurrent_todo = self)))
-        OrderedUser.save()
+        order = len(OrderedUser.objects.filter(recurrent_todo = self))
+        ordered_user = OrderedUser.objects.create(user=user, recurrent_todo = self, order = order)
+        ordered_user.save()
 
     def add_empty(self):
-        OrderedUser(empty = True, recurrent_todo = self, order = len(OrderedUser.objects.all(recurrent_todo = self)))
-        OrderedUser.save()
+        order = len(OrderedUser.objects.filter(recurrent_todo = self))
+        ordered_user = OrderedUser.objects.create(empty = True, recurrent_todo = self, order = order)
+        ordered_user.save()
 
     def get_user_at_day(self,n) -> User:
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
@@ -63,7 +65,7 @@ class TodoRecurrency(models.Model):
         users = OrderedUser.objects.filter(recurrent_todo = self)
 
         current_time = localtime(now()).date()
-        start_time = self.recurrent_state.started_at
+        start_time = self.started_at
 
         passed_days = (current_time - start_time).days
         return (passed_days // self.day_rotation) % len(users)

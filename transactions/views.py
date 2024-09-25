@@ -15,7 +15,7 @@ from .forms import NewTransactionForm
 def dashboard(request):
     if request.method == "GET":
         return dashboard_handle_get(request)
-    elif request.method == "POST":
+    if request.method == "POST":
         return dashboard_handle_post(request)
     else:
         return HttpResponseRedirect("/")
@@ -65,7 +65,7 @@ def dashboard_handle_get(request):
     }
 
 
-    sum = 0
+    summation = 0
     cummulative_sum = [0]
     for trans in db_transactions:
         try:
@@ -86,16 +86,16 @@ def dashboard_handle_get(request):
         })
         amount_tuple = trans.amount.as_integer_ratio()
 
-        sum += amount_tuple[0] / amount_tuple[1]
-        cummulative_sum.append(sum)
+        summation += amount_tuple[0] / amount_tuple[1]
+        cummulative_sum.append(summation)
 
 
-    context['sum'] = sum
+    context['sum'] = summation
     if len(db_transactions) > 0:
         context['sum_currency'] = db_transactions[0].currency
     else:
         context['sum_currency'] = "EUR"
-    context['sum_state'] = "positive" if sum >= 0 else "negative"
+    context['sum_state'] = "positive" if summation >= 0 else "negative"
     context['cummulative_sum'] = json.dumps(cummulative_sum)
 
     transaction_form = NewTransactionForm()

@@ -71,9 +71,9 @@ def signup(request):
             auth_user = AuthUser.objects.create_user(form.cleaned_data["username"], form.cleaned_data["email"], form.cleaned_data["password"])
         except IntegrityError:
             return render(request, "hub/signup.html", {"form": form, "error_message": "The username is already taken."})
-        else:
-            # If the auth_user was created, also create out user model
-            User.objects.create(auth_user=auth_user)
+        
+        # If the auth_user was created, also create out user model
+        User.objects.create(auth_user=auth_user)
 
         # If everything was successful return to the hub
         return HttpResponseRedirect("/login")

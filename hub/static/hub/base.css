@@ -1,7 +1,7 @@
 * {
     --light: rgba(244,250,255,1);
     --light-bg: #DEE3E1;
-    --mid-bg: #B7C5BB;
+    --mid-bg: #b7c5c3;
     --dark-bg: #303935;
     --text: #191710;
     --strong-highlight: rgba(53,255,146,1);
@@ -33,8 +33,13 @@ header {
 /* Buttons */
 
 .button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
     background-color: var(--light-highlight);
-    padding: 1rem;
+    padding: 0 1rem;
+    height: 2.5rem;
     border-radius: 0.5rem;
     font-family: 'Albert Sans', sans-serif;
     font-weight: 800;
@@ -124,6 +129,12 @@ label {
 .horizontal-line {
     width: 100%;
     height: 2px;
+    background-color: var(--light-bg);
+}
+
+.vertical-line {
+    width: 2px;
+    height: 100%;
     background-color: var(--light-bg);
 }
 

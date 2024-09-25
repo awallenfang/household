@@ -1,3 +1,6 @@
+selected_users = []
+selected_todo_id = -1
+
 function toggleDropdown(e) {
     let dropdown = e.target.parentElement.parentElement.nextElementSibling
 
@@ -56,6 +59,39 @@ function setupDragEnv(e) {
             }
       };
     }
+}
+
+function addSelectedUsers(e) {
+    let id = e.target.getAttribute("todo-id")
+
+    let url = `/todos/${id}/add_users?users=`
+    for (let user of selected_users) {
+        url += user + ","
+    }
+    url = url.substring(0, url.length-1)
+    htmx.ajax("POST", url, '#recurrent-block')
+    clearSelectedUsers()
+}
+
+function userChecked(e) {
+    let index = selected_users.indexOf(e.target.id)
+
+    if (index == -1) {
+        selected_users.push(e.target.id)
+    } else {
+        selected_users.splice(index, 1)
+    }
+    console.log(selected_users)
+}
+
+function clearSelectedUsers() {
+    selected_users = []
+}
+
+function rateChanged(e) {
+    let id = e.target.getAttribute("todo-id")
+    let url = `/todos/${id}/rate_change/${e.target.value}`
+    htmx.ajax("POST", url, '#recurrent-block')
 }
 
 document.addEventListener("DOMContentLoaded", function(e) {

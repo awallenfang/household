@@ -115,11 +115,8 @@ textarea {
     flex-direction: row;
     gap: 1rem;
     justify-content: space-between;
-    background-color: var(--light-bg);
-    width: 35vw;
-    height: 25vw;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    width: 100%;
+    overflow: hidden;
 }
 
 .recurrency-list {
@@ -177,4 +174,41 @@ textarea {
     background-color: var(--mid-bg);
     padding: 0.5rem;
     border-radius: 0.25rem;
+}
+
+.top-bar-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.floating-container {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0); 
+    width: 35vw;
+    height: 25vw;
+    display:flex;
+    flex-direction: column;
+    background-color: var(--light-bg);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    -webkit-box-shadow: 5px 5px 15px -5px rgba(0,0,0,0.88); 
+    box-shadow: 5px 5px 15px -5px rgba(0,0,0,0.88);
+}
+
+.close-icon-container  {
+    cursor: pointer;
+}
+
+.vertical-center-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.trash-container {
+    display: inline-block;
+    height: 100%;
 }

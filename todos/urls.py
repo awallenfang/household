@@ -16,4 +16,8 @@ urlpatterns = [
     path('<int:todo_id>/editor', views.recurrency_editor, name="recurrency_editor"),
     path('<int:todo_id>/add_users', views.recurrency_add_users, name="recurrency_add_users"),
     path('<int:todo_id>/rate_change/<int:rate>', views.recurrency_rate_change, name="recurrency_rate_change"),
+    # Maybe move this path to the hub
+    path('empty', views.empty, name="empty"),
+    path('<int:todo_id>/remove_position/<int:position>', views.recurrency_delete_position, name="recurrency_remove_position"),
+
 ]

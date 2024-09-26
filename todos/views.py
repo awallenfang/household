@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
@@ -183,4 +184,20 @@ def recurrency_rate_change(request, todo_id, rate):
     
     todo.recurrent_state.day_rotation = rate
     todo.recurrent_state.save()
+    return render_recurrency_editor(request, todo_id)
+
+def empty(request):
+    return HttpResponse("")
+
+@login_required
+@require_http_methods(['POST'])
+def recurrency_delete_position(request, todo_id, position):
+    todo = Todo.objects.get(id = todo_id)
+
+    # If it isn't recurrant do nothing
+    if todo.recurrent_state is None or position < 0:
+        return render_recurrency_editor(request, todo_id)
+    
+    todo.recurrent_state.remove_position(position)
+
     return render_recurrency_editor(request, todo_id)

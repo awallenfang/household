@@ -61,14 +61,27 @@ class TodoRecurrency(models.Model):
     def get_current_rotation(self):
         """
         Returns the current index of the user that is assigned to the todo
+        Returns -1 if there are no users
         """
         users = OrderedUser.objects.filter(recurrent_todo = self)
+        if len(users) == 0:
+            return -1
 
         current_time = localtime(now()).date()
         start_time = self.started_at
 
         passed_days = (current_time - start_time).days
         return (passed_days // self.day_rotation) % len(users)
+    
+    def remove_position(self, position):
+        ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        ordered_users[position].delete()
+        
+        ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        for i in range(len(ordered_users)):
+            ordered_users[i].order = i
+            ordered_users[i].save()
+
 
 
 

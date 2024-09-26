@@ -1,9 +1,11 @@
 {% load static%}
 <div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
     <div class="floating-recurrent-container">
-        <a class="button btn-small" hx-get="{% url 'todos:recurrency_editor' todo.id %}"
-                    hx-target="#recurrent-block"
-                    hx-swap="innerHTML">Open Editor</a>
+        <a class="button btn-small" 
+        hx-get="{% url 'todos:recurrency_editor' todo.id %}"
+        hx-target="#recurrent-block"
+        hx-swap="innerHTML"
+        onclick="clearSelectedUsers()">Open Editor</a>
     </div>
     <div class="todo">
         <div class="todo-header">

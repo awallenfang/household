@@ -13,38 +13,60 @@
         rateChanged(event)
     })
 </script>
-<div class="recurrency-editor-container">
-    <div class="recurrency-list">
-        {% for user in existing_order%}
-            <div class="recurrency-item">
-                <p class="recurrency-user-name">{{user.auth_user.username}}</p>
-                <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
-            </div>
-        {%endfor%}
+<div class="floating-container">
+    <div class="top-bar-container">
+        <div></div>
+        <a hx-get="{% url 'todos:empty'%}" 
+        hx-target="#recurrent-block"
+        hx-swap="innerHTML" 
+        onclick="clearSelectedUsers()"
+        class="close-icon-container">
+            <img src="{% static 'todos/assets/close.svg' %}" class="close-icon">
+        </a>
     </div>
-    <div class="vertical-line" style="background-color: var(--mid-bg)"></div>
-    <div class="recurrency-settings">
-        <div class="add-user-container">
-            <div class="user-list">
-                <div class="selectable-user">
-                    <p>Empty space</p>
-                    <input  class="user-add-check" type="checkbox" name="-1_checked" id="-1" change="userChecked(event)">
+    <div class="recurrency-editor-container">
+        
+        <div class="recurrency-list">
+            {% for user in existing_order%}
+                <div class="recurrency-item">
+                    <p class="recurrency-user-name">{{user.auth_user.username}}</p>
+                    <div cass="vertical-center-flex">
+                        <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
+                        hx-target="#recurrent-block"
+                        hx-swap="innerHTML"
+                        class="trash-container">
+                            <img src="{% static 'todos/assets/trash.svg' %}" class="trashcan">
+                        </a>
+                        <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+                    </div>
                 </div>
-                {% for user in available_users%}
-                <div class="selectable-user">
-                    <p>{{user.auth_user.username}}</p>
-                    <input  class="user-add-check" type="checkbox" name="{{user.id}}_checked" id="{{user.id}}" change="userChecked(event)">
+            {%endfor%}
+        </div>
+        <div class="vertical-line" style="background-color: var(--mid-bg)"></div>
+        <div class="recurrency-settings">
+            <div class="add-user-container">
+                <div class="user-list">
+                    <div class="selectable-user">
+                        <p>Empty space</p>
+                        <input  class="user-add-check" type="checkbox" name="-1_checked" id="-1" change="userChecked(event)">
+                    </div>
+                    {% for user in available_users%}
+                    <div class="selectable-user">
+                        <p>{{user.auth_user.username}}</p>
+                        <input  class="user-add-check" type="checkbox" name="{{user.id}}_checked" id="{{user.id}}" change="userChecked(event)">
+                    </div>
+                        
+                    {% endfor %}
                 </div>
-                    
-                {% endfor %}
+                <a onclick="addSelectedUsers(event)" class="button" todo-id="{{todo.id}}">Add Selected Users</a>
             </div>
-            <a onclick="addSelectedUsers(event)" class="button" todo-id="{{todo.id}}">Add Selected Users</a>
+            <div class="horizontal-line" style="background-color: var(--mid-bg); margin: 0.5rem 0;"></div>
+            <div class="recurrency-parameter">
+                <p>Rate in days:</p>
+                <input type="number" class="recurrency-rate" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
+            </div>
+            <div class="button">Remove recurrency</div>
         </div>
-        <div class="horizontal-line" style="background-color: var(--mid-bg); margin: 0.5rem 0;"></div>
-        <div class="recurrency-parameter">
-            <p>Rate in days:</p>
-            <input type="number" class="recurrency-rate" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
-        </div>
-        <div class="button">Remove recurrency</div>
+        
     </div>
 </div>

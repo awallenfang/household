@@ -18,6 +18,7 @@ class SharedSpace(models.Model):
     def __str__(self):
         return f'Shared Space: {self.name}'
     
+    @staticmethod
     def create_space(name: str, owner):
         invite_token = ''.join(random.choice(string.ascii_uppercase) for _ in range(10))
 
@@ -30,10 +31,11 @@ class SharedSpace(models.Model):
 
         return SharedSpace.objects.create(name=name, invite_token=invite_token, owner=owner)
     
+    @staticmethod
     def join(user, token):
         try:
             space_with_token = SharedSpace.objects.get(invite_token = token)
-        except Exception as exc:
+        except SharedSpace.DoesNotExist as exc:
             raise InvalidTokenError("There is no space with the given token") from exc
         user.spaces.add(space_with_token)
         user.save()

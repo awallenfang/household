@@ -19,5 +19,6 @@ urlpatterns = [
     # Maybe move this path to the hub
     path('empty', views.empty, name="empty"),
     path('<int:todo_id>/remove_position/<int:position>', views.recurrency_delete_position, name="recurrency_remove_position"),
+    path('<int:todo_id>/<str:prev_pos>/<str:pos>/recurrency_reorder_user', views.recurrency_reorder_user, name="todo_recurrency_reorder_user"),
 
 ]

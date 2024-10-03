@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 from hub.models import User
 
@@ -12,6 +13,7 @@ def dashboard(request):
     """
     The initial dashboard to show the todos
     """
+    Todo.check_recurrency_update()
     todos = Todo.get_open(request)
 
     finished_todos = Todo.get_closed(request)
@@ -141,11 +143,18 @@ def render_recurrency_editor(request, todo_id):
     # TODO: Make this just not return anything once the building of it is done
     if todo.recurrent_state is None:
         todo.make_recurrent([user])
+        
     space_users = todo.space.joined_people()
     existing_order = todo.recurrent_state.get_full_order()
     current_assignment = todo.recurrent_state.get_current_rotation()
     rate = todo.recurrent_state.day_rotation
-    return render(request, "todos/components/recurrency_editor.html", {"todo": todo, "available_users": space_users, "existing_order": existing_order, "current_assignment_idx": current_assignment, "rate": rate})
+    return render(request, 
+                  "todos/components/recurrency_editor.html", 
+                  {"todo": todo, 
+                   "available_users": space_users, 
+                   "existing_order": existing_order, 
+                   "current_assignment_idx": current_assignment, 
+                   "rate": rate})
 
 @login_required
 @require_http_methods(['GET'])
@@ -170,7 +179,7 @@ def recurrency_add_users(request, todo_id):
             if user_id == -1:
                 todo.recurrent_state.add_empty()
             else:
-                user = User.objects.get(id = user_id)
+                user = get_object_or_404(User, id = user_id)
                 todo.recurrent_state.add_user(user)
 
     return render_recurrency_editor(request, todo_id)
@@ -199,5 +208,14 @@ def recurrency_delete_position(request, todo_id, position):
         return render_recurrency_editor(request, todo_id)
     
     todo.recurrent_state.remove_position(position)
+
+    return render_recurrency_editor(request, todo_id)
+
+def recurrency_reorder_user(request, todo_id, prev_pos, pos):
+    todo = Todo.objects.get(id = todo_id)
+    if todo.recurrent_state is None:
+        return render_recurrency_editor(request, todo_id)
+    
+    todo.recurrent_state.reorder_user(int(prev_pos), int(pos))
 
     return render_recurrency_editor(request, todo_id)

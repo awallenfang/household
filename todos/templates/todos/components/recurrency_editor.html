@@ -1,7 +1,6 @@
 {% load static%}
 <script>
     let checks = document.getElementsByClassName("user-add-check")
-    console.log(checks)
 
     for (let check of checks) {
         check.addEventListener("change", (event) => {
@@ -12,6 +11,67 @@
     document.getElementById("rate-change-input").addEventListener("change", (event) => {
         rateChanged(event)
     })
+
+    function drop_user(ev) {
+        ev.preventDefault()
+
+        
+        let id = ev.dataTransfer.getData('todo-id')
+        let prev_position = ev.dataTransfer.getData("prev_pos")
+        let position = ev.target.getAttribute("pos")
+        if (Math.abs(position - prev_position) == 0) {
+            return
+        }
+        let url = `/todos/${id}/${prev_position}/${position}/recurrency_reorder_user`
+        htmx.ajax("POST", url, '#recurrent-block')
+    }
+
+    function setupUserDragEnv(e) {
+        let handles = document.getElementsByClassName("user-drag-handle")
+        let drop_spots = document.getElementsByClassName("user-drop-spot")
+    
+        for (let handle of handles) {
+            let draggable_elem = handle.closest('.draggable-user-container')
+    
+            handle.onmousedown = function(e) {
+                draggable_elem.setAttribute('draggable', 'true');
+                
+            }
+            handle.onmouseup = function(e) {
+                draggable_elem.setAttribute('draggable', 'false');
+                
+            }
+            draggable_elem.ondragstart = function(e) {
+                let todo_id = e.target.getAttribute("todo-id")
+                let pos = e.target.getAttribute("pos")
+                e.dataTransfer.setData('todo-id', todo_id)
+                e.dataTransfer.setData('prev_pos', pos)
+                e.dataTransfer.setData('text/plain', 'handle');
+                for (let drop_spot of drop_spots) {
+                    drop_spot.style.visibility = "visible"
+                }
+            }
+            draggable_elem.ondragend = function(e) {
+                e.target.setAttribute('draggable', 'false')
+                for (let drop_spot of drop_spots) {
+                    drop_spot.style.visibility = "hidden"
+                }
+          };
+        }
+
+        for (let spot of drop_spots) {
+            spot.ondrop = function(e) {
+                drop_user(e)
+            }
+        }
+    }
+    document.addEventListener("DOMContentLoaded", function(e) {
+        setupUserDragEnv(e)
+    })
+    document.addEventListener('htmx:afterSwap', function(e) {
+        setupUserDragEnv(e)
+    });
+    setupUserDragEnv()
 </script>
 <div class="floating-container">
     <div class="top-bar-container">
@@ -27,8 +87,23 @@
     <div class="recurrency-editor-container">
         
         <div class="recurrency-list">
+            {% if existing_order|length > 0%}
+                <div class="user-drop-spot" 
+                pos="0"
+                ondragover="allowDrop(event)"
+                ondrop="drop_user(event)"></div>
+            {%endif%}
             {% for user in existing_order%}
+            <div class="recurrency-item-container draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}">
+                {% if forloop.counter0 == current_assignment_idx%}
+                    <div class="select-drag-spot">
+                        <img src="{% static 'todos/assets/select.svg' %}" class="close-icon">
+                    </div>
+                {% else %}
+                    <div class="select-drag-spot"></div>
+                {% endif %}
                 <div class="recurrency-item">
+                    
                     <p class="recurrency-user-name">{{user.auth_user.username}}</p>
                     <div cass="vertical-center-flex">
                         <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
@@ -37,9 +112,14 @@
                         class="trash-container">
                             <img src="{% static 'todos/assets/trash.svg' %}" class="trashcan">
                         </a>
-                        <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+                        <img src="{% static 'todos/assets/drag.svg' %}" class="user-drag-handle" draggable="false">
                     </div>
                 </div>
+            </div>
+            <div class="user-drop-spot" 
+            pos="{{forloop.counter}}"
+            ondragover="allowDrop(event)"
+            ondrop="drop_user(event)"></div>
             {%endfor%}
         </div>
         <div class="vertical-line" style="background-color: var(--mid-bg)"></div>

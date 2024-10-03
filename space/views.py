@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
 from hub.models import User
-from space.models import SharedSpace
+from space.models import InvalidTokenError, SharedSpace
 
 # Create your views here.
 
@@ -40,7 +40,7 @@ def join_space(request):
         return HttpResponseRedirect("/")
     try:
         SharedSpace.join(user, space_id)
-    except:
+    except InvalidTokenError:
         return HttpResponseRedirect("/")
 
     return HttpResponseRedirect("/")
@@ -60,7 +60,7 @@ def kick_from_space(request, space_id, username):
                 try:
                     space.owner = space.joined_people()[1]
                     space.save()    
-                except:
+                except IndexError:
                     # Space is empty now, so remove it
                     space.delete_space()
                     return HttpResponseRedirect("/")

@@ -1,3 +1,5 @@
+
+/* ############### General todo view ###############  */
 #todo-block {
     display: flex;
     flex-direction: row;
@@ -110,6 +112,8 @@ textarea {
     max-width: 15vw
 }
 
+/* ############### Recurrency view ################## */
+
 .recurrency-editor-container {
     display: flex;
     flex-direction: row;
@@ -211,4 +215,29 @@ textarea {
 .trash-container {
     display: inline-block;
     height: 100%;
+}
+
+.recurrency-item-container {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.select-drag-spot {
+    width: 2rem;
+}
+
+.user-drop-spot {
+    background-color: var(--mid-bg);
+    width: 5rem;
+    border-style: dashed;
+    border-radius: 0.5rem;
+    border-color: var(--dark-bg);
+    height: 2rem;
+    visibility: hidden;
+}
+
+.user-drag-handle:hover {
+    cursor: grab;
 }

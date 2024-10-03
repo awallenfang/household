@@ -19,9 +19,11 @@ class OrderedUser(models.Model):
 class TodoRecurrency(models.Model):
     assigned_users = models.ManyToManyField("hub.User", through=OrderedUser)
     recurrency_turn = models.IntegerField(default=0, blank=False, null=False)
-    started_at = models.DateField(auto_created=True, auto_now_add=True)
+    started_at = models.DateField(auto_created=True, default=now)
     day_rotation = models.IntegerField(default=7)
+    last_check = models.DateTimeField(auto_created=True, default=now)
 
+    @staticmethod
     def create_with_settings(users, rate):
         recurrency = TodoRecurrency.objects.create(recurrency_turn = 0, day_rotation = rate)
 
@@ -48,8 +50,16 @@ class TodoRecurrency(models.Model):
 
     def get_user_at_day(self,n) -> User:
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        if len(users) == 0:
+            return None
         idx = (n // self.day_rotation) % len(users)
         return users[idx].user
+    
+    def get_current_user(self) -> User:
+        users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        if len(users) == 0:
+            return None
+        return users[self.get_current_rotation()].user
     
     def get_full_order(self):
         """
@@ -58,29 +68,48 @@ class TodoRecurrency(models.Model):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         return [ou.user for ou in ordered_users]
     
+    def get_rotation_at_date(self, date):
+        users = OrderedUser.objects.filter(recurrent_todo = self)
+        if len(users) == 0:
+            return -1
+
+        start_time = self.started_at
+
+        passed_days = (date - start_time).days
+        return (passed_days // self.day_rotation) % len(users)
+
     def get_current_rotation(self):
         """
         Returns the current index of the user that is assigned to the todo
         Returns -1 if there are no users
         """
-        users = OrderedUser.objects.filter(recurrent_todo = self)
-        if len(users) == 0:
-            return -1
-
         current_time = localtime(now()).date()
-        start_time = self.started_at
 
-        passed_days = (current_time - start_time).days
-        return (passed_days // self.day_rotation) % len(users)
+        return self.get_rotation_at_date(current_time)
     
     def remove_position(self, position):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         ordered_users[position].delete()
         
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
-        for i in range(len(ordered_users)):
-            ordered_users[i].order = i
+        for i, ord_usr in enumerate(ordered_users):
+            ord_usr.order = i
+            ord_usr.save()
+
+    def reorder_user(self, prev_pos, new_pos):
+        ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+
+        for i in range(new_pos, len(ordered_users) - new_pos):
+            ordered_users[i].order = i+1
             ordered_users[i].save()
+        ordered_users[prev_pos].order = new_pos
+        ordered_users[prev_pos].save()
+
+        ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        for i, ord_usr in enumerate(ordered_users):
+            ord_usr.order = i
+            ord_usr.save()
+        
 
 
 
@@ -99,6 +128,7 @@ class Todo(models.Model):
     def __str__(self):
         return f'{self.name}: {self.description} | Position: {self.position} | Done: {self.done}'
     
+    @staticmethod
     def create_in_space(space):
         """
         Create a todo with the name "New Todo" and an empty description
@@ -111,18 +141,21 @@ class Todo(models.Model):
         todo = Todo.objects.create(name="New Todo", description = "", position = max_pos+1, space=space)
 
         return todo
-
+    
+    @staticmethod
     def get_open(request):
         user = User.objects.get(auth_user = request.user)
         space = user.selected_space
         return Todo.objects.filter(done=False, space=space).order_by("position")
     
+    @staticmethod
     def get_closed(request):
         user = User.objects.get(auth_user = request.user)
         space = user.selected_space
 
         return Todo.objects.filter(done=True, space=space).order_by("position")
     
+    @staticmethod
     def minimize_positions():
         """
         This minimizes all the values for the positions to not leave any holes
@@ -208,6 +241,46 @@ class Todo(models.Model):
             return self.recurrent_state.get_user_at_day(passed_time.days + self.recurrent_state.day_rotation)
         
         return self.assigned_user
+    
+    def set_open(self):
+        self.done = False
+        self.save()
+
+    def set_closed(self):
+        self.done = True
+        self.save()
+    
+    @staticmethod
+    def check_recurrency_update():
+        # Iterate over every recurrent todo
+        # Check if since the last check the assigned user would have changed
+        # Change the state to open if the user changed
+        recurrent_todos = Todo.objects.filter(recurrent_state__isnull = False)
+
+        for todo in recurrent_todos:
+
+            recurrency = todo.recurrent_state
+            # If the last check was on another day
+            if recurrency.last_check.date() != localtime(now()).date():
+                # Check if the rotation changed since then
+                current_rot = recurrency.get_current_rotation()
+                past_rot = recurrency.get_rotation_at_date(recurrency.last_check.date())
+
+                # If the rotation changed
+                if current_rot != past_rot:
+                    user = recurrency.get_current_user()
+                    # If there are no users or this time no one is assigned set it to be closed
+                    if user is None:
+                        todo.set_closed()
+                    else:
+                        todo.set_open()
+
+                        todo.assigned_user = recurrency.get_current_user()
+                        todo.save()
+
+                recurrency.last_check = now()
+                recurrency.save()
+
 
     
 

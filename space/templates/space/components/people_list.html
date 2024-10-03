@@ -8,7 +8,9 @@
                 <span class="space-owner">Owner</span>
             {% endif %}
             {% if selected_space.owner == user or person == user %}
-                <a href="{% url 'space:kick_from_space' space.id person.auth_user.username%}">
+                <a href="{% url 'space:kick_from_space' space.id person.auth_user.username%}" {% if joined_people|length == 1%}
+                    onclick="return confirm('Are you sure? By leaving as the last person the space and all connected data will be lost!')"
+                {%endif%}>
                     <img src="{% static 'space/assets/door-kick.svg' %}" alt="Kick {{person.auth_user.username}}">
                 </a>
             {% else %}

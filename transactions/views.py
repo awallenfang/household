@@ -17,8 +17,8 @@ def dashboard(request):
         return dashboard_handle_get(request)
     if request.method == "POST":
         return dashboard_handle_post(request)
-    else:
-        return HttpResponseRedirect("/")
+
+    return HttpResponseRedirect("/")
 
 @login_required
 def dashboard_handle_post(request):
@@ -70,7 +70,7 @@ def dashboard_handle_get(request):
     for trans in db_transactions:
         try:
             tag = TransactionToTag.objects.get(transaction = trans).tag
-        except:
+        except TransactionToTag.DoesNotExist:
             tag = None
         context['transactions'].append({
             'name': trans.name,
@@ -108,22 +108,22 @@ def dashboard_handle_get(request):
 
     return render(request, "transactions/dashboard_full.html", context)
 
-@login_required
-def recipient_page(request, recipient_name):
-    context = {
-        "transactions": []
-    }
-    # recipient_name = recipient_name.lower()
-    # recipient = Recipient()
-    # try:
-    #     recipient = Recipient.objects.get(name = recipient_name)
-    # except Recipient.DoesNotExist:
-    #     HttpResponseRedirect("/")
+# @login_required
+# def recipient_page(request, recipient_name):
+#     context = {
+#         "transactions": []
+#     }
+#     # recipient_name = recipient_name.lower()
+#     # recipient = Recipient()
+#     # try:
+#     #     recipient = Recipient.objects.get(name = recipient_name)
+#     # except Recipient.DoesNotExist:
+#     #     HttpResponseRedirect("/")
 
-    # received_transactions = Transaction.objects.filter(receiver = recipient.id) 
-    # sent_transactions = Transaction.objects.filter(sender=recipient.id)
+#     # received_transactions = Transaction.objects.filter(receiver = recipient.id) 
+#     # sent_transactions = Transaction.objects.filter(sender=recipient.id)
 
-    return render(request, "transactions/recipient.html", context)
+#     return render(request, "transactions/recipient.html", context)
 
 
 

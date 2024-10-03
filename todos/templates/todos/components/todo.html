@@ -1,19 +1,18 @@
 {% load static%}
 <div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
-    <div class="floating-recurrent-container">
-        <a class="button btn-small" 
-        hx-get="{% url 'todos:recurrency_editor' todo.id %}"
-        hx-target="#recurrent-block"
-        hx-swap="innerHTML"
-        onclick="clearSelectedUsers()">Open Editor</a>
-    </div>
+        
     <div class="todo">
         <div class="todo-header">
             <div >
                 <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
                 <p class="todo-name">{{ todo.name }}</p>
+                {% if todo.recurrent_state is not None%}
+                    <img src="{% static 'todos/assets/refresh.svg' %}" class="recurrent_refresh_icon" >
+                {% endif %}
             </div>
-            <p>{{todo.assigned_user.auth_user.username}}</p>
+            {%if todo.assigned_user is not None%}
+                <p>{{todo.assigned_user.auth_user.username}}</p>
+            {%endif%}
         </div>
         <div class="todo-buttons">
             <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
@@ -28,6 +27,19 @@
                     <a class="button btn-small" hx-post="{% url 'todos:edit_todo' todo.id %}"
                     hx-target="closest .collapsible-container"
                     hx-swap="outerHTML">Edit</a>
+                    {% if todo.recurrent_state is None%}
+                        <a class="button btn-small" 
+                        hx-get="{% url 'todos:make_recurrent' todo.id %}"
+                        hx-target="closest .collapsible-container"
+                        hx-swap="innerHTML">Make recurrent</a>
+                    {%else%}
+                        <a class="button btn-small" 
+                        hx-get="{% url 'todos:recurrency_editor' todo.id %}"
+                        hx-target="#recurrent-block"
+                        hx-swap="innerHTML"
+                        onclick="clearSelectedUsers()">Recurrency</a>
+                    {% endif %}
+                    
                     <div class="button-center-container">
                         <a class="button btn-small" 
                         hx-delete="{% url 'todos:delete_todo' todo.id %}" 
@@ -38,7 +50,11 @@
                         </a>
                     </div>
                     <p>Assigned user:</p>
-                    <p>{{todo.assigned_user.auth_user.username}}</p>
+                    {%if todo.assigned_user is not None%}
+                        <p>{{todo.assigned_user.auth_user.username}}</p>
+                    {%else%}
+                        <p>No one</p>
+                    {%endif%}
                 </div>
         </div>
     </div>

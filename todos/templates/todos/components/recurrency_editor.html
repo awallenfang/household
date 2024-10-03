@@ -145,7 +145,13 @@
                 <p>Rate in days:</p>
                 <input type="number" class="recurrency-rate" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
             </div>
-            <div class="button">Remove recurrency</div>
+            <a hx-get="{% url 'todos:remove_recurrency' todo.id%}" 
+            hx-target="#todo-list"
+            hx-swap="innerHTML" 
+            onclick="return confirm('Are you sure? By removing the recurrency all the settings will be lost.')"
+            class="button">
+                Remove Recurrency
+            </a>
         </div>
         
     </div>

@@ -188,6 +188,7 @@ textarea {
 }
 
 .floating-container {
+    z-index: 1;
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0); 
@@ -240,4 +241,8 @@ textarea {
 
 .user-drag-handle:hover {
     cursor: grab;
+}
+
+.recurrent_refresh_icon {
+    filter:opacity(50%);
 }

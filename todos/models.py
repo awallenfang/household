@@ -1,5 +1,5 @@
 
-from datetime import date
+from datetime import date, datetime
 from django.db import models, transaction
 from django.db.models import F
 from django.utils.timezone import localtime, now
@@ -69,14 +69,14 @@ class TodoRecurrency(models.Model):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         return [ou.user for ou in ordered_users]
     
-    def get_rotation_at_date(self, date):
+    def get_rotation_at_date(self, check_date:datetime):
         users = OrderedUser.objects.filter(recurrent_todo = self)
         if len(users) == 0:
             return -1
 
         start_time = self.started_at
 
-        passed_days = (date - start_time).days
+        passed_days = (check_date - date(start_time.year, start_time.month, start_time.day)).days
         return (passed_days // self.day_rotation) % len(users)
 
     def get_current_rotation(self):
@@ -274,6 +274,8 @@ class Todo(models.Model):
                     # If there are no users or this time no one is assigned set it to be closed
                     if user is None:
                         todo.set_closed()
+                        todo.assigned_user = None
+                        todo.save()
                     else:
                         todo.set_open()
 

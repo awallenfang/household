@@ -1,4 +1,5 @@
 
+from datetime import date
 from django.db import models, transaction
 from django.db.models import F
 from django.utils.timezone import localtime, now
@@ -223,11 +224,12 @@ class Todo(models.Model):
             recurrency.save()
 
     def get_currently_assigned_user(self) -> User:
-        if self.recurrent_state:
+        if self.recurrent_state is not None:
             current_time = localtime(now()).date()
             start_time = self.recurrent_state.started_at
-
-            passed_time = current_time - start_time
+            
+            # This feels kinda disgusting, but ig it works. For some reason the DateField doesn't return the same date object as Djangos date method
+            passed_time = current_time - date(start_time.year, start_time.month, start_time.day)
             return self.recurrent_state.get_user_at_day(passed_time.days)
         
         return self.assigned_user
@@ -237,7 +239,7 @@ class Todo(models.Model):
             current_time = localtime(now()).date()
             start_time = self.recurrent_state.started_at
 
-            passed_time = current_time - start_time
+            passed_time = current_time - date(start_time.year, start_time.month, start_time.day)
             return self.recurrent_state.get_user_at_day(passed_time.days + self.recurrent_state.day_rotation)
         
         return self.assigned_user

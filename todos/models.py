@@ -125,6 +125,9 @@ class TodoRecurrency(models.Model):
                 self.recurrency_turn += day_difference % len(self.assigned_users.all())
         self.last_check = datetime.now()
 
+    def __str__(self):
+        todo = Todo.objects.get(recurrent_state = self)
+        return f'Recurrency for {todo.name} in {todo.space}'
 #######
 
 class Todo(models.Model):

@@ -1,10 +1,10 @@
 * {
-    --light: rgba(244,250,255,1);
+    --light: rgba(244, 250, 255, 1);
     --light-bg: #DEE3E1;
     --mid-bg: #b7c5c3;
     --dark-bg: #303935;
     --text: #191710;
-    --strong-highlight: rgba(53,255,146,1);
+    --strong-highlight: rgba(53, 255, 146, 1);
     --light-highlight: #90FFD1;
     --error-bg: #ff3c3c;
     --negative-bg: #ebbbbb;
@@ -74,6 +74,8 @@ header {
     padding: 0.5rem;
     margin: 0.2rem;
     max-height: 2.2rem;
+    font-size: small;
+    text-align: center;
 }
 
 /* Drop down menus */
@@ -90,12 +92,13 @@ header {
     background-color: var(--light-bg);
     width: 100%;
     border-radius: 0.25rem;
-    padding: 1rem;;
+    padding: 1rem;
+    ;
 }
 
 .dropdown-open {
     display: block;
-    
+
 }
 
 .dropdown-closed {

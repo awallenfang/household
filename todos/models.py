@@ -69,24 +69,26 @@ class TodoRecurrency(models.Model):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         return [ou.user for ou in ordered_users]
     
-    def get_rotation_at_date(self, check_date:datetime):
-        users = OrderedUser.objects.filter(recurrent_todo = self)
-        if len(users) == 0:
-            return -1
+    # def get_rotation_at_date(self, check_date:date):
+    #     users = OrderedUser.objects.filter(recurrent_todo = self)
+    #     if len(users) == 0:
+    #         return -1
 
-        start_time = self.started_at
+    #     start_time = self.started_at
 
-        passed_days = (check_date - date(start_time.year, start_time.month, start_time.day)).days
-        return (passed_days // self.day_rotation) % len(users)
+    #     passed_days = (check_date - date(start_time.year, start_time.month, start_time.day)).days
+    #     return (passed_days // self.day_rotation) % len(users)
 
     def get_current_rotation(self):
         """
         Returns the current index of the user that is assigned to the todo
         Returns -1 if there are no users
         """
-        current_time = localtime(now()).date()
-
-        return self.get_rotation_at_date(current_time)
+        if len(self.assigned_users.all()) > 0:
+            self.tick_rotation()
+            return self.recurrency_turn 
+        
+        return -1
     
     def remove_position(self, position):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
@@ -96,6 +98,8 @@ class TodoRecurrency(models.Model):
         for i, ord_usr in enumerate(ordered_users):
             ord_usr.order = i
             ord_usr.save()
+
+        self.recurrency_turn = self.recurrency_turn % len(self.assigned_users.all())
 
     def reorder_user(self, prev_pos, new_pos):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
@@ -110,10 +114,16 @@ class TodoRecurrency(models.Model):
         for i, ord_usr in enumerate(ordered_users):
             ord_usr.order = i
             ord_usr.save()
-        
 
+    def tick_rotation(self):
+        date_now = datetime.now().date()
+        last_date = self.last_check.date()
+        if datetime.now().date() > self.last_check.date():
+            day_difference = (date_now - last_date).days
 
-
+            if day_difference > 0:
+                self.recurrency_turn += day_difference % len(self.assigned_users.all())
+        self.last_check = datetime.now()
 
 #######
 

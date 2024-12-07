@@ -11,12 +11,12 @@ services:
             - "5432:5432"
     web:
         build: .
-        # command: python manage.py runserver 0.0.0.0:42069
+        # command: python manage.py runserver 0.0.0.0:5000
         entrypoint: bash debug_startup.sh
         volumes:
             - .:/code
         ports:
-            - "42069:42069"
+            - "5000:5000"
         environment:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres

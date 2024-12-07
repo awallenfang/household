@@ -13,6 +13,15 @@
             {%if todo.assigned_user is not None%}
                 <p>{{todo.assigned_user.auth_user.username}}</p>
             {%endif%}
+            {% if not todo.done %}
+                <a class="button btn-small" 
+                    hx-post="{% url 'todos:close_todo' todo.id %}"
+                    hx-target="#todo-list">Done</a>
+            {% else %}
+                <a class="button btn-small" 
+                    hx-post="{% url 'todos:open_todo' todo.id %}"
+                    hx-target="#todo-list">Reopen</a>
+            {% endif %}
         </div>
         <div class="todo-buttons">
             <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>

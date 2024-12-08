@@ -122,7 +122,23 @@ class TodoRecurrency(models.Model):
             day_difference = (date_now - last_date).days
 
             if day_difference > 0:
+                old_turn = self.recurrency_turn
                 self.recurrency_turn += day_difference % len(self.assigned_users.all())
+                new_turn = self.recurrency_turn
+
+                if old_turn != new_turn:
+                    user = self.get_current_user()
+                    # If there are no users or this time no one is assigned set it to be closed
+                    if user is None:
+                        self.todo.set_closed()
+                        self.todo.assigned_user = None
+                        self.todo.save()
+                    else:
+                        self.todo.set_open()
+
+                        self.todo.assigned_user = self.get_current_user()
+                        self.todo.save()
+                    
         self.last_check = datetime.now()
 
     def __str__(self):
@@ -273,30 +289,30 @@ class Todo(models.Model):
         recurrent_todos = Todo.objects.filter(recurrent_state__isnull = False)
 
         for todo in recurrent_todos:
+            todo.recurrent_state.tick_rotation()
+            # recurrency = todo.recurrent_state
+            # # If the last check was on another day
+            # if recurrency.last_check.date() != localtime(now()).date():
+            #     # Check if the rotation changed since then
+            #     current_rot = recurrency.get_current_rotation()
+            #     past_rot = recurrency.get_rotation_at_date(recurrency.last_check.date())
 
-            recurrency = todo.recurrent_state
-            # If the last check was on another day
-            if recurrency.last_check.date() != localtime(now()).date():
-                # Check if the rotation changed since then
-                current_rot = recurrency.get_current_rotation()
-                past_rot = recurrency.get_rotation_at_date(recurrency.last_check.date())
+            #     # If the rotation changed
+            #     if current_rot != past_rot:
+            #         user = recurrency.get_current_user()
+            #         # If there are no users or this time no one is assigned set it to be closed
+            #         if user is None:
+            #             todo.set_closed()
+            #             todo.assigned_user = None
+            #             todo.save()
+            #         else:
+            #             todo.set_open()
 
-                # If the rotation changed
-                if current_rot != past_rot:
-                    user = recurrency.get_current_user()
-                    # If there are no users or this time no one is assigned set it to be closed
-                    if user is None:
-                        todo.set_closed()
-                        todo.assigned_user = None
-                        todo.save()
-                    else:
-                        todo.set_open()
+            #             todo.assigned_user = recurrency.get_current_user()
+            #             todo.save()
 
-                        todo.assigned_user = recurrency.get_current_user()
-                        todo.save()
-
-                recurrency.last_check = now()
-                recurrency.save()
+            #     recurrency.last_check = now()
+            #     recurrency.save()
 
 
     

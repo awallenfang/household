@@ -4,10 +4,13 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
+from hub.decorators import space_required
 from hub.models import User
 
 from .models import Todo
 
+@login_required
+@space_required
 def render_dashboard(request):
     todos = Todo.get_open(request)
 
@@ -19,6 +22,8 @@ def render_dashboard(request):
 
     return render(request, "todos/dashboard_full.html", {'todos': todos, 'finished_todos': finished_todos, 'user_spaces': user_spaces, 'selected_space': selected_space})
 
+@login_required
+@space_required
 def render_todo_list(request):
     todos = Todo.get_open(request)
 
@@ -27,6 +32,7 @@ def render_todo_list(request):
     return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
 
 @login_required
+@space_required
 def dashboard(request):
     """
     The initial dashboard to show the todos
@@ -36,6 +42,7 @@ def dashboard(request):
     return render_dashboard(request)
 
 @login_required
+@space_required
 @require_http_methods(['DELETE'])
 def delete_todo(request, todo_id):
     """
@@ -46,6 +53,7 @@ def delete_todo(request, todo_id):
     return render_todo_list(request)
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def add_todo(request):
     """
@@ -62,6 +70,7 @@ def add_todo(request):
     return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def edit_todo(request, todo_id):
     """
@@ -71,6 +80,7 @@ def edit_todo(request, todo_id):
     return render(request, "todos/components/todo_edit.html", {"todo": todo})
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def finish_edit_todo(request, todo_id):
     """
@@ -89,6 +99,7 @@ def finish_edit_todo(request, todo_id):
     return render(request, "todos/components/todo.html", {"todo": todo})
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def close_todo(request, todo_id):
     """
@@ -106,6 +117,7 @@ def close_todo(request, todo_id):
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def open_todo(request, todo_id):
     """
@@ -123,6 +135,7 @@ def open_todo(request, todo_id):
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def reorder(request, todo_id, left, right, status):
     """
@@ -144,6 +157,8 @@ def reorder(request, todo_id, left, right, status):
 
     return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
+@login_required
+@space_required
 def render_recurrency_editor(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
 
@@ -163,6 +178,7 @@ def render_recurrency_editor(request, todo_id):
                    "rate": rate})
 
 @login_required
+@space_required
 @require_http_methods(['GET'])
 def recurrency_editor(request, todo_id):
     """
@@ -171,6 +187,7 @@ def recurrency_editor(request, todo_id):
     return render_recurrency_editor(request, todo_id)
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def recurrency_add_users(request, todo_id):
     # TODO: Figure out why the parameter isn't caught
@@ -191,6 +208,7 @@ def recurrency_add_users(request, todo_id):
     return render_recurrency_editor(request, todo_id)
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def recurrency_rate_change(request, todo_id, rate):
     todo = Todo.objects.get(id = todo_id)
@@ -205,6 +223,7 @@ def empty(request):
     return HttpResponse("")
 
 @login_required
+@space_required
 @require_http_methods(['POST'])
 def recurrency_delete_position(request, todo_id, position):
     todo = Todo.objects.get(id = todo_id)
@@ -218,6 +237,7 @@ def recurrency_delete_position(request, todo_id, position):
     return render_recurrency_editor(request, todo_id)
 
 @login_required
+@space_required
 def recurrency_reorder_user(request, todo_id, prev_pos, pos):
     todo = Todo.objects.get(id = todo_id)
     if todo.recurrent_state is None:
@@ -228,6 +248,7 @@ def recurrency_reorder_user(request, todo_id, prev_pos, pos):
     return render_recurrency_editor(request, todo_id)
 
 @login_required
+@space_required
 def make_recurrent(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
     user = User.objects.get(auth_user = request.user)
@@ -236,6 +257,7 @@ def make_recurrent(request, todo_id):
     return render(request, "todos/components/todo.html", {"todo": todo})
 
 @login_required
+@space_required
 def remove_recurrency(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
     user = User.objects.get(auth_user = request.user)

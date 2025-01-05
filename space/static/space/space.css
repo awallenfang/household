@@ -60,7 +60,8 @@ main {
     flex-direction: column;
     gap: 0.5rem;
     width: 50vw;
-    padding: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
 }
 
 .space-person {
@@ -86,4 +87,10 @@ main {
 
 .delete-button {
     background-color: var(--error-bg);
+}
+
+.space-bg {
+    padding: 1rem;
+    border-radius: 1rem; 
+    background-color: var(--light-bg);
 }

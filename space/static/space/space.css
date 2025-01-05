@@ -94,3 +94,7 @@ main {
     border-radius: 1rem; 
     background-color: var(--light-bg);
 }
+
+.small-gap {
+    gap: 1rem;
+}

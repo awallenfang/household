@@ -60,7 +60,7 @@ class TodoRecurrency(models.Model):
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         if len(users) == 0:
             return None
-        return users[self.get_current_rotation()].user
+        return users[self.recurrency_turn].user
     
     def get_full_order(self):
         """

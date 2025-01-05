@@ -128,16 +128,18 @@ class TodoRecurrency(models.Model):
 
                 if old_turn != new_turn:
                     user = self.get_current_user()
+                    todo = Todo.objects.get(todo_recurrency = self)
+                    
                     # If there are no users or this time no one is assigned set it to be closed
                     if user is None:
-                        self.todo.set_closed()
-                        self.todo.assigned_user = None
-                        self.todo.save()
+                        todo.set_closed()
+                        todo.assigned_user = None
+                        todo.save()
                     else:
-                        self.todo.set_open()
+                        todo.set_open()
 
-                        self.todo.assigned_user = self.get_current_user()
-                        self.todo.save()
+                        todo.assigned_user = self.get_current_user()
+                        todo.save()
                     
         self.last_check = datetime.now()
 

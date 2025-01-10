@@ -61,7 +61,7 @@
                     </div>
                     <b>Assigned user:</b>
                     {%if todo.assigned_user is not None%}
-                        <p>{{ todo.recurrency_state.get_currency_user().auth_user.username }}</p>
+                        <p>{{ todo.recurrent_state.get_currency_user.auth_user.username }}</p>
                     {%else%}
                         <p>No one</p>
                     {%endif%}

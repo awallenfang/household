@@ -272,40 +272,11 @@ class Todo(models.Model):
     
     @staticmethod
     def check_recurrency_update():
-        # Iterate over every recurrent todo
-        # Check if since the last check the assigned user would have changed
-        # Change the state to open if the user changed
+
         recurrent_todos = Todo.objects.filter(recurrent_state__isnull = False)
 
         for todo in recurrent_todos:
             todo.recurrent_state.tick_rotation()
-            # recurrency = todo.recurrent_state
-            # # If the last check was on another day
-            # if recurrency.last_check.date() != localtime(now()).date():
-            #     # Check if the rotation changed since then
-            #     current_rot = recurrency.get_current_rotation()
-            #     past_rot = recurrency.get_rotation_at_date(recurrency.last_check.date())
-
-            #     # If the rotation changed
-            #     if current_rot != past_rot:
-            #         user = recurrency.get_current_user()
-            #         # If there are no users or this time no one is assigned set it to be closed
-            #         if user is None:
-            #             todo.set_closed()
-            #             todo.assigned_user = None
-            #             todo.save()
-            #         else:
-            #             todo.set_open()
-
-            #             todo.assigned_user = recurrency.get_current_user()
-            #             todo.save()
-
-            #     recurrency.last_check = now()
-            #     recurrency.save()
-
-
-    
-
 
 class SubTask(models.Model):
     title = models.CharField(max_length=500, blank=False, null=False)

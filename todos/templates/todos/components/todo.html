@@ -60,11 +60,14 @@
                         </a>
                     </div>
                     <b>Assigned user:</b>
-                    {%if todo.assigned_user is not None%}
-                        <p>{{ todo.recurrent_state.get_currency_user.auth_user.username }}</p>
-                    {%else%}
-                        <p>No one</p>
-                    {%endif%}
+                    {% if todo.recurrent_state is None %}
+                        {{ todo.assigned_user }}
+                    {% else %}
+                        {% with current=todo.recurrent_state.get_current_user %}
+                            <p>{{ current.auth_user.username }}</p>
+                        {% endwith %}
+                    {% endif %}
+
                     {% if todo.recurrent_state is not None %}
                         {% with next=todo.recurrent_state.get_next_user %}
                             {% if next is not None %}

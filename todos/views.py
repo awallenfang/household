@@ -167,7 +167,7 @@ def render_recurrency_editor(request, todo_id):
         
     space_users = todo.space.joined_people()
     existing_order = todo.recurrent_state.get_full_order()
-    current_assignment = todo.recurrent_state.get_current_rotation()
+    current_assignment = todo.recurrent_state.recurrency_turn
     rate = todo.recurrent_state.day_rotation
     return render(request, 
                   "todos/components/recurrency_editor.html", 

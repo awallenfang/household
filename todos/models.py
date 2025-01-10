@@ -61,6 +61,12 @@ class TodoRecurrency(models.Model):
         if len(users) == 0:
             return None
         return users[self.recurrency_turn].user
+
+    def get_next_user(self) -> User:
+        users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        if len(users) == 0:
+            return None
+        return users[(self.recurrency_turn + 1) % len(users)].user
     
     def get_full_order(self):
         """
@@ -68,27 +74,6 @@ class TodoRecurrency(models.Model):
         """
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         return [ou.user for ou in ordered_users]
-    
-    # def get_rotation_at_date(self, check_date:date):
-    #     users = OrderedUser.objects.filter(recurrent_todo = self)
-    #     if len(users) == 0:
-    #         return -1
-
-    #     start_time = self.started_at
-
-    #     passed_days = (check_date - date(start_time.year, start_time.month, start_time.day)).days
-    #     return (passed_days // self.day_rotation) % len(users)
-
-    def get_current_rotation(self):
-        """
-        Returns the current index of the user that is assigned to the todo
-        Returns -1 if there are no users
-        """
-        if len(self.assigned_users.all()) > 0:
-            self.tick_rotation()
-            return self.recurrency_turn 
-        
-        return -1
     
     def remove_position(self, position):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
@@ -142,6 +127,8 @@ class TodoRecurrency(models.Model):
                         todo.save()
                     
         self.last_check = datetime.now()
+
+    
 
     def __str__(self):
         todo = Todo.objects.get(recurrent_state = self)

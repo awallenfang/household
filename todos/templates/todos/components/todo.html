@@ -10,9 +10,13 @@
                     <img src="{% static 'todos/assets/refresh.svg' %}" class="recurrent_refresh_icon" >
                 {% endif %}
             </div>
-            {%if todo.assigned_user is not None%}
-                <p>{{todo.assigned_user.auth_user.username}}</p>
-            {%endif%}
+            {% if todo.recurrent_state is None %}
+                <p>{{ todo.assigned_user }}</p>
+            {% else %}
+                {% with current=todo.recurrent_state.get_current_user %}
+                    <p>{{ current.auth_user.username }}</p>
+                {% endwith %}
+            {% endif %}
             {% if not todo.done %}
                 <a class="button btn-small" 
                     hx-post="{% url 'todos:close_todo' todo.id %}"
@@ -61,7 +65,7 @@
                     </div>
                     <b>Assigned user:</b>
                     {% if todo.recurrent_state is None %}
-                        {{ todo.assigned_user }}
+                        <p>{{ todo.assigned_user }}</p>
                     {% else %}
                         {% with current=todo.recurrent_state.get_current_user %}
                             <p>{{ current.auth_user.username }}</p>

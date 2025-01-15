@@ -103,7 +103,8 @@ class TodoRecurrency(models.Model):
     def tick_rotation(self):
         date_now = datetime.now().date()
         last_date = self.last_check.date()
-        if datetime.now().date() > self.last_check.date():
+        print(date_now, last_date)
+        if date_now > self.last_check.date():
             day_difference = (date_now - last_date).days
             print(day_difference)
             if day_difference > 0:

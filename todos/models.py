@@ -128,6 +128,7 @@ class TodoRecurrency(models.Model):
                         todo.save()
                     
         self.last_check = datetime.now()
+        self.save()
 
     
 

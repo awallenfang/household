@@ -105,7 +105,7 @@ class TodoRecurrency(models.Model):
         last_date = self.last_check.date()
         if datetime.now().date() > self.last_check.date():
             day_difference = (date_now - last_date).days
-
+            print(day_difference)
             if day_difference > 0:
                 old_turn = self.recurrency_turn
                 self.recurrency_turn += day_difference % len(self.assigned_users.all())

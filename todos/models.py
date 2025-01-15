@@ -1,5 +1,5 @@
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from django.db import models, transaction
 from django.db.models import F
 from django.utils.timezone import localtime, now
@@ -101,12 +101,10 @@ class TodoRecurrency(models.Model):
             ord_usr.save()
 
     def tick_rotation(self):
-        date_now = datetime.now().date()
+        date_now = timezone.now().date()
         last_date = self.last_check.date()
-        print(date_now, last_date)
         if date_now > self.last_check.date():
             day_difference = (date_now - last_date).days
-            print(day_difference)
             if day_difference > 0:
                 old_turn = self.recurrency_turn
                 self.recurrency_turn += day_difference % len(self.assigned_users.all())
@@ -127,7 +125,7 @@ class TodoRecurrency(models.Model):
                         todo.assigned_user = self.get_current_user()
                         todo.save()
                     
-        self.last_check = datetime.now()
+        self.last_check = timezone.now()
         self.save()
 
     

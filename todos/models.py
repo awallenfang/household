@@ -131,7 +131,7 @@ class TodoRecurrency(models.Model):
     
 
     def __str__(self):
-        todo = Todo.objects.get(recurrent_state = self)
+        todo = self.todo
         return f'Recurrency for {todo.name} in {todo.space}'
 #######
 

@@ -48,7 +48,10 @@ def delete_todo(request, todo_id):
     """
     Delete the todo with the given ID
     """
-    Todo.objects.filter(id=todo_id).delete()
+    todo = Todo.objects.get(id=todo_id)
+
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        todo.delete()
 
     return render_todo_list(request)
 
@@ -60,8 +63,9 @@ def add_todo(request):
     Add a new todo with default values
     """
     user  = User.objects.get(auth_user = request.user)
-
+    
     todo = Todo.create_in_space(user.selected_space)
+
     todo.assign_user(user)
     todos = Todo.get_open(request)
 
@@ -88,13 +92,14 @@ def finish_edit_todo(request, todo_id):
     """
     todo = Todo.objects.get(id = todo_id)
 
-    todo_name = request.POST.get("todo_name", todo.name)
-    todo_description = request.POST.get("todo_description", todo.description)
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        todo_name = request.POST.get("todo_name", todo.name)
+        todo_description = request.POST.get("todo_description", todo.description)
 
-    todo.name = todo_name
-    todo.description = todo_description
+        todo.name = todo_name
+        todo.description = todo_description
 
-    todo.save()
+        todo.save()
 
     return render(request, "todos/components/todo.html", {"todo": todo})
 
@@ -107,8 +112,9 @@ def close_todo(request, todo_id):
     """
     todo = Todo.objects.get(id = todo_id)
 
-    todo.done = True
-    todo.save()
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        todo.done = True
+        todo.save()
 
     todos = Todo.get_open(request)
 
@@ -125,8 +131,9 @@ def open_todo(request, todo_id):
     """
     todo = Todo.objects.get(id = todo_id)
 
-    todo.done = False
-    todo.save()
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        todo.done = False
+        todo.save()
 
     todos = Todo.get_open(request)
 
@@ -145,11 +152,13 @@ def reorder(request, todo_id, left, right, status):
     """
     # Move position
     changed_todo = Todo.objects.get(id=int(todo_id))
-    changed_todo.reorder(int(left), int(right))
 
-    changed_todo.done =  not (status == "open") 
+    if changed_todo.space == User.objects.get(auth_user = request.user).selected_space:
+        changed_todo.reorder(int(left), int(right))
 
-    changed_todo.save()
+        changed_todo.done =  not (status == "open") 
+
+        changed_todo.save()
 
     todos = Todo.get_open(request)
 
@@ -198,12 +207,13 @@ def recurrency_add_users(request, todo_id):
         ids = [int(id) for id in added_list]
 
         todo = Todo.objects.get(id = todo_id)
-        for user_id in ids:
-            if user_id == -1:
-                todo.recurrent_state.add_empty()
-            else:
-                user = get_object_or_404(User, id = user_id)
-                todo.recurrent_state.add_user(user)
+        if todo.space == User.objects.get(auth_user = request.user).selected_space:
+            for user_id in ids:
+                if user_id == -1:
+                    todo.recurrent_state.add_empty()
+                else:
+                    user = get_object_or_404(User, id = user_id)
+                    todo.recurrent_state.add_user(user)
 
     return render_recurrency_editor(request, todo_id)
 
@@ -212,11 +222,13 @@ def recurrency_add_users(request, todo_id):
 @require_http_methods(['POST'])
 def recurrency_rate_change(request, todo_id, rate):
     todo = Todo.objects.get(id = todo_id)
-    if todo.recurrent_state is None:
-        return render_recurrency_editor(request, todo_id)
-    
-    todo.recurrent_state.day_rotation = rate
-    todo.recurrent_state.save()
+
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        if todo.recurrent_state is None:
+            return render_recurrency_editor(request, todo_id)
+        
+        todo.recurrent_state.day_rotation = rate
+        todo.recurrent_state.save()
     return render_recurrency_editor(request, todo_id)
 
 def empty(request):
@@ -228,11 +240,12 @@ def empty(request):
 def recurrency_delete_position(request, todo_id, position):
     todo = Todo.objects.get(id = todo_id)
 
-    # If it isn't recurrant do nothing
-    if todo.recurrent_state is None or position < 0:
-        return render_recurrency_editor(request, todo_id)
-    
-    todo.recurrent_state.remove_position(position)
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        # If it isn't recurrant do nothing
+        if todo.recurrent_state is None or position < 0:
+            return render_recurrency_editor(request, todo_id)
+        
+        todo.recurrent_state.remove_position(position)
 
     return render_recurrency_editor(request, todo_id)
 
@@ -240,10 +253,13 @@ def recurrency_delete_position(request, todo_id, position):
 @space_required
 def recurrency_reorder_user(request, todo_id, prev_pos, pos):
     todo = Todo.objects.get(id = todo_id)
-    if todo.recurrent_state is None:
-        return render_recurrency_editor(request, todo_id)
-    
-    todo.recurrent_state.reorder_user(int(prev_pos), int(pos))
+
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+
+        if todo.recurrent_state is None:
+            return render_recurrency_editor(request, todo_id)
+        
+        todo.recurrent_state.reorder_user(int(prev_pos), int(pos))
 
     return render_recurrency_editor(request, todo_id)
 
@@ -251,8 +267,11 @@ def recurrency_reorder_user(request, todo_id, prev_pos, pos):
 @space_required
 def make_recurrent(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
-    user = User.objects.get(auth_user = request.user)
-    todo.make_recurrent([user])
+
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+
+        user = User.objects.get(auth_user = request.user)
+        todo.make_recurrent([user])
 
     return render(request, "todos/components/todo.html", {"todo": todo})
 
@@ -260,12 +279,14 @@ def make_recurrent(request, todo_id):
 @space_required
 def remove_recurrency(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
-    user = User.objects.get(auth_user = request.user)
 
-    todo.recurrent_state = None
-    todo.save()
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        user = User.objects.get(auth_user = request.user)
 
-    todo.assign_user(user)
+        todo.recurrent_state = None
+        todo.save()
+
+        todo.assign_user(user)
 
     return render_todo_list(request)
 
@@ -273,15 +294,17 @@ def remove_recurrency(request, todo_id):
 @space_required
 def recurrency_set_position(request, todo_id, position):
     todo = Todo.objects.get(id = todo_id)
-    recurrent_state = todo.recurrent_state
 
-    if recurrent_state is None:
-        return render_todo_list(request)
-    if position > len(recurrent_state.assigned_users.all()):
-        recurrent_state.recurrency_turn = len(recurrent_state.assigned_users) - 1
-    else:
-        recurrent_state.recurrency_turn = position
-    recurrent_state.save()
+    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        recurrent_state = todo.recurrent_state
+
+        if recurrent_state is None:
+            return render_todo_list(request)
+        if position > len(recurrent_state.assigned_users.all()):
+            recurrent_state.recurrency_turn = len(recurrent_state.assigned_users) - 1
+        else:
+            recurrent_state.recurrency_turn = position
+        recurrent_state.save()
     
     
     return render_recurrency_editor(request, todo_id)

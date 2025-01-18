@@ -134,7 +134,7 @@ textarea {
     padding: 1rem;
     height: 100%;
     gap: 0.5rem;
-
+    max-height: 65vh;
 }
 
 .recurrency-settings {

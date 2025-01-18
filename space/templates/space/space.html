@@ -16,7 +16,7 @@
     {% if selected_space.owner == user%}
     <div class="center-container small-gap">
         <input class="button" type="submit" value="Save" form="space-form">
-        <a class="button delete-button" href="{% url 'space:delete_space' space.id%}" onclick="return confirm('Are you sure?')">DELETE SPACE</a>
+        <a class="button button-red" href="{% url 'space:delete_space' space.id%}" onclick="return confirm('Are you sure?')">DELETE SPACE</a>
     </div>
     {% endif %}
 </div>

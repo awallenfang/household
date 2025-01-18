@@ -3,7 +3,7 @@
 <div id="todo-list">
     <div id="recurrent-block"></div>
     <h2>Open Todos</h2>
-    <div class="flex-row flex-justify-center flex-gap-medium flex-wrap" id="todo-block">
+    <div class="flex-row flex-align-start flex-justify-center flex-gap-medium flex-wrap" id="todo-block">
 
         {% for todo in todos%}
             <div class="todo-drop-spot" 
@@ -36,7 +36,7 @@
             ></div>
         {%endif%}
 
-        <div class="flex-row flex-justify-around w-25vw">
+        <div class="flex-row flex-justify-around w-20vw">
             <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}"
             hx-target="#todo-list"
             hx-swap="outerHTML">New Todo</a>
@@ -44,7 +44,7 @@
     </div>
 
     <h2>Finished Todos</h2>
-    <div class="flex-row flex-justify-center flex-gap-medium flex-wrap" id="todo-block">
+    <div class="flex-row flex-align-start flex-justify-center flex-gap-medium flex-wrap" id="todo-block">
         {% for todo in finished_todos%}
             <div class="todo-drop-spot" 
             ondrop="drop(event)"  

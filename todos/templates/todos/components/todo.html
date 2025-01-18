@@ -1,9 +1,9 @@
 {% load static%}
-<div class="flex-col flex-gap-small collapsible-container draggable-container" todo-id="{{todo.id}}">
+<div class="col gap-small collapsible-container draggable-container" todo-id="{{todo.id}}">
         
-    <div class="flex-row flex-gap-medium p-05 w-30vw minw-20 background-light flex-justify-between border-radius-05 h-3 font-w-600">
-        <div class="w-100p flex-row flex-gap-medium flex-justify-between ">
-            <div class="flex-row flex-gap-medium">
+    <div class="row gap-medium p-05 w-30vw minw-20 background-light justify-between border-radius-05 h-3 font-w-600">
+        <div class="w-100p row gap-medium justify-between ">
+            <div class="row gap-medium">
                 <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
                 <p>{{ todo.name }}</p>
                 {% if todo.recurrent_state is not None%}
@@ -27,16 +27,16 @@
                     hx-target="#todo-list">Reopen</a>
             {% endif %}
         </div>
-        <div class="flex-row">
+        <div class="row">
             <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
         </div>
     </div>
     <div class="background-light w-30vw minw-20 h-20 p-1 dropdown-closed">
-        <div class="flex-row flex-justify-between">
+        <div class="row justify-between">
                 <div class="w-60p">
                     <p>{{todo.description}} </p>
                 </div>
-                <div class="w-40p flex-col flex-gap-small">
+                <div class="w-40p col gap-small">
                    
                     <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
                     hx-target="closest .collapsible-container"

@@ -1,8 +1,8 @@
 {% load static %}
 
-<div class="flex-col flex-gap-small pt-1 pb-2">
+<div class="col gap-small pt-1 pb-2">
     {% for person in joined_people %}
-        <div class="p-05 background-mid border-radius-05 flex-row flex-justify-between">
+        <div class="p-05 background-mid border-radius-05 row justify-between">
             <b>{{person.auth_user.username}}</b>
             {% if selected_space.owner == person %}
                 <span>Owner</span>

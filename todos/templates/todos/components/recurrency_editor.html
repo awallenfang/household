@@ -143,7 +143,7 @@
     setupPositionDragEnv()
 </script>
 <div class="floating">
-    <div class="flex-row flex-justify-between">
+    <div class="row justify-between">
         <div></div>
         <a hx-get="{% url 'todos:empty'%}" 
         hx-target="#recurrent-block"
@@ -153,29 +153,29 @@
             <img src="{% static 'todos/assets/close.svg' %}" class="close-icon">
         </a>
     </div>
-    <div class="flex-row flex-justify-between flex-gap-medium overflow-hidden">
+    <div class="row justify-between gap-medium overflow-hidden">
         
-        <div class="flex-col p-1 flex-gap-small maxh-40vh overflow-scroll w-50p">
+        <div class="col p-1 gap-small maxh-40vh overflow-scroll w-50p">
             {% if existing_order|length > 0%}
                 <div class="user-drop-spot" 
                 pos="0"
                 ondragover="allowDrop(event)"></div>
             {%endif%}
             {% for user in existing_order%}
-            <div class="flex-row">
+            <div class="row">
 
                 {% if forloop.counter0 == current_assignment_idx%}
-                    <div class="flex-row select-drag-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}">
+                    <div class="row select-drag-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}">
                         <img src="{% static 'todos/assets/select.svg' %}" class="select-icon">
                     </div>
                 {% else %}
                     <div class="recurrent-position-drop-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}" ondragover="allowDrop(event)" todo-id="{{forloop.counter0}}"></div>
                 {% endif %}
-                <div class="flex-row draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
-                    <div class="flex-row w-10 flex-justify-between background-mid p-05 border-radius-025">
+                <div class="row draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
+                    <div class="row w-10 justify-between background-mid p-05 border-radius-025">
                         
                         <p>{{user.auth_user.username}}</p>
-                        <div cass="flex-row">
+                        <div cass="row">
                             <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
                             hx-target="#recurrent-block"
                             hx-swap="innerHTML"
@@ -194,15 +194,15 @@
             {%endfor%}
         </div>
         <div class="vertical-line" style="background-color: var(--mid-bg)"></div>
-        <div class="flex-col p-1 flex-gap-small">
-            <div class="flex-col p-05 maxh-15 flex-gap-small">
-                <div class="flex-col p-05 flex-gap-small">
-                    <div class="flex-row flex-align-stretch flex-justify-between background-mid p-05 border-radius-025">
+        <div class="col p-1 gap-small">
+            <div class="col p-05 maxh-15 gap-small">
+                <div class="col p-05 gap-small">
+                    <div class="row align-stretch justify-between background-mid p-05 border-radius-025">
                         <p>Empty space</p>
                         <input  class="user-add-check" type="checkbox" name="-1_checked" id="-1" change="userChecked(event)">
                     </div>
                     {% for user in available_users%}
-                    <div class="flex-row flex-align-stretch flex-justify-between background-mid p-05 border-radius-025">
+                    <div class="row align-stretch justify-between background-mid p-05 border-radius-025">
                         <p>{{user.auth_user.username}}</p>
                         <input  class="user-add-check" type="checkbox" name="{{user.id}}_checked" id="{{user.id}}" change="userChecked(event)">
                     </div>

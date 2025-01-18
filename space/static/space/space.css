@@ -51,30 +51,6 @@ main {
     gap: 1rem;
 }
 
-.right-side {
-    right: 0
-}
-
-#joined-people-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 50vw;
-    padding-top: 1rem;
-    padding-bottom: 2rem;
-}
-
-.space-person {
-    background-color: var(--mid-bg);
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
 .quick-space-selector-box {
     overflow-y: auto;
     max-height: 40vh;
@@ -83,14 +59,4 @@ main {
     align-items: center;
     gap: 0.5rem;
     padding: 1rem
-}
-
-.space-bg {
-    padding: 1rem;
-    border-radius: 1rem; 
-    background-color: var(--light-bg);
-}
-
-.small-gap {
-    gap: 1rem;
 }

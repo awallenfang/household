@@ -20,7 +20,7 @@
     </div>
     
     <div class="horizontal-line"></div>
-    <form action="{% url 'space:join_space' %}" method="post" id="quick-space-form">
+    <form action="{% url 'space:join_space' %}" method="post" class="flex-col flex-gap-small">
         {% csrf_token %}
         <input type="text" name="space_token" placeholder="Invite Token">
         <input class="button" type="submit" value="Join Space">

@@ -34,10 +34,3 @@
     flex-direction: column;
     gap: 0.5rem;
 }
-
-.space-form {
-    display:flex;
-    flex-direction: column;
-    align-items: baseline;
-    gap: 1rem;
-}

@@ -18,6 +18,10 @@
     align-items: end;
 }
 
+.flex-align-base {
+    align-items: baseline;
+}
+
 .flex-justify-between {
     justify-content: space-between;
 }

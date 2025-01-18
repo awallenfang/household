@@ -2,7 +2,7 @@
 {% block content %}
 <div class="p-1 background-light border-radius-1">
 
-    <form action="{% url 'space:space_view' space.id %}" method="post" class="space-form" id="space-form">
+    <form action="{% url 'space:space_view' space.id %}" method="post" class="flex-col flex-aline-base flex-gap-medium" id="space-form">
         {% csrf_token %}
         <div class="flex-row flex-justify-center"><h2>Space Settings and Information</h2></div>
         <label for="space-name"><b>Name:</b></label>

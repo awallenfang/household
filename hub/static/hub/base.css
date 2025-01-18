@@ -32,7 +32,7 @@ header {
 
 /* Buttons */
 
-.button {
+/* .button {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,8 +47,8 @@ header {
     border: none;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
+} */
+/* 
 .button:link {
     color: var(--text);
     text-decoration: none;
@@ -76,7 +76,7 @@ header {
     max-height: 2.2rem;
     font-size: small;
     text-align: center;
-}
+} */
 
 /* Drop down menus */
 

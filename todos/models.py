@@ -101,7 +101,7 @@ class TodoRecurrency(models.Model):
             ord_usr.save()
 
     def tick_rotation(self):
-        date_now = timezone.now().date()
+        date_now = now().date()
         last_date = self.last_check.date()
         if date_now > self.last_check.date():
             day_difference = (date_now - last_date).days
@@ -125,7 +125,7 @@ class TodoRecurrency(models.Model):
                         todo.assigned_user = self.get_current_user()
                         todo.save()
                     
-        self.last_check = timezone.now()
+        self.last_check = now()
         self.save()
 
     

@@ -1,0 +1,61 @@
+
+/* ########### Button ######### */
+.button {
+    appearance: none;
+    padding: 0.5rem 1rem;
+    background-color: var(--light-highlight);
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    color: var(--text);
+    display: inline-block;
+    line-height: 1rem;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: 600;
+    
+    &:disabled {
+        filter: grayscale(90%);
+        cursor: default;
+    }
+    &:hover  {
+        filter: brightness(110%);
+        text-decoration: none;
+        transition-duration: 0.1s;
+    }
+    &:active {
+        filter: brightness(130%);
+        transition: 0.1s;
+    }
+    &:focus {
+        outline: 1px transparent;
+    }
+}
+
+.button-strong {
+    background-color: var(--strong-highlight);
+}
+
+.button-red {
+    background-color: var(--error-bg)
+}
+
+.button-disabled {
+    filter:grayscale(90%);
+}
+
+/* ############# Floating ############### */
+
+.floating {
+    z-index: 1;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: var(--light-bg);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    -webkit-box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.88);
+    box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.88);
+}

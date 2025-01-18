@@ -38,31 +38,28 @@
                 </div>
                 <div class="todo-additional-info">
                    
-                    <a class="button btn-small" hx-post="{% url 'todos:edit_todo' todo.id %}"
+                    <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
                     hx-target="closest .collapsible-container"
                     hx-swap="outerHTML">Edit</a>
                     {% if todo.recurrent_state is None%}
-                        <a class="button btn-small" 
+                        <a class="button" 
                         hx-get="{% url 'todos:make_recurrent' todo.id %}"
                         hx-target="closest .collapsible-container"
                         hx-swap="innerHTML">Make recurrent</a>
                     {%else%}
-                        <a class="button btn-small" 
+                        <a class="button" 
                         hx-get="{% url 'todos:recurrency_editor' todo.id %}"
                         hx-target="#recurrent-block"
                         hx-swap="innerHTML"
                         onclick="clearSelectedUsers()">Recurrency</a>
                     {% endif %}
-                    
-                    <div class="button-center-container">
-                        <a class="button btn-small" 
-                        hx-delete="{% url 'todos:delete_todo' todo.id %}" 
-                        hx-confirm="Are you sure you would like to delete this todo?"
-                        hx-target="#todo-list"
-                        >
-                            Delete!
-                        </a>
-                    </div>
+                    <a class="button" 
+                    hx-delete="{% url 'todos:delete_todo' todo.id %}" 
+                    hx-confirm="Are you sure you would like to delete this todo?"
+                    hx-target="#todo-list"
+                    >
+                        Delete!
+                    </a>
                     <b>Assigned user:</b>
                     {% if todo.recurrent_state is None %}
                         <p>{{ todo.assigned_user }}</p>

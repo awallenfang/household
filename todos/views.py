@@ -269,3 +269,23 @@ def remove_recurrency(request, todo_id):
 
     return render_todo_list(request)
 
+@login_required
+@space_required
+def recurrency_set_position(request, todo_id, position):
+    todo = Todo.objects.get(id = todo_id)
+    recurrent_state = todo.recurrent_state
+
+    if recurrent_state is None:
+        return render_todo_list(request)
+    if position > len(recurrent_state.assigned_users.all()):
+        recurrent_state.recurrency_turn = len(recurrent_state.assigned_users) - 1
+    else:
+        recurrent_state.recurrency_turn = position
+    recurrent_state.save()
+    
+    
+    return render_recurrency_editor(request, todo_id)
+
+
+
+

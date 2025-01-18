@@ -20,7 +20,8 @@ urlpatterns = [
     # Maybe move this path to the hub
     path('empty', views.empty, name="empty"),
     path('<int:todo_id>/remove_position/<int:position>', views.recurrency_delete_position, name="recurrency_remove_position"),
-    path('<int:todo_id>/<str:prev_pos>/<str:pos>/recurrency_reorder_user', views.recurrency_reorder_user, name="todo_recurrency_reorder_user"),
+    path('<int:todo_id>/<int:prev_pos>/<int:pos>/recurrency_reorder_user', views.recurrency_reorder_user, name="todo_recurrency_reorder_user"),
     path('<int:todo_id>/remove_recurrency', views.remove_recurrency, name="remove_recurrency"),
+    path('<int:todo_id>/<int:position>/recurrency_set_position', views.recurrency_set_position, name="todo_recurrency_set_position"),
 
 ]

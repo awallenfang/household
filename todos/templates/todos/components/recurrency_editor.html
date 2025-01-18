@@ -1,8 +1,8 @@
 {% load static%}
 <script>
-    let checks = document.getElementsByClassName("user-add-check")
+    var checks = document.getElementsByClassName("user-add-check")
 
-    for (let check of checks) {
+    for (var check of checks) {
         check.addEventListener("change", (event) => {
             userChecked(event)
         })
@@ -16,22 +16,78 @@
         ev.preventDefault()
 
         
-        let id = ev.dataTransfer.getData('todo-id')
-        let prev_position = ev.dataTransfer.getData("prev_pos")
-        let position = ev.target.getAttribute("pos")
+        var id = ev.dataTransfer.getData('todo-id')
+        var prev_position = ev.dataTransfer.getData("prev_pos")
+        var position = ev.target.getAttribute("pos")
         if (Math.abs(position - prev_position) == 0) {
             return
         }
-        let url = `/todos/${id}/${prev_position}/${position}/recurrency_reorder_user`
+        var url = `/todos/${id}/${prev_position}/${position}/recurrency_reorder_user`
         htmx.ajax("POST", url, '#recurrent-block')
     }
 
     function setupUserDragEnv(e) {
-        let handles = document.getElementsByClassName("user-drag-handle")
-        let drop_spots = document.getElementsByClassName("user-drop-spot")
+        var handles = document.getElementsByClassName("user-drag-handle")
+        for (var handle of handles) {
+            var draggable_elem = handle.closest('.draggable-user-container')
+            console.log(draggable_elem)
+            handle.onmousedown = function(e) {
+                draggable_elem.setAttribute('draggable', 'true');
+                
+            }
+            handle.onmouseup = function(e) {
+                draggable_elem.setAttribute('draggable', 'false');
+                
+            }
+
+            draggable_elem.ondragstart = function(e) {
+                console.log(e.target)
+                var todo_id = e.target.getAttribute("todo-id")
+                var pos = e.target.getAttribute("pos")
+                e.dataTransfer.setData('todo-id', todo_id)
+                e.dataTransfer.setData('prev_pos', pos)
+                e.dataTransfer.setData('text/plain', 'handle');
+                var user_drop_spots = document.getElementsByClassName("user-drop-spot")
+
+                for (var drop_spot of user_drop_spots) {
+                    console.log(drop_spot)
+                    drop_spot.style.visibility = "visible"
+                    drop_spot.ondrop = function(e) {
+                        drop_user(e)
+                    }
+                }
+            }
+            draggable_elem.ondragend = function(e) {
+                e.target.setAttribute('draggable', 'false')
+                var user_drop_spots = document.getElementsByClassName("user-drop-spot")
+
+                for (var drop_spot of user_drop_spots) {
+                    drop_spot.style.visibility = "hidden"
+                    drop_spot.ondrop = function(e) {
+                    }
+                }
+          };
+        }
+    }
+
+    function drop_position(ev) {
+        ev.preventDefault()
+
+        var id = ev.target.getAttribute('todo-id')
+        var prev_position = ev.dataTransfer.getData("prev_pos")
+        var position = ev.target.getAttribute("pos")
+        if (Math.abs(position - prev_position) == 0) {
+            return
+        }
+        var url = `/todos/${id}/${position}/recurrency_set_position`
+        htmx.ajax("POST", url, '#recurrent-block')
+    }
+
+    function setupPositionDragEnv(e) {
+        var handles = document.getElementsByClassName("select-icon")
     
-        for (let handle of handles) {
-            let draggable_elem = handle.closest('.draggable-user-container')
+        for (var handle of handles) {
+            var draggable_elem = handle.closest(".select-drag-spot")
     
             handle.onmousedown = function(e) {
                 draggable_elem.setAttribute('draggable', 'true');
@@ -42,36 +98,49 @@
                 
             }
             draggable_elem.ondragstart = function(e) {
-                let todo_id = e.target.getAttribute("todo-id")
-                let pos = e.target.getAttribute("pos")
-                e.dataTransfer.setData('todo-id', todo_id)
+                var todo_id = e.target.getAttribute("todo-id")
+                var pos = e.target.getAttribute("pos")
                 e.dataTransfer.setData('prev_pos', pos)
+                e.dataTransfer.setData('todo-id', todo_id)
+
                 e.dataTransfer.setData('text/plain', 'handle');
-                for (let drop_spot of drop_spots) {
+                var position_drop_spots = document.getElementsByClassName("recurrent-position-drop-spot")
+
+                for (var drop_spot of position_drop_spots) {
+                    console.log(drop_spot)
+
                     drop_spot.style.visibility = "visible"
+                    drop_spot.ondrop = function(e) {
+                        drop_position(e)
+                    }
                 }
             }
             draggable_elem.ondragend = function(e) {
                 e.target.setAttribute('draggable', 'false')
-                for (let drop_spot of drop_spots) {
+                var position_drop_spots = document.getElementsByClassName("recurrent-position-drop-spot")
+
+                for (var drop_spot of position_drop_spots) {
                     drop_spot.style.visibility = "hidden"
+                    drop_spot.ondrop = function(e) {
+                        
+                    }
                 }
           };
         }
 
-        for (let spot of drop_spots) {
-            spot.ondrop = function(e) {
-                drop_user(e)
-            }
-        }
+        
     }
+
     document.addEventListener("DOMContentLoaded", function(e) {
-        setupUserDragEnv(e)
+        setupUserDragEnv(e);
+        setupPositionDragEnv(e)
     })
     document.addEventListener('htmx:afterSwap', function(e) {
-        setupUserDragEnv(e)
+        setupUserDragEnv(e);
+        setupPositionDragEnv(e)
     });
-    setupUserDragEnv()
+    setupUserDragEnv();
+    setupPositionDragEnv()
 </script>
 <div class="floating">
     <div class="top-bar-container">
@@ -90,36 +159,38 @@
             {% if existing_order|length > 0%}
                 <div class="user-drop-spot" 
                 pos="0"
-                ondragover="allowDrop(event)"
-                ondrop="drop_user(event)"></div>
+                ondragover="allowDrop(event)"></div>
             {%endif%}
             {% for user in existing_order%}
-            <div class="recurrency-item-container draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}">
+            <div class="recurrency-user-container">
+
                 {% if forloop.counter0 == current_assignment_idx%}
-                    <div class="select-drag-spot">
-                        <img src="{% static 'todos/assets/select.svg' %}" class="close-icon">
+                    <div class="select-drag-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}">
+                        <img src="{% static 'todos/assets/select.svg' %}" class="select-icon">
                     </div>
                 {% else %}
-                    <div class="select-drag-spot"></div>
+                    <div class="recurrent-position-drop-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}" ondragover="allowDrop(event)" todo-id="{{forloop.counter0}}"></div>
                 {% endif %}
-                <div class="recurrency-item">
-                    
-                    <p class="recurrency-user-name">{{user.auth_user.username}}</p>
-                    <div cass="vertical-center-flex">
-                        <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
-                        hx-target="#recurrent-block"
-                        hx-swap="innerHTML"
-                        class="trash-container">
-                            <img src="{% static 'todos/assets/trash.svg' %}" class="trashcan">
-                        </a>
-                        <img src="{% static 'todos/assets/drag.svg' %}" class="user-drag-handle" draggable="false">
+                <div class="recurrency-item-container draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
+                    <div class="recurrency-item">
+                        
+                        <p class="recurrency-user-name">{{user.auth_user.username}}</p>
+                        <div cass="vertical-center-flex">
+                            <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
+                            hx-target="#recurrent-block"
+                            hx-swap="innerHTML"
+                            class="trash-container">
+                                <img src="{% static 'todos/assets/trash.svg' %}" class="trashcan">
+                            </a>
+                            <img src="{% static 'todos/assets/drag.svg' %}" class="user-drag-handle" draggable="false">
+                        </div>
                     </div>
                 </div>
             </div>
+            
             <div class="user-drop-spot" 
             pos="{{forloop.counter}}"
-            ondragover="allowDrop(event)"
-            ondrop="drop_user(event)"></div>
+            ondragover="allowDrop(event)"></div>
             {%endfor%}
         </div>
         <div class="vertical-line" style="background-color: var(--mid-bg)"></div>

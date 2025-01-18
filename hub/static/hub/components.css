@@ -48,6 +48,10 @@
     filter:grayscale(90%);
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 /* ############# Floating ############### */
 
 .floating {

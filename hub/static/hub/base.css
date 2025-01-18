@@ -23,21 +23,6 @@ main {
 
 /* Drop down menus */
 
-.collapsible-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.collapsible-content {
-    height: 15rem;
-    background-color: var(--light-bg);
-    width: 100%;
-    border-radius: 0.25rem;
-    padding: 1rem;
-    ;
-}
 
 .dropdown-open {
     display: block;

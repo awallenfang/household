@@ -10,7 +10,7 @@
         <div class="todo">
             <div class="todo-header">
                 <div >
-                    <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
+                    <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
                     <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
                 </div>
                 <p>{{todo.assigned_user.auth_user.username}}</p>
@@ -20,9 +20,9 @@
                 <button type="button" class="dropdown-button" onclick="toggleDropdown(event)">...</button>
             </div>
         </div>
-        <div class="collapsible-content dropdown-open">
-            <div class="todo-collapsible-content">
-                    <div class="todo-description-container">
+        <div class="background-light w-25vw minw-20 h-20 p-1 dropdown-open">
+            <div class="flex-row flex-justify-between">
+                    <div>
 
                         <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea> 
                     </div>

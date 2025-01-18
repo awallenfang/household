@@ -143,44 +143,44 @@
     setupPositionDragEnv()
 </script>
 <div class="floating">
-    <div class="top-bar-container">
+    <div class="flex-row flex-justify-between">
         <div></div>
         <a hx-get="{% url 'todos:empty'%}" 
         hx-target="#recurrent-block"
         hx-swap="innerHTML" 
         onclick="clearSelectedUsers()"
-        class="close-icon-container">
+        class="cursor-pointer">
             <img src="{% static 'todos/assets/close.svg' %}" class="close-icon">
         </a>
     </div>
-    <div class="recurrency-editor-container">
+    <div class="flex-row flex-justify-between flex-gap-medium overflow-hidden">
         
-        <div class="recurrency-list">
+        <div class="flex-col p-1 flex-gap-small maxh-65vh overflow-scroll w-50p">
             {% if existing_order|length > 0%}
                 <div class="user-drop-spot" 
                 pos="0"
                 ondragover="allowDrop(event)"></div>
             {%endif%}
             {% for user in existing_order%}
-            <div class="recurrency-user-container">
+            <div class="flex-row">
 
                 {% if forloop.counter0 == current_assignment_idx%}
-                    <div class="select-drag-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}">
+                    <div class="flex-row select-drag-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}">
                         <img src="{% static 'todos/assets/select.svg' %}" class="select-icon">
                     </div>
                 {% else %}
                     <div class="recurrent-position-drop-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}" ondragover="allowDrop(event)" todo-id="{{forloop.counter0}}"></div>
                 {% endif %}
-                <div class="recurrency-item-container draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
-                    <div class="recurrency-item">
+                <div class="flex-row draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
+                    <div class="flex-row w-10 flex-justify-between background-mid p-05 border-radius-025">
                         
-                        <p class="recurrency-user-name">{{user.auth_user.username}}</p>
-                        <div cass="vertical-center-flex">
+                        <p>{{user.auth_user.username}}</p>
+                        <div cass="flex-row">
                             <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
                             hx-target="#recurrent-block"
                             hx-swap="innerHTML"
                             class="trash-container">
-                                <img src="{% static 'todos/assets/trash.svg' %}" class="trashcan">
+                                <img src="{% static 'todos/assets/trash.svg' %}">
                             </a>
                             <img src="{% static 'todos/assets/drag.svg' %}" class="user-drag-handle" draggable="false">
                         </div>
@@ -194,15 +194,15 @@
             {%endfor%}
         </div>
         <div class="vertical-line" style="background-color: var(--mid-bg)"></div>
-        <div class="recurrency-settings">
-            <div class="add-user-container">
-                <div class="user-list">
-                    <div class="selectable-user">
+        <div class="flex-col p-1 flex-gap-small">
+            <div class="flex-col p-05 maxh-15 flex-gap-small">
+                <div class="flex-col p-05 flex-gap-small">
+                    <div class="flex-row flex-align-stretch flex-justify-between background-mid p-05 border-radius-025">
                         <p>Empty space</p>
                         <input  class="user-add-check" type="checkbox" name="-1_checked" id="-1" change="userChecked(event)">
                     </div>
                     {% for user in available_users%}
-                    <div class="selectable-user">
+                    <div class="flex-row flex-align-stretch flex-justify-between background-mid p-05 border-radius-025">
                         <p>{{user.auth_user.username}}</p>
                         <input  class="user-add-check" type="checkbox" name="{{user.id}}_checked" id="{{user.id}}" change="userChecked(event)">
                     </div>
@@ -212,9 +212,9 @@
                 <a onclick="addSelectedUsers(event)" class="button" todo-id="{{todo.id}}">Add Selected Users</a>
             </div>
             <div class="horizontal-line" style="background-color: var(--mid-bg); margin: 0.5rem 0;"></div>
-            <div class="recurrency-parameter">
+            <div>
                 <p>Rate in days:</p>
-                <input type="number" class="recurrency-rate" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
+                <input type="number" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
             </div>
             <a hx-get="{% url 'todos:remove_recurrency' todo.id%}" 
             hx-target="#todo-list"

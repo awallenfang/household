@@ -30,7 +30,7 @@ function allowDrop(ev) {
 }
 
 function setupDragEnv(e) {
-    let handles = document.getElementsByClassName("todo_drag_handle")
+    let handles = document.getElementsByClassName("todo-drag-handle")
     let drop_spots = document.getElementsByClassName("todo-drop-spot")
 
     for (let handle of handles) {

@@ -1,13 +1,13 @@
 {% load static%}
-<div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
+<div class="flex-col flex-gap-small collapsible-container draggable-container" todo-id="{{todo.id}}">
         
-    <div class="todo">
-        <div class="todo-header">
-            <div >
-                <img src="{% static 'todos/assets/drag.svg' %}" class="todo_drag_handle" draggable="false">
-                <p class="todo-name">{{ todo.name }}</p>
+    <div class="flex-row flex-gap-medium p-05 w-25vw minw-20 background-light flex-justify-between border-radius-05 h-3 font-w-600">
+        <div class="w-100p flex-row flex-gap-medium flex-justify-between ">
+            <div class="flex-row flex-gap-medium">
+                <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
+                <p>{{ todo.name }}</p>
                 {% if todo.recurrent_state is not None%}
-                    <img src="{% static 'todos/assets/refresh.svg' %}" class="recurrent_refresh_icon" >
+                    <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
                 {% endif %}
             </div>
             {% if todo.recurrent_state is None %}
@@ -18,25 +18,25 @@
                 {% endwith %}
             {% endif %}
             {% if not todo.done %}
-                <a class="button btn-small" 
+                <a class="button" 
                     hx-post="{% url 'todos:close_todo' todo.id %}"
                     hx-target="#todo-list">Done</a>
             {% else %}
-                <a class="button btn-small" 
+                <a class="button" 
                     hx-post="{% url 'todos:open_todo' todo.id %}"
                     hx-target="#todo-list">Reopen</a>
             {% endif %}
         </div>
-        <div class="todo-buttons">
+        <div class="flex-row">
             <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
         </div>
     </div>
-    <div class="collapsible-content dropdown-closed">
-        <div class="todo-collapsible-content">
-                <div class="todo-description-container">
-                    <p class="todo-description">{{todo.description}} </p>
+    <div class="background-light w-25vw minw-20 h-20 p-1 dropdown-closed">
+        <div class="flex-row flex-justify-between">
+                <div class="w-65p">
+                    <p>{{todo.description}} </p>
                 </div>
-                <div class="todo-additional-info">
+                <div class="w-35p flex-col flex-gap-small">
                    
                     <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
                     hx-target="closest .collapsible-container"

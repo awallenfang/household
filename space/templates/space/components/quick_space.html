@@ -23,7 +23,7 @@
     <form action="{% url 'space:join_space' %}" method="post" class="flex-col flex-gap-small">
         {% csrf_token %}
         <input type="text" name="space_token" placeholder="Invite Token">
-        <input class="button" type="submit" value="Join Space">
+        <input class="button max-width-25vw" type="submit" value="Join Space">
     </form>
     <a href="{% url 'space:create_space' %}"  class="button">Create Space</a>
 </div>

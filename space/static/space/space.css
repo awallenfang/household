@@ -23,14 +23,3 @@
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 
 }
-
-.quick-space-container .button {
-    max-width: 25vw;
-    white-space: nowrap;
-}
-
-#quick-space-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}

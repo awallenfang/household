@@ -17,6 +17,10 @@ header {
     margin-bottom: 1rem;
 }
 
+main {
+    padding: 1rem;
+}
+
 /* Drop down menus */
 
 .collapsible-container {
@@ -68,17 +72,7 @@ label {
 }
 
 
-.horizontal-line {
-    width: 100%;
-    height: 2px;
-    background-color: var(--light-bg);
-}
 
-.vertical-line {
-    width: 2px;
-    height: 100%;
-    background-color: var(--light-bg);
-}
 
 .center-container {
     width: 100%;

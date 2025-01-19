@@ -1,5 +1,5 @@
 
-from datetime import date, datetime, timezone
+from datetime import date
 from django.db import models, transaction
 from django.db.models import F
 from django.utils.timezone import localtime, now

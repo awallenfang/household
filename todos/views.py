@@ -231,7 +231,7 @@ def recurrency_rate_change(request, todo_id, rate):
         todo.recurrent_state.save()
     return render_recurrency_editor(request, todo_id)
 
-def empty(request):
+def empty(_request):
     return HttpResponse("")
 
 @login_required

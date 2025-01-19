@@ -105,12 +105,12 @@ formats_10 = [
 ]
 
 for i in range(10,105,10):
-    for format in formats_10:
-        sizing_file += format.format(size=i)
+    for class_format in formats_10:
+        sizing_file += class_format.format(size=i)
 
 for i in range(26):
-    for format in formats_1:
-        sizing_file += format.format(size=i)
+    for class_format in formats_1:
+        sizing_file += class_format.format(size=i)
 
 additional = \
 """.overflow-scroll {
@@ -128,5 +128,5 @@ additional = \
 
 sizing_file += additional
 
-with open("hub/static/hub/sizing.css", "w") as file:
+with open("hub/static/hub/sizing.css", "w", encoding="utf8") as file:
     file.write(re.sub(r'\s+', '', sizing_file))

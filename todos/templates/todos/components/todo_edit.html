@@ -7,9 +7,9 @@
     hx-swap="outerHTML"
     class="collapsible-container">
         {% csrf_token %}
-        <div class="todo">
-            <div class="todo-header">
-                <div >
+        <div class="row gap-medium p-05 w-30vw minw-20 background-light justify-between border-radius-05 h-3 font-w-600">
+            <div class="w-100p row gap-medium justify-between">
+                <div class="row gap-medium">
                     <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
                     <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
                 </div>
@@ -21,13 +21,13 @@
             </div>
         </div>
         <div class="background-light w-30vw minw-20 h-20 p-1 dropdown-open">
-            <div class="row justify-between">
+            <div class="row justify-between align-start">
                     <div>
 
                         <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea> 
                     </div>
                     
-                    <div class="todo-additional-info">
+                    <div class="col gap-small">
                         <input type="submit" value="Save" class="button">
 
                         <a class="button" 

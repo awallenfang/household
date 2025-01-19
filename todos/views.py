@@ -245,7 +245,7 @@ def recurrency_delete_position(request, todo_id, position):
         if todo.recurrent_state is None or position < 0:
             return render_recurrency_editor(request, todo_id)
         
-        todo.recurrent_state.remove_position(position)
+        todo.recurrent_state.remove_user_at_position(position)
 
     return render_recurrency_editor(request, todo_id)
 

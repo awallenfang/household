@@ -50,7 +50,7 @@ textarea {
     border-radius: 0.5rem;
     border-color: var(--dark-bg);
     height: 2rem;
-    visibility: hidden;
+    visibility: collapse;
     flex-shrink: 0;
 }
 

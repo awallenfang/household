@@ -9,6 +9,9 @@ from hub.models import SharedSpace, User
 ######## Recurrent Todo helpers
 
 class OrderedUser(models.Model):
+    """
+    Corresponds to the order of users in a recurrency
+    """
     user = models.ForeignKey("hub.User", on_delete=models.CASCADE, null=True, blank=True)
     recurrent_todo = models.ForeignKey("todos.TodoRecurrency", on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
@@ -18,6 +21,9 @@ class OrderedUser(models.Model):
         return f'OrderedUser: {self.user} - {self.recurrent_todo} | {self.order}'
 
 class TodoRecurrency(models.Model):
+    """
+    Tracks the assignment of a todo along time with the todo opening up after some time and changing the assigned users
+    """
     assigned_users = models.ManyToManyField("hub.User", through=OrderedUser)
     recurrency_turn = models.IntegerField(default=0, blank=False, null=False)
     started_at = models.DateField(auto_created=True, default=now)
@@ -26,6 +32,9 @@ class TodoRecurrency(models.Model):
 
     @staticmethod
     def create_with_settings(users, rate):
+        """
+        Create a TodoRecurrency with the specified users and recurrency_rate
+        """
         recurrency = TodoRecurrency.objects.create(recurrency_turn = 0, day_rotation = rate)
 
         for (i, user) in enumerate(users):
@@ -39,17 +48,27 @@ class TodoRecurrency(models.Model):
 
         return recurrency
     
-    def add_user(self,user):
+    def add_user(self, user):
+        """
+        Add a user to the TodoRecurrency
+        """
         order = len(OrderedUser.objects.filter(recurrent_todo = self))
         ordered_user = OrderedUser.objects.create(user=user, recurrent_todo = self, order = order)
         ordered_user.save()
 
     def add_empty(self):
+        """
+        Add an empty field to the TodoRecurrency
+        """
         order = len(OrderedUser.objects.filter(recurrent_todo = self))
         ordered_user = OrderedUser.objects.create(empty = True, recurrent_todo = self, order = order)
         ordered_user.save()
 
-    def get_user_at_day(self,n) -> User:
+    def get_user_at_day(self, n) -> User:
+        """
+        Return the assigned user n days after the start. 
+        This is used during testing mainly and does not properly track changes of the assigned position of the recurrency
+        """
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         if len(users) == 0:
             return None
@@ -57,12 +76,20 @@ class TodoRecurrency(models.Model):
         return users[idx].user
     
     def get_current_user(self) -> User:
+        """
+        Get the currently assigned user. 
+        If there are no users or if there is no assigned user in the next turn return none
+        """
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         if len(users) == 0:
             return None
         return users[self.recurrency_turn].user
 
     def get_next_user(self) -> User:
+        """
+        Get the user of the next turn. 
+        If there are no users or if there is no assigned user in the next turn return none
+        """
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         if len(users) == 0:
             return None
@@ -75,8 +102,14 @@ class TodoRecurrency(models.Model):
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         return [ou.user for ou in ordered_users]
     
-    def remove_position(self, position):
+    def remove_user_at_position(self, position):
+        """
+        Remove the user at the given position
+        """
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
+        if position >= len(ordered_users):
+            return
+        
         ordered_users[position].delete()
         
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
@@ -86,21 +119,34 @@ class TodoRecurrency(models.Model):
 
         self.recurrency_turn = self.recurrency_turn % len(self.assigned_users.all())
 
+    @transaction.atomic 
     def reorder_user(self, prev_pos, new_pos):
-        ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
-
-        for i in range(new_pos, len(ordered_users) - new_pos):
-            ordered_users[i].order = i+1
-            ordered_users[i].save()
-        ordered_users[prev_pos].order = new_pos
-        ordered_users[prev_pos].save()
+        """
+        Reorder the users. 
+        The user at prev_pos is moved to new_pos.
+        All other users are moved accordingly to keep the ordering
+        """
+        user_amt = OrderedUser.objects.filter(recurrent_todo = self).count()
+        if new_pos < 0 or prev_pos < 0 or new_pos > user_amt or prev_pos >= user_amt:
+            return
+        moved_users = OrderedUser.objects.filter(recurrent_todo = self, order__gte=new_pos).order_by("order")
+        prev_user = OrderedUser.objects.get(recurrent_todo = self, order = prev_pos)
+        for user in moved_users:
+            user.order += 1
+            user.save()
+        prev_user.order = new_pos
+        prev_user.save()
 
         ordered_users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         for i, ord_usr in enumerate(ordered_users):
             ord_usr.order = i
             ord_usr.save()
 
+
     def tick_rotation(self):
+        """
+        Ticks the recurrency rotation to continue it if there are day changes
+        """
         date_now = now().date()
         last_date = self.last_check.date()
         if date_now > self.last_check.date():
@@ -243,7 +289,7 @@ class Todo(models.Model):
 
     def get_currently_assigned_user(self) -> User:
         if self.recurrent_state is not None:
-            current_time = localtime(now()).date()
+            current_time = now.date()
             start_time = self.recurrent_state.started_at
             
             # This feels kinda disgusting, but ig it works. For some reason the DateField doesn't return the same date object as Djangos date method
@@ -254,7 +300,7 @@ class Todo(models.Model):
         
     def get_next_assigned_user(self) -> User:
         if self.recurrent_state:
-            current_time = localtime(now()).date()
+            current_time = now().date()
             start_time = self.recurrent_state.started_at
 
             passed_time = current_time - date(start_time.year, start_time.month, start_time.day)

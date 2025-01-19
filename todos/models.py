@@ -289,7 +289,7 @@ class Todo(models.Model):
 
     def get_currently_assigned_user(self) -> User:
         if self.recurrent_state is not None:
-            current_time = now.date()
+            current_time = now().date()
             start_time = self.recurrent_state.started_at
             
             # This feels kinda disgusting, but ig it works. For some reason the DateField doesn't return the same date object as Djangos date method

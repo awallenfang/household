@@ -11,7 +11,7 @@
                 {% endif %}
             </div>
             {% if todo.recurrent_state is None %}
-                <p>{{ todo.assigned_user }}</p>
+                <p>{{ todo.assigned_user.auth_user.username }}</p>
             {% else %}
                 {% with current=todo.recurrent_state.get_current_user %}
                     <p>{{ current.auth_user.username }}</p>
@@ -71,10 +71,13 @@
 
                     {% if todo.recurrent_state is not None %}
                         {% with next=todo.recurrent_state.get_next_user %}
+                        <b>Next user:</b>
                             {% if next is not None %}
-                                <b>Next user:</b>
                                 <br>
                                 <p>{{ next.auth_user.username }}</p>
+                            {% else %}
+                                <br>
+                                <p>No one</p>
                             {% endif %}
                         {% endwith %}
                     {% endif %}

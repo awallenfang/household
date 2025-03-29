@@ -1,87 +1,82 @@
 {% load static%}
-<div class="col gap-small collapsible-container draggable-container" todo-id="{{todo.id}}">
-        
-    <div class="row gap-medium p-05 w-30vw minw-20 background-light justify-between border-radius-05 h-3 font-w-600">
-        <div class="w-100p row gap-medium justify-between ">
-            <div class="row gap-medium">
-                <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
-                <p>{{ todo.name }}</p>
-                {% if todo.recurrent_state is not None%}
-                    <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
+<div class="card w-30vw minw-20 draggable-container" todo-id="{{todo.id}}">
+    <div class="card-header font-w-600">
+        <div class="row gap-medium">
+            <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
+            <p>{{ todo.name }}</p>
+            {% if todo.recurrent_state is not None%}
+            <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
+            {% endif %}
+        </div>
+        {% if todo.recurrent_state is None %}
+            <p>{{ todo.assigned_user.auth_user.username }}</p>
+        {% else %}
+            {% with current=todo.recurrent_state.get_current_user %}
+            <p>{{ current.auth_user.username }}</p>
+            {% endwith %}
+        {% endif %}
+        {% if not todo.done %}
+            <a class="button" 
+            hx-post="{% url 'todos:close_todo' todo.id %}"
+            hx-target="#todo-list">Done</a>
+        {% else %}
+            <a class="button" 
+            hx-post="{% url 'todos:open_todo' todo.id %}"
+            hx-target="#todo-list">Reopen</a>
+        {% endif %}
+        <button class="dropdown-button" collapse-target="collapse-{{todo.id}}" onclick="toggleCollapse(event)">...</button>
+    </div>
+    <div class="card-body collapse" id="collapse-{{todo.id}}">
+        <div class="row justify-between">
+            <div class="w-60p">
+                <p>{{todo.description}} </p>
+            </div>
+            <div class="w-40p col gap-small">
+                
+                <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
+                hx-target="closest .card"
+                hx-swap="outerHTML">Edit</a>
+                {% if todo.recurrent_state is None%}
+                    <a class="button" 
+                    hx-get="{% url 'todos:make_recurrent' todo.id %}"
+                    hx-target="closest .card"
+                    hx-swap="innerHTML">Make recurrent</a>
+                {%else%}
+                    <a class="button" 
+                    hx-get="{% url 'todos:recurrency_editor' todo.id %}"
+                    hx-target="#recurrent-block"
+                    hx-swap="innerHTML"
+                    onclick="clearSelectedUsers()">Recurrency</a>
+                {% endif %}
+                <a class="button" 
+                hx-delete="{% url 'todos:delete_todo' todo.id %}" 
+                hx-confirm="Are you sure you would like to delete this todo?"
+                hx-target="#todo-list"
+                >
+                    Delete!
+                </a>
+                <b>Assigned user:</b>
+                {% if todo.recurrent_state is None %}
+                    <p>{{ todo.assigned_user }}</p>
+                {% else %}
+                    {% with current=todo.recurrent_state.get_current_user %}
+                        <p>{{ current.auth_user.username }}</p>
+                    {% endwith %}
+                {% endif %}
+
+                {% if todo.recurrent_state is not None %}
+                    {% with next=todo.recurrent_state.get_next_user %}
+                    <b>Next user:</b>
+                        {% if next is not None %}
+                            <br>
+                            <p>{{ next.auth_user.username }}</p>
+                        {% else %}
+                            <br>
+                            <p>No one</p>
+                        {% endif %}
+                    {% endwith %}
                 {% endif %}
             </div>
-            {% if todo.recurrent_state is None %}
-                <p>{{ todo.assigned_user.auth_user.username }}</p>
-            {% else %}
-                {% with current=todo.recurrent_state.get_current_user %}
-                    <p>{{ current.auth_user.username }}</p>
-                {% endwith %}
-            {% endif %}
-            {% if not todo.done %}
-                <a class="button" 
-                    hx-post="{% url 'todos:close_todo' todo.id %}"
-                    hx-target="#todo-list">Done</a>
-            {% else %}
-                <a class="button" 
-                    hx-post="{% url 'todos:open_todo' todo.id %}"
-                    hx-target="#todo-list">Reopen</a>
-            {% endif %}
-        </div>
-        <div class="row">
-            <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
-        </div>
-    </div>
-    <div class="background-light w-30vw minw-20 h-20 p-1 dropdown-closed">
-        <div class="row justify-between">
-                <div class="w-60p">
-                    <p>{{todo.description}} </p>
-                </div>
-                <div class="w-40p col gap-small">
-                   
-                    <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
-                    hx-target="closest .collapsible-container"
-                    hx-swap="outerHTML">Edit</a>
-                    {% if todo.recurrent_state is None%}
-                        <a class="button" 
-                        hx-get="{% url 'todos:make_recurrent' todo.id %}"
-                        hx-target="closest .collapsible-container"
-                        hx-swap="innerHTML">Make recurrent</a>
-                    {%else%}
-                        <a class="button" 
-                        hx-get="{% url 'todos:recurrency_editor' todo.id %}"
-                        hx-target="#recurrent-block"
-                        hx-swap="innerHTML"
-                        onclick="clearSelectedUsers()">Recurrency</a>
-                    {% endif %}
-                    <a class="button" 
-                    hx-delete="{% url 'todos:delete_todo' todo.id %}" 
-                    hx-confirm="Are you sure you would like to delete this todo?"
-                    hx-target="#todo-list"
-                    >
-                        Delete!
-                    </a>
-                    <b>Assigned user:</b>
-                    {% if todo.recurrent_state is None %}
-                        <p>{{ todo.assigned_user }}</p>
-                    {% else %}
-                        {% with current=todo.recurrent_state.get_current_user %}
-                            <p>{{ current.auth_user.username }}</p>
-                        {% endwith %}
-                    {% endif %}
-
-                    {% if todo.recurrent_state is not None %}
-                        {% with next=todo.recurrent_state.get_next_user %}
-                        <b>Next user:</b>
-                            {% if next is not None %}
-                                <br>
-                                <p>{{ next.auth_user.username }}</p>
-                            {% else %}
-                                <br>
-                                <p>No one</p>
-                            {% endif %}
-                        {% endwith %}
-                    {% endif %}
-                </div>
         </div>
     </div>
 </div>

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'transactions',
     'hub',
     'todos',
-    'space'
+    'space',
 ]
 
 MIDDLEWARE = [

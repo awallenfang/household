@@ -23,16 +23,6 @@ main {
 
 /* Drop down menus */
 
-
-.dropdown-open {
-    display: block;
-
-}
-
-.dropdown-closed {
-    display: none;
-}
-
 .dropdown-button {
     width: 2rem;
     height: 2rem;

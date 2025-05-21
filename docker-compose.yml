@@ -1,8 +1,8 @@
 services:
     db:
         image: postgres
-        volumes:
-            - ./data/db:/var/lib/postgresql/data
+        # volumes:
+            # - ./data/db:/var/lib/postgresql/data
         environment:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
@@ -10,7 +10,7 @@ services:
         ports:
             - "5432:5432"
     web:
-        image: base:latest
+        build: .
         volumes:
             # - .:/code
             - ./_logs/supervisor:/var/log/supervisor

@@ -163,3 +163,4 @@ cython_debug/
 
 db.sqlite3
 data/
+_logs/

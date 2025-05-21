@@ -2,6 +2,22 @@
 
 The household planner is a web application built for planning todos and similar for shared living spaces, specifically. Although it can also be used for single households.
 
+## Docker setup
+
+Env variables:
+
+example config.env file
+```
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_PORT=5432
+POSTGRES_HOST=db
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=root@root.org
+DJANGO_SUPERUSER_PASSWORD=admin
+```
+
 ## Setup
 
 First setup a Python venv:

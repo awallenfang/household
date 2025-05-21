@@ -11,7 +11,8 @@ services:
             - "5432:5432"
     web:
         build: .
-        entrypoint: bash debug_startup.sh
+        # entrypoint: bash debug_startup.sh
+        command: python manage.py runserver 0.0.0.0:5000
         volumes:
             - .:/code
         ports:

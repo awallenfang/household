@@ -83,6 +83,8 @@ class TodoRecurrency(models.Model):
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         if len(users) == 0:
             return None
+        if self.recurrency_turn >= len(users):
+            self.recurrency_turn = self.recurrency_turn % len(users)
         return users[self.recurrency_turn].user
 
     def get_next_user(self) -> User:

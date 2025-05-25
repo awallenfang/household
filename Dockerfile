@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 COPY . /code/
 RUN python manage.py collectstatic --noinput
 RUN python manage.py migrate
-RUN python manage.py createsuperuser --noinput
+RUN python manage.py createsuperuser --username $DJANGO_SUPERUSER_USERNAME --noinput

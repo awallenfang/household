@@ -74,13 +74,11 @@ def space_view(request, space_id):
         user = Profile.objects.get(user = request.user)
         space = SharedSpace.objects.get(id = space_id)
 
-        # This isn't particularly pretty. I should solve this using a single page method with htmx soon
-        user_spaces = user.spaces.all()
-        selected_space = user.selected_space
+        if space in user.spaces:
+            user_spaces = user.spaces.all()
+            selected_space = user.selected_space
 
-        joined_people = space.joined_people()
-
-        if user.spaces.contains(space):
+            joined_people = space.joined_people()
             return render(request, "space/space-full.html", 
                           {"user": user, 
                            "space": space, 

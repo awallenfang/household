@@ -46,10 +46,10 @@ def join_space(request):
 
 @login_required
 @require_http_methods(['GET'])
-def kick_from_space(request, space_id, username):
+def kick_from_space(request, space_id, user_id):
     user = Profile.objects.get(user = request.user)
     space = SharedSpace.objects.get(id = space_id)
-    user_to_kick = Profile.objects.get(auth_user__username = username)
+    user_to_kick = Profile.objects.get(auth_user__id = user_id)
     # Only the owner can kick people
     if user == space.owner:
         if user_to_kick in space.joined_people():

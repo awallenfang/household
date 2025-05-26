@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_htmx',
-    'transactions',
     'hub',
     'todos',
     'space',
@@ -148,3 +147,4 @@ CURRENCIES = [
 ]
 
 LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/"

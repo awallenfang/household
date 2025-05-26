@@ -1,45 +1,39 @@
 {%load static%}
-<div class="collapsible-container draggable-container" todo-id="{{todo.id}}">
+<div class="card w-30vw minw-20 draggable-container" todo-id="{{todo.id}}">
     <form action="{% url 'todos:finish_todo_edit' todo.id %}" 
     method="post" id="todo-edit" 
     hx-post="{% url 'todos:finish_todo_edit' todo.id %}"
-    hx-target="closest .collapsible-container"
-    hx-swap="outerHTML"
-    class="collapsible-container">
+    hx-target="closest .card"
+    hx-swap="outerHTML">
         {% csrf_token %}
-        <div class="row gap-medium p-05 w-30vw minw-20 background-light justify-between border-radius-05 h-3 font-w-600">
-            <div class="w-100p row gap-medium justify-between">
-                <div class="row gap-medium">
-                    <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
-                    <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
-                </div>
-                <p>{{todo.assigned_user.auth_user.username}}</p>
-
+        <div class="card-header font-w-500">
+            <div class="row gap-medium">
+                <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
+                <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
             </div>
-            <div class="todo-buttons">
-                <button type="button" class="dropdown-button" onclick="toggleDropdown(event)">...</button>
-            </div>
+            <p>{{todo.assigned_user.auth_user.username}}</p>
+            
+            <button type="button" class="dropdown-button" collapse-target="collapse-{{todo.id}}" onclick="toggleCollapse(event)">...</button>
         </div>
-        <div class="background-light w-30vw minw-20 h-20 p-1 dropdown-open">
+        <div class="card-body collapse" id="collapse-{{todo.id}}">
             <div class="row justify-between align-start">
-                    <div>
+                <div class="col">
+                    <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea> 
+                </div>
+                
+                <div class="col gap-small">
+                    <input type="submit" value="Save" class="button">
 
-                        <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea> 
-                    </div>
-                    
-                    <div class="col gap-small">
-                        <input type="submit" value="Save" class="button">
-
-                        <a class="button" 
-                        hx-delete="{% url 'todos:delete_todo' todo.id %}" 
-                        hx-confirm="Are you sure you would like to delete this todo?"
-                        hx-target="#todo-block"
-                        >
-                            Delete!
-                        </a>
-                        <p>Assigned user:</p>
-                        <p>{{todo.assigned_user.auth_user.username}}</p>
-                    </div>
+                    <a class="button" 
+                    hx-delete="{% url 'todos:delete_todo' todo.id %}" 
+                    hx-confirm="Are you sure you would like to delete this todo?"
+                    hx-target="#todo-block"
+                    >
+                        Delete!
+                    </a>
+                    <p>Assigned user:</p>
+                    <p>{{todo.assigned_user.auth_user.username}}</p>
+                </div>
             </div>
         </div>
     </form>

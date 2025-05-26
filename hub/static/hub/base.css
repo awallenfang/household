@@ -1,8 +1,13 @@
+@font-face {
+  font-family: 'Albert Sans';
+  src: url(fonts/AlbertSans-Medium.woff2) format('woff2'),
+}
 * {
     margin: 0;
     box-sizing: border-box;
     font-family: 'Albert Sans', sans-serif;
 }
+
 
 header {
     margin: 0;
@@ -22,16 +27,6 @@ main {
 }
 
 /* Drop down menus */
-
-
-.dropdown-open {
-    display: block;
-
-}
-
-.dropdown-closed {
-    display: none;
-}
 
 .dropdown-button {
     width: 2rem;

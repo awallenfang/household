@@ -4,7 +4,7 @@ from django.db import models, transaction
 from django.db.models import F
 from django.utils.timezone import localtime, now
 
-from hub.models import SharedSpace, User
+from hub.models import SharedSpace, Profile
 
 ######## Recurrent Todo helpers
 
@@ -12,7 +12,7 @@ class OrderedUser(models.Model):
     """
     Corresponds to the order of users in a recurrency
     """
-    user = models.ForeignKey("hub.User", on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey("hub.Profile", on_delete=models.CASCADE, null=True, blank=True)
     recurrent_todo = models.ForeignKey("todos.TodoRecurrency", on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
     empty = models.BooleanField(default=False)
@@ -24,7 +24,7 @@ class TodoRecurrency(models.Model):
     """
     Tracks the assignment of a todo along time with the todo opening up after some time and changing the assigned users
     """
-    assigned_users = models.ManyToManyField("hub.User", through=OrderedUser)
+    assigned_users = models.ManyToManyField("hub.Profile", through=OrderedUser)
     recurrency_turn = models.IntegerField(default=0, blank=False, null=False)
     started_at = models.DateField(auto_created=True, default=now)
     day_rotation = models.IntegerField(default=7)
@@ -64,7 +64,7 @@ class TodoRecurrency(models.Model):
         ordered_user = OrderedUser.objects.create(empty = True, recurrent_todo = self, order = order)
         ordered_user.save()
 
-    def get_user_at_day(self, n) -> User:
+    def get_user_at_day(self, n) -> Profile:
         """
         Return the assigned user n days after the start. 
         This is used during testing mainly and does not properly track changes of the assigned position of the recurrency
@@ -75,7 +75,7 @@ class TodoRecurrency(models.Model):
         idx = (n // self.day_rotation) % len(users)
         return users[idx].user
     
-    def get_current_user(self) -> User:
+    def get_current_user(self) -> Profile:
         """
         Get the currently assigned user. 
         If there are no users or if there is no assigned user in the next turn return none
@@ -83,9 +83,11 @@ class TodoRecurrency(models.Model):
         users = OrderedUser.objects.filter(recurrent_todo = self).order_by("order")
         if len(users) == 0:
             return None
+        if self.recurrency_turn >= len(users):
+            self.recurrency_turn = self.recurrency_turn % len(users)
         return users[self.recurrency_turn].user
 
-    def get_next_user(self) -> User:
+    def get_next_user(self) -> Profile:
         """
         Get the user of the next turn. 
         If there are no users or if there is no assigned user in the next turn return none
@@ -188,7 +190,7 @@ class Todo(models.Model):
     position = models.IntegerField()
     space = models.ForeignKey(SharedSpace, on_delete=models.CASCADE)
     recurrent_state = models.ForeignKey(TodoRecurrency, on_delete=models.CASCADE, blank=True, null=True)
-    assigned_user = models.ForeignKey("hub.User", on_delete=models.CASCADE, blank=True, null=True)
+    assigned_user = models.ForeignKey("hub.Profile", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}: {self.description} | Position: {self.position} | Done: {self.done}'
@@ -209,13 +211,13 @@ class Todo(models.Model):
     
     @staticmethod
     def get_open(request):
-        user = User.objects.get(auth_user = request.user)
+        user = Profile.objects.get(user = request.user)
         space = user.selected_space
         return Todo.objects.filter(done=False, space=space).order_by("position")
     
     @staticmethod
     def get_closed(request):
-        user = User.objects.get(auth_user = request.user)
+        user = Profile.objects.get(user = request.user)
         space = user.selected_space
 
         return Todo.objects.filter(done=True, space=space).order_by("position")
@@ -287,7 +289,7 @@ class Todo(models.Model):
             recurrency.add_user(user)
             recurrency.save()
 
-    def get_currently_assigned_user(self) -> User:
+    def get_currently_assigned_user(self) -> Profile:
         if self.recurrent_state is not None:
             current_time = now().date()
             start_time = self.recurrent_state.started_at
@@ -298,7 +300,7 @@ class Todo(models.Model):
         
         return self.assigned_user
         
-    def get_next_assigned_user(self) -> User:
+    def get_next_assigned_user(self) -> Profile:
         if self.recurrent_state:
             current_time = now().date()
             start_time = self.recurrent_state.started_at

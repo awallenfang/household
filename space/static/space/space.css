@@ -3,6 +3,7 @@
 .space-dropdown {
     position: relative;
     display: inline-block;
+    z-index: 2;
 }
 
 .quick-space-container {

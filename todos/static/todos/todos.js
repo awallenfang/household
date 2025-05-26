@@ -1,19 +1,6 @@
 selected_users = []
 selected_todo_id = -1
 
-function toggleDropdown(e) {
-    let dropdown = e.target.parentElement.parentElement.nextElementSibling
-
-    if (dropdown.classList.contains("dropdown-open")) {
-        dropdown.classList.remove("dropdown-open")
-        dropdown.classList.add("dropdown-closed")
-    } else {
-        dropdown.classList.remove("dropdown-closed")
-        dropdown.classList.add("dropdown-open")
-
-    }
-}
-
 function drop(ev) {
     ev.preventDefault()
 

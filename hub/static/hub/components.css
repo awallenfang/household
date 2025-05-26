@@ -78,3 +78,54 @@
     height: 100%;
     background-color: var(--light-bg);
 }
+
+/* ############### Badge ################# */
+.badge {
+    color: var(--text);
+    background-color: var(--light-highlight);
+    padding: 4px 8px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.badge-strong {
+    color: var(--text);
+    background-color: var(--strong-highlight);
+}
+
+.badge-error {
+    color: white;
+    background-color: var(--error-bg);
+}
+
+/* ############## Card ############### */
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    background-color: var(--light-bg);
+    background-clip: border-box;
+    border-radius: 5px;
+}
+
+.card-header {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 8px
+}
+
+/* #################### Collapsing ################### */
+.collapse {
+    display: none;
+}

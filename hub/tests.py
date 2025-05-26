@@ -1,18 +1,18 @@
 from django.test import TestCase
-from django.contrib.auth.models import User as AuthUser
+from django.contrib.auth.models import User
 from space.models import InvalidTokenError, SharedSpace
-from .models import User
+from .models import Profile
 # Create your tests here.
 class UserTest(TestCase):
     def create_testuser(self, name):
-        auth_user = AuthUser.objects.create_user(username=name, password="test")
-        user = User.objects.create(auth_user=auth_user)
+        auth_user = User.objects.create_user(username=name, password="test")
+        user = Profile.objects.create(user=auth_user)
         return user
 
     def test_user_creation(self):
         user = self.create_testuser("test1")
-        self.assertTrue(isinstance(user, User))
-        self.assertEqual(str(user), "User: test1")
+        self.assertTrue(isinstance(user, Profile))
+        self.assertEqual(str(user), "Profile: test1")
 
 class SharedSpaceTest(TestCase):
     def create_testspace(self):
@@ -20,8 +20,8 @@ class SharedSpaceTest(TestCase):
         return SharedSpace.create_space("test space", user)
     
     def create_testuser(self, name):
-        auth_user = AuthUser.objects.create_user(username=name, password="test")
-        user = User.objects.create(auth_user=auth_user)
+        auth_user = User.objects.create_user(username=name, password="test")
+        user = Profile.objects.create(user=auth_user)
         return user
     
     def test_space_creation(self):

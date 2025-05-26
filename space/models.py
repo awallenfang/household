@@ -13,7 +13,7 @@ class InvalidTokenError(Exception):
 class SharedSpace(models.Model):
     name = models.TextField(null=False, blank=False, default="My Shared Living Space", max_length=100)
     invite_token = models.TextField(max_length=10, null=False, blank=False)
-    owner = models.ForeignKey('hub.User', on_delete=models.CASCADE, null=True, blank=True)
+    owner = models.ForeignKey('hub.Profile', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f'Shared Space: {self.name}'
@@ -53,9 +53,9 @@ class SharedSpace(models.Model):
 
     def joined_people(self):
         # Avoid a circular import with this
-        from hub.models import User
+        from hub.models import Profile
 
-        users = User.objects.filter(spaces__in=[self])
+        users = Profile.objects.filter(spaces__in=[self])
         return list(users)
     
     def delete_space(self):

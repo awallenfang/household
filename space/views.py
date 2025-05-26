@@ -74,7 +74,7 @@ def space_view(request, space_id):
         user = Profile.objects.get(user = request.user)
         space = SharedSpace.objects.get(id = space_id)
 
-        if space in user.spaces:
+        if user.spaces.contains(space):
             user_spaces = user.spaces.all()
             selected_space = user.selected_space
 

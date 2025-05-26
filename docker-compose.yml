@@ -9,6 +9,8 @@ services:
             - "5432:5432"
         networks:
             - net
+        restart:
+            - always
     web:
         build: .
         volumes:
@@ -23,6 +25,8 @@ services:
             - db
         networks:
             - net
+        restart:
+            - always
 networks:
   net:
     external: true

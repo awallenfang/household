@@ -1,8 +1,8 @@
 from django.test import TestCase
-from django.contrib.auth.models import User as AuthUser
+from django.contrib.auth.models import User
 
 from space.models import SharedSpace
-from hub.models import User
+from hub.models import Profile
 from .models import Todo
 
 
@@ -12,11 +12,11 @@ from .models import Todo
 
 # Create your tests here.
 class TodosTest(TestCase):
-    def create_random_users(self, n) -> list[User]:
+    def create_random_users(self, n) -> list[Profile]:
         users = []
         for i in range(n):
-            auth_user = AuthUser.objects.create(username=str(i), password="a")
-            user = User.objects.create(auth_user=auth_user)
+            auth_user = User.objects.create(username=str(i), password="a")
+            user = Profile.objects.create(user=auth_user)
 
             users.append(user)
 
@@ -24,15 +24,15 @@ class TodosTest(TestCase):
 
 
     def create_test_todos(self, n):
-        auth_user = AuthUser.objects.create(username="a", password="a")
-        user = User.objects.create(auth_user=auth_user)
+        auth_user = User.objects.create(username="a", password="a")
+        user = Profile.objects.create(user=auth_user)
         space = SharedSpace.create_space("test", user)
         for _ in range(n):
             Todo.create_in_space(space)
     
     def create_single_todo(self) -> Todo:
-        auth_user = AuthUser.objects.create(username="a", password="a")
-        user = User.objects.create(auth_user=auth_user)
+        auth_user = User.objects.create(username="a", password="a")
+        user = Profile.objects.create(user=auth_user)
         space = SharedSpace.create_space("test", user)
 
         todo = Todo.create_in_space(space)

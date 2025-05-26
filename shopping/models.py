@@ -24,5 +24,5 @@ class ShoppingItemOnList(models.Model):
     list = models.ForeignKey(ShoppingList, on_delete=CASCADE)
     amount = models.PositiveIntegerField(verbose_name="Amount", default=1)
     checked = models.BooleanField(verbose_name="Bought", default=False)
-    bought_by = models.ForeignKey("hub.User", null=True, blank=True, on_delete=CASCADE)
+    bought_by = models.ForeignKey("hub.Profile", null=True, blank=True, on_delete=CASCADE)
 

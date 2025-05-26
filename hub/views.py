@@ -4,27 +4,25 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponseRedirect
 from django.contrib import auth
-from django.contrib.auth.models import User as AuthUser
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 
 
 from .forms import LoginForm, SignupForm
-from .models import User
+from .models import Profile
 
 
-
+@login_required
 def hub(request):
-    if request.user.is_authenticated:
-        user = User.objects.get(auth_user = request.user)
-        user_spaces = user.spaces.all()
-        selected_space = user.selected_space
-        return render(request, 
-                      "hub/base.html", 
-                      {"user_spaces": user_spaces, "selected_space": selected_space})
+    user = Profile.objects.get(user = request.user)
+        
+    user_spaces = user.spaces.all()
+    selected_space = user.selected_space
+    return render(request, 
+                    "hub/base.html", 
+                    {"user_spaces": user_spaces, "selected_space": selected_space})
     
-    return HttpResponseRedirect("/login")
-
 def login(request):
     # If the user is alread logged in, redirect
     if request.user.is_authenticated:
@@ -68,12 +66,12 @@ def signup(request):
         
         # Create the user. If the username is already taken, return an error stating it
         try:
-            auth_user = AuthUser.objects.create_user(form.cleaned_data["username"], form.cleaned_data["email"], form.cleaned_data["password"])
+            auth_user = User.objects.create_user(form.cleaned_data["username"], form.cleaned_data["email"], form.cleaned_data["password"])
         except IntegrityError:
             return render(request, "hub/signup.html", {"form": form, "error_message": "The username is already taken."})
         
         # If the auth_user was created, also create out user model
-        User.objects.create(auth_user=auth_user)
+        Profile.objects.create(user=auth_user)
 
         # If everything was successful return to the hub
         return HttpResponseRedirect("/login")

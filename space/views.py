@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
-from hub.models import User
+from hub.models import Profile
 from space.models import InvalidTokenError, SharedSpace
 
 # Create your views here.
@@ -12,7 +12,7 @@ from space.models import InvalidTokenError, SharedSpace
 @login_required
 @require_http_methods(['GET', 'POST'])
 def select_space(request, space_id):
-    user = User.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
 
     user.select_space(space_id)
     return HttpResponseRedirect("/")
@@ -20,7 +20,7 @@ def select_space(request, space_id):
 @login_required
 @require_http_methods(['GET', 'POST'])
 def create_space(request):
-    user = User.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
     space = SharedSpace.create_space("My Space", user)
 
     SharedSpace.join(user, space.invite_token)
@@ -34,7 +34,7 @@ def create_space(request):
 @login_required
 @require_http_methods(['POST'])
 def join_space(request):
-    user = User.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
     space_id = request.POST.get("space_token", None)
     if space_id is None:
         return HttpResponseRedirect("/")
@@ -48,9 +48,9 @@ def join_space(request):
 @login_required
 @require_http_methods(['GET'])
 def kick_from_space(request, space_id, username):
-    user = User.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
     space = SharedSpace.objects.get(id = space_id)
-    user_to_kick = User.objects.get(auth_user__username = username)
+    user_to_kick = Profile.objects.get(auth_user__username = username)
     # Only the owner can kick people
     if user == space.owner:
         if user_to_kick in space.joined_people():
@@ -72,7 +72,7 @@ def kick_from_space(request, space_id, username):
 @require_http_methods(['GET', 'POST'])
 def space_view(request, space_id):
     if request.method == "GET":
-        user = User.objects.get(auth_user = request.user)
+        user = Profile.objects.get(user = request.user)
         space = SharedSpace.objects.get(id = space_id)
 
         # This isn't particularly pretty. I should solve this using a single page method with htmx soon
@@ -100,7 +100,7 @@ def space_view(request, space_id):
 
 @login_required
 def delete_space(request, space_id):
-    user = User.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
     space = SharedSpace.objects.get(id = space_id)
 
     if space.owner == user:

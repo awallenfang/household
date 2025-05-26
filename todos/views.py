@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 from hub.decorators import space_required
-from hub.models import User
+from hub.models import Profile
 
 from .models import Todo
 
@@ -17,7 +17,7 @@ def render_dashboard(request):
 
     finished_todos = Todo.get_closed(request)
 
-    user = User.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
     user_spaces = user.spaces.all()
     selected_space = user.selected_space
 
@@ -51,7 +51,7 @@ def delete_todo(request, todo_id):
     """
     todo = Todo.objects.get(id=todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
         todo.delete()
 
     return render_todo_list(request)
@@ -63,7 +63,7 @@ def add_todo(request):
     """
     Add a new todo with default values
     """
-    user  = User.objects.get(auth_user = request.user)
+    user  = Profile.objects.get(user = request.user)
     
     todo = Todo.create_in_space(user.selected_space)
 
@@ -93,7 +93,7 @@ def finish_edit_todo(request, todo_id):
     """
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
         todo_name = request.POST.get("todo_name", todo.name)
         todo_description = request.POST.get("todo_description", todo.description)
 
@@ -113,7 +113,7 @@ def close_todo(request, todo_id):
     """
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
         todo.done = True
         todo.save()
 
@@ -132,7 +132,7 @@ def open_todo(request, todo_id):
     """
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
         todo.done = False
         todo.save()
 
@@ -154,7 +154,7 @@ def reorder(request, todo_id, left, right, status):
     # Move position
     changed_todo = Todo.objects.get(id=int(todo_id))
 
-    if changed_todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if changed_todo.space == Profile.objects.get(user = request.user).selected_space:
         changed_todo.reorder(int(left), int(right))
 
         changed_todo.done =  not (status == "open") 
@@ -208,12 +208,12 @@ def recurrency_add_users(request, todo_id):
         ids = [int(id) for id in added_list]
 
         todo = Todo.objects.get(id = todo_id)
-        if todo.space == User.objects.get(auth_user = request.user).selected_space:
+        if todo.space == Profile.objects.get(user = request.user).selected_space:
             for user_id in ids:
                 if user_id == -1:
                     todo.recurrent_state.add_empty()
                 else:
-                    user = get_object_or_404(User, id = user_id)
+                    user = get_object_or_404(Profile, id = user_id)
                     todo.recurrent_state.add_user(user)
 
     return render_recurrency_editor(request, todo_id)
@@ -224,7 +224,7 @@ def recurrency_add_users(request, todo_id):
 def recurrency_rate_change(request, todo_id, rate):
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
         if todo.recurrent_state is None:
             return render_recurrency_editor(request, todo_id)
         
@@ -241,7 +241,7 @@ def empty(_request):
 def recurrency_delete_position(request, todo_id, position):
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
         # If it isn't recurrant do nothing
         if todo.recurrent_state is None or position < 0:
             return render_recurrency_editor(request, todo_id)
@@ -255,7 +255,7 @@ def recurrency_delete_position(request, todo_id, position):
 def recurrency_reorder_user(request, todo_id, prev_pos, pos):
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
 
         if todo.recurrent_state is None:
             return render_recurrency_editor(request, todo_id)
@@ -269,9 +269,9 @@ def recurrency_reorder_user(request, todo_id, prev_pos, pos):
 def make_recurrent(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
 
-        user = User.objects.get(auth_user = request.user)
+        user = Profile.objects.get(user = request.user)
         todo.make_recurrent([user])
 
     return render(request, "todos/components/todo.html", {"todo": todo})
@@ -281,8 +281,8 @@ def make_recurrent(request, todo_id):
 def remove_recurrency(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
-        user = User.objects.get(auth_user = request.user)
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
+        user = Profile.objects.get(user = request.user)
 
         todo.recurrent_state = None
         todo.save()
@@ -296,7 +296,7 @@ def remove_recurrency(request, todo_id):
 def recurrency_set_position(request, todo_id, position):
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.space == User.objects.get(auth_user = request.user).selected_space:
+    if todo.space == Profile.objects.get(user = request.user).selected_space:
         recurrent_state = todo.recurrent_state
 
         if recurrent_state is None:

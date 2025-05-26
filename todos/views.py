@@ -38,6 +38,7 @@ def dashboard(request):
     """
     The initial dashboard to show the todos
     """
+
     Todo.check_recurrency_update()
 
     return render_dashboard(request)
@@ -81,8 +82,12 @@ def edit_todo(request, todo_id):
     """
     Swap the todo with the editable version
     """
+    user  = Profile.objects.get(user = request.user)
+    
     todo = Todo.objects.get(id = todo_id)
-    return render(request, "todos/components/todo_edit.html", {"todo": todo})
+    if todo.space in user.spaces:
+        return render(request, "todos/components/todo_edit.html", {"todo": todo})
+    return empty(request)
 
 @login_required
 @space_required
@@ -102,7 +107,9 @@ def finish_edit_todo(request, todo_id):
 
         todo.save()
 
-    return render(request, "todos/components/todo.html", {"todo": todo})
+        return render(request, "todos/components/todo.html", {"todo": todo})
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -117,11 +124,13 @@ def close_todo(request, todo_id):
         todo.done = True
         todo.save()
 
-    todos = Todo.get_open(request)
+        todos = Todo.get_open(request)
 
-    finished_todos = Todo.get_closed(request)
+        finished_todos = Todo.get_closed(request)
 
-    return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
+        return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -136,11 +145,10 @@ def open_todo(request, todo_id):
         todo.done = False
         todo.save()
 
-    todos = Todo.get_open(request)
+        return render_todo_list(request)
+    else:
+        return empty()
 
-    finished_todos = Todo.get_closed(request)
-
-    return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
 
 @login_required
 @space_required
@@ -161,11 +169,9 @@ def reorder(request, todo_id, left, right, status):
 
         changed_todo.save()
 
-    todos = Todo.get_open(request)
-
-    finished_todos = Todo.get_closed(request)
-
-    return render(request, "todos/components/todo_list.html", {"todos": todos, "finished_todos": finished_todos})
+        return render_todo_list(request)
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -174,18 +180,23 @@ def render_recurrency_editor(request, todo_id):
 
     if todo.recurrent_state is None:
         return empty(request)
-        
-    space_users = todo.space.joined_people()
-    existing_order = todo.recurrent_state.get_full_order()
-    current_assignment = todo.recurrent_state.recurrency_turn
-    rate = todo.recurrent_state.day_rotation
-    return render(request, 
-                  "todos/components/recurrency_editor.html", 
-                  {"todo": todo, 
-                   "available_users": space_users, 
-                   "existing_order": existing_order, 
-                   "current_assignment_idx": current_assignment, 
-                   "rate": rate})
+
+    user = Profile.objects.get(auth_user = request.user)
+
+    if todo.space in user.spaces:
+        space_users = todo.space.joined_people()
+        existing_order = todo.recurrent_state.get_full_order()
+        current_assignment = todo.recurrent_state.recurrency_turn
+        rate = todo.recurrent_state.day_rotation
+        return render(request, 
+                    "todos/components/recurrency_editor.html", 
+                    {"todo": todo, 
+                    "available_users": space_users, 
+                    "existing_order": existing_order, 
+                    "current_assignment_idx": current_assignment, 
+                    "rate": rate})
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -194,7 +205,12 @@ def recurrency_editor(request, todo_id):
     """
     Show the recurrency editor for the given todo
     """
-    return render_recurrency_editor(request, todo_id)
+    user = Profile.objects.get(auth_user = request.user)
+    todo = Todo.objects.get(id = todo_id)
+    if todo.space in user.spaces:
+        return render_recurrency_editor(request, todo_id)
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -216,7 +232,9 @@ def recurrency_add_users(request, todo_id):
                     user = get_object_or_404(Profile, id = user_id)
                     todo.recurrent_state.add_user(user)
 
-    return render_recurrency_editor(request, todo_id)
+            return render_recurrency_editor(request, todo_id)
+        else:
+            return empty(request)
 
 @login_required
 @space_required
@@ -230,7 +248,9 @@ def recurrency_rate_change(request, todo_id, rate):
         
         todo.recurrent_state.day_rotation = rate
         todo.recurrent_state.save()
-    return render_recurrency_editor(request, todo_id)
+        return render_recurrency_editor(request, todo_id)
+    else:
+        return empty(request)
 
 def empty(_request):
     return HttpResponse("")
@@ -248,7 +268,9 @@ def recurrency_delete_position(request, todo_id, position):
         
         todo.recurrent_state.remove_user_at_position(position)
 
-    return render_recurrency_editor(request, todo_id)
+        return render_recurrency_editor(request, todo_id)
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -262,7 +284,9 @@ def recurrency_reorder_user(request, todo_id, prev_pos, pos):
         
         todo.recurrent_state.reorder_user(int(prev_pos), int(pos))
 
-    return render_recurrency_editor(request, todo_id)
+        return render_recurrency_editor(request, todo_id)
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -274,7 +298,9 @@ def make_recurrent(request, todo_id):
         user = Profile.objects.get(user = request.user)
         todo.make_recurrent([user])
 
-    return render(request, "todos/components/todo.html", {"todo": todo})
+        return render(request, "todos/components/todo.html", {"todo": todo})
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -289,7 +315,9 @@ def remove_recurrency(request, todo_id):
 
         todo.assign_user(user)
 
-    return render_todo_list(request)
+        return render_todo_list(request)
+    else:
+        return empty(request)
 
 @login_required
 @space_required
@@ -308,8 +336,9 @@ def recurrency_set_position(request, todo_id, position):
         recurrent_state.save()
     
     
-    return render_recurrency_editor(request, todo_id)
-
+        return render_recurrency_editor(request, todo_id)
+    else:
+        return empty(request)
 
 
 

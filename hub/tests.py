@@ -12,7 +12,7 @@ class UserTest(TestCase):
     def test_user_creation(self):
         user = self.create_testuser("test1")
         self.assertTrue(isinstance(user, Profile))
-        self.assertEqual(str(user), "User: test1")
+        self.assertEqual(str(user), "Profile: test1")
 
 class SharedSpaceTest(TestCase):
     def create_testspace(self):

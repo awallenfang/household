@@ -16,6 +16,8 @@ POSTGRES_HOST=db
 DJANGO_SUPERUSER_USERNAME=admin
 DJANGO_SUPERUSER_EMAIL=root@root.org
 DJANGO_SUPERUSER_PASSWORD=admin
+DJANGO_SETTINGS_MODULE=root.prod_settings
+SECRET_KEY=<some secret key>
 ```
 
 ## Setup

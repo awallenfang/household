@@ -22,6 +22,5 @@ class Profile(models.Model):
         space = SharedSpace.objects.get(id=space_id)
         if self.spaces.contains(space):
             self.selected_space = space
-
-        self.save()
+            self.save()
 

@@ -27,7 +27,6 @@ def create_space(request):
 
     if user.selected_space is None:
         user.select_space(space.id)
-        return HttpResponseRedirect("/")
     
     return HttpResponseRedirect("/")
 
@@ -35,11 +34,11 @@ def create_space(request):
 @require_http_methods(['POST'])
 def join_space(request):
     user = Profile.objects.get(user = request.user)
-    space_id = request.POST.get("space_token", None)
-    if space_id is None:
+    space_token = request.POST.get("space_token", None)
+    if space_token is None:
         return HttpResponseRedirect("/")
     try:
-        SharedSpace.join(user, space_id)
+        SharedSpace.join(user, space_token)
     except InvalidTokenError:
         return HttpResponseRedirect("/")
 

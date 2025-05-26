@@ -12,7 +12,6 @@ services:
     web:
         build: .
         volumes:
-            # - .:/code
             - ./_logs/supervisor:/var/log/supervisor
             - ./_logs/nginx:/var/log/nginx
             - ./_logs/uwsgi:/var/log/uwsgi

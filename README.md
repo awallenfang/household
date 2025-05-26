@@ -20,6 +20,8 @@ DJANGO_SETTINGS_MODULE=root.prod_settings
 SECRET_KEY=<some secret key>
 ```
 
+This assumes to be in a network called net, over which the incoming requests are sent.
+
 ## Setup
 
 First setup a Python venv:

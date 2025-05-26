@@ -9,7 +9,7 @@ services:
             - "5432:5432"
     web:
         build: .
-        command: python manage.py runserver 0.0.0.0:5000
+        command: bash debug_startup.sh
         volumes:
             - .:/code
         ports:

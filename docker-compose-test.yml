@@ -9,7 +9,7 @@ services:
             - "5432:5432"
     web:
         build: .
-        command: python manage.py test
+        command: bash test_startup.sh
         volumes:
             - .:/code
         ports:

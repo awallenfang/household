@@ -7,8 +7,6 @@ services:
             - config.env
         ports:
             - "5432:5432"
-        networks:
-            - net
         restart: always
     web:
         build: .

@@ -180,7 +180,7 @@
                 <div class="row draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
                     <div class="row w-10 justify-between background-mid p-05 border-radius-025">
                         
-                        <p>{{user.auth_user.username}}</p>
+                        <p>{{user.user.username}}</p>
                         <div cass="row">
                             <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
                             hx-target="#recurrent-block"
@@ -209,7 +209,7 @@
                     </div>
                     {% for user in available_users%}
                     <div class="row align-stretch justify-between background-mid p-05 border-radius-025">
-                        <p>{{user.auth_user.username}}</p>
+                        <p>{{user.user.username}}</p>
                         <input  class="user-add-check" type="checkbox" name="{{user.id}}_checked" id="{{user.id}}" change="userChecked(event)">
                     </div>
                         

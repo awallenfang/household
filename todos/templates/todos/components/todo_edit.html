@@ -11,7 +11,7 @@
                 <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
                 <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
             </div>
-            <p>{{todo.assigned_user.auth_user.username}}</p>
+            <p>{{todo.assigned_user.user.username}}</p>
             
             <button type="button" class="dropdown-button" collapse-target="collapse-{{todo.id}}" onclick="toggleCollapse(event)">...</button>
         </div>
@@ -32,7 +32,7 @@
                         Delete!
                     </a>
                     <p>Assigned user:</p>
-                    <p>{{todo.assigned_user.auth_user.username}}</p>
+                    <p>{{todo.assigned_user.user.username}}</p>
                 </div>
             </div>
         </div>

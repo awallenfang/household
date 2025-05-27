@@ -181,7 +181,7 @@ def render_recurrency_editor(request, todo_id):
     if todo.recurrent_state is None:
         return empty(request)
 
-    user = Profile.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
 
     if todo.space in user.spaces:
         space_users = todo.space.joined_people()
@@ -205,7 +205,7 @@ def recurrency_editor(request, todo_id):
     """
     Show the recurrency editor for the given todo
     """
-    user = Profile.objects.get(auth_user = request.user)
+    user = Profile.objects.get(user = request.user)
     todo = Todo.objects.get(id = todo_id)
     if todo.space in user.spaces:
         return render_recurrency_editor(request, todo_id)

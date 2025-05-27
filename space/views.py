@@ -72,8 +72,10 @@ def kick_from_space(request, space_id, user_id):
 def space_view(request, space_id):
     if request.method == "GET":
         user = Profile.objects.get(user = request.user)
-        space = SharedSpace.objects.get(id = space_id)
-
+        try:
+            space = SharedSpace.objects.get(id = space_id)
+        except SharedSpace.DoesNotExist:
+            return HttpResponseRedirect("/")
         if user.spaces.contains(space):
             user_spaces = user.spaces.all()
             selected_space = user.selected_space

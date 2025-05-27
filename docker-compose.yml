@@ -8,6 +8,8 @@ services:
         ports:
             - "5432:5432"
         restart: always
+        networks:
+          - net
     web:
         build: .
         volumes:

@@ -3,7 +3,7 @@
 <div class="col gap-small pt-1 pb-2 align-center">
     {% for person in joined_people %}
         <div class="p-05 background-mid border-radius-05 row justify-between w-80p h-3">
-            <b>{{person.auth_user.username}}</b>
+            <b>{{ person.user.username }}</b>
             {% if selected_space.owner == person %}
                 <span>Owner</span>
             {% endif %}
@@ -12,7 +12,7 @@
                 {% if joined_people|length == 1%}
                     onclick="return confirm('Are you sure? By leaving as the last person the space and all connected data will be lost!')"
                 {%endif%}>
-                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Kick {{person.auth_user.username}}">
+                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Kick {{person.user.username}}">
                 </a>
             {% else %}
                 <div></div>

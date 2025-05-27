@@ -20,7 +20,8 @@ class SharedSpace(models.Model):
     
     @staticmethod
     def create_space(name: str, owner):
-        invite_token = ''.join(random.choice(string.ascii_uppercase) for _ in range(10))
+        # string.digits[1:] is used to avoid the digit '0' in the token
+        invite_token = ''.join(random.choice(string.ascii_uppercase + string.digits[1:]) for _ in range(10))
 
         # Check if invite_token exists already
         spaces = SharedSpace.objects.filter(invite_token = invite_token)

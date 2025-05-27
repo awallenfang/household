@@ -16,6 +16,7 @@ services:
             - ./_logs/supervisor:/var/log/supervisor
             - ./_logs/nginx:/var/log/nginx
             - ./_logs/uwsgi:/var/log/uwsgi
+            - ./_logs/django:/var/log/django
         ports:
             - "5000:5000"
         env_file:

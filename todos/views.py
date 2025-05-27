@@ -2,78 +2,90 @@ from functools import wraps
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
+from django.views.generic import ListView, View, CreateView, FormView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+
 
 from hub.decorators import space_required
+from hub.mixins import HTMXMixin
 from hub.models import Profile
+from todos.forms import TodoForm
+from todos.renderers import render_todo_list
+from todos.actions import create_todo, delete_todo
 
 from .models import Todo
 
-@login_required
-@space_required
-def render_dashboard(request):
-    todos = Todo.get_open(request)
-
-    finished_todos = Todo.get_closed(request)
-
-    user = Profile.objects.get(user = request.user)
-    user_spaces = user.spaces.all()
-    selected_space = user.selected_space
-
-    return render(request, "todos/dashboard_full.html", {'todos': todos, 'finished_todos': finished_todos, 'user_spaces': user_spaces, 'selected_space': selected_space})
-
-@login_required
-@space_required
-def render_todo_list(request):
-    todos = Todo.get_open(request)
-
-    finished_todos = Todo.get_closed(request)
-
-    return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
-
-@login_required
-@space_required
-def dashboard(request):
-    """
-    The initial dashboard to show the todos
-    """
-
-    Todo.check_recurrency_update()
-
-    return render_dashboard(request)
-
-@login_required
-@space_required
-@require_http_methods(['DELETE'])
-def delete_todo(request, todo_id):
-    """
-    Delete the todo with the given ID
-    """
-    todo = Todo.objects.get(id=todo_id)
-
-    if todo.space == Profile.objects.get(user = request.user).selected_space:
-        todo.delete()
-
-    return render_todo_list(request)
-
-@login_required
-@space_required
-@require_http_methods(['POST'])
-def add_todo(request):
-    """
-    Add a new todo with default values
-    """
-    user  = Profile.objects.get(user = request.user)
+@method_decorator(login_required, name='dispatch')
+@method_decorator(space_required, name='dispatch')
+class TodoDashboard(HTMXMixin, ListView):
+    model = Todo
+    template_name = "todos/dashboard_full.html"
+    context_object_name = "todos"
+    partials = {
+        "todo_list": render_todo_list
+    }
     
-    todo = Todo.create_in_space(user.selected_space)
+    def get_queryset(self):
+        profile = Profile.objects.get(user=self.request.user)
+        return Todo.objects.filter(space=profile.selected_space).order_by('position', 'done')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        todos = Todo.get_open(self.request)
 
-    todo.assign_user(user)
-    todos = Todo.get_open(request)
+        finished_todos = Todo.get_closed(self.request)
 
-    finished_todos = Todo.get_closed(request)
+        user = Profile.objects.get(user = self.request.user)
+        user_spaces = user.spaces.all()
+        selected_space = user.selected_space
+        context.update({
+            'todos': todos,
+            'finished_todos': finished_todos,
+            'user_spaces': user_spaces,
+            'selected_space': selected_space
+        })
+        return context
+    
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle the deletion of a todo item.
+        """
+        todo_id = kwargs.get('pk')
+        todo = get_object_or_404(Todo, id=todo_id)
+        
+        if todo.space == Profile.objects.get(user=request.user).selected_space:
+            todo.delete()
+        
+        return render_todo_list(request)
 
-    return render(request, "todos/components/todo_list.html", {'todos': todos, 'finished_todos': finished_todos})
+
+class DeleteTodoView(HTMXMixin, View):
+    partials = {
+        "todo_list": (render_todo_list, delete_todo)
+    }
+
+    def delete(self, request, todo_id):
+        delete_todo(todo_id)
+
+class CreateTodoView(HTMXMixin, View):
+    model = Todo
+    partials = {
+        "create_todo": (render_todo_list, create_todo)
+    }
+
+    def get(self, request, *args, **kwargs):
+        create_todo(request, *args, **kwargs)
+        return redirect("todos:todos")
+    
+    def post(self, request, *args, **kwargs):
+        create_todo(request, *args, **kwargs)
+        return redirect("todos:todos")
+
+class EditTodoView(HTMXMixin, FormView):
+    form_class = TodoForm
+    template_name = "todos/components/todo_edit.html"
 
 @login_required
 @space_required
@@ -152,7 +164,6 @@ def open_todo(request, todo_id):
 
 @login_required
 @space_required
-@require_http_methods(['POST'])
 def reorder(request, todo_id, left, right, status):
     """
     Allows the reordering on the dashboard. This will be called once a todo is dropped on a droppable space.
@@ -169,9 +180,7 @@ def reorder(request, todo_id, left, right, status):
 
         changed_todo.save()
 
-        return render_todo_list(request)
-    else:
-        return empty(request)
+    return HttpResponse()
 
 @login_required
 @space_required
@@ -252,8 +261,6 @@ def recurrency_rate_change(request, todo_id, rate):
     else:
         return empty(request)
 
-def empty(_request):
-    return HttpResponse("")
 
 @login_required
 @space_required

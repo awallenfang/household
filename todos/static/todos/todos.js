@@ -9,7 +9,11 @@ function drop(ev) {
     let status = ev.target.getAttribute("todo-status")
     let id = ev.dataTransfer.getData('todo-id')
     let url = `/todos/${id}/${left}/${right}/${status}/reorder`
-    htmx.ajax("POST", url, {target:'#todo-list', swap:'outerHTML'})
+    $.ajax(url).done(() => {
+
+        let swap_url = "/todos/?hxp=todo_list"
+        htmx.ajax("GET", swap_url, {target:'#todo-list', swap:'outerHTML'})
+    })
 }
 
 function allowDrop(ev) {

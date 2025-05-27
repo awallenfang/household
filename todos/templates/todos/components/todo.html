@@ -49,7 +49,7 @@
                     onclick="clearSelectedUsers()">Recurrency</a>
                 {% endif %}
                 <a class="button" 
-                hx-delete="{% url 'todos:delete_todo' todo.id %}" 
+                hx-get="{% url 'todos:delete_todo' todo.id %}?hxp=todo_list" 
                 hx-confirm="Are you sure you would like to delete this todo?"
                 hx-target="#todo-list"
                 >

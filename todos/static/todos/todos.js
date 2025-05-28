@@ -60,7 +60,7 @@ function addSelectedUsers(e) {
         url += user + ","
     }
     url = url.substring(0, url.length-1)
-    htmx.ajax("POST", url, '#recurrent-block')
+    htmx.ajax("POST", url, '#schedule-block')
     clearSelectedUsers()
 }
 
@@ -82,7 +82,7 @@ function clearSelectedUsers() {
 function rateChanged(e) {
     let id = e.target.getAttribute("todo-id")
     let url = `/todos/${id}/rate_change/${e.target.value}`
-    htmx.ajax("POST", url, '#recurrent-block')
+    htmx.ajax("POST", url, '#schedule-block')
 }
 
 document.addEventListener("DOMContentLoaded", function(e) {

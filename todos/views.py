@@ -184,21 +184,21 @@ def reorder(request, todo_id, left, right, status):
 
 @login_required
 @space_required
-def render_recurrency_editor(request, todo_id):
+def render_schedule_editor(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
 
-    if todo.recurrent_state is None:
+    if todo.schedule_state is None:
         return empty(request)
 
     user = Profile.objects.get(user = request.user)
 
     if todo.space in user.spaces:
         space_users = todo.space.joined_people()
-        existing_order = todo.recurrent_state.get_full_order()
-        current_assignment = todo.recurrent_state.recurrency_turn
-        rate = todo.recurrent_state.day_rotation
+        existing_order = todo.schedule_state.get_full_order()
+        current_assignment = todo.schedule_state.schedule_turn
+        rate = todo.schedule_state.day_rotation
         return render(request, 
-                    "todos/components/recurrency_editor.html", 
+                    "todos/components/schedule_editor.html", 
                     {"todo": todo, 
                     "available_users": space_users, 
                     "existing_order": existing_order, 
@@ -210,21 +210,21 @@ def render_recurrency_editor(request, todo_id):
 @login_required
 @space_required
 @require_http_methods(['GET'])
-def recurrency_editor(request, todo_id):
+def schedule_editor(request, todo_id):
     """
-    Show the recurrency editor for the given todo
+    Show the schedule editor for the given todo
     """
     user = Profile.objects.get(user = request.user)
     todo = Todo.objects.get(id = todo_id)
     if todo.space in user.spaces:
-        return render_recurrency_editor(request, todo_id)
+        return render_schedule_editor(request, todo_id)
     else:
         return empty(request)
 
 @login_required
 @space_required
 @require_http_methods(['POST'])
-def recurrency_add_users(request, todo_id):
+def schedule_add_users(request, todo_id):
     # TODO: Figure out why the parameter isn't caught
     path = request.get_full_path()
     users = path.split("?users=")
@@ -236,28 +236,28 @@ def recurrency_add_users(request, todo_id):
         if todo.space == Profile.objects.get(user = request.user).selected_space:
             for user_id in ids:
                 if user_id == -1:
-                    todo.recurrent_state.add_empty()
+                    todo.schedule_state.add_empty()
                 else:
                     user = get_object_or_404(Profile, id = user_id)
-                    todo.recurrent_state.add_user(user)
+                    todo.schedule_state.add_user(user)
 
-            return render_recurrency_editor(request, todo_id)
+            return render_schedule_editor(request, todo_id)
         else:
             return empty(request)
 
 @login_required
 @space_required
 @require_http_methods(['POST'])
-def recurrency_rate_change(request, todo_id, rate):
+def schedule_add_users(request, todo_id, rate):
     todo = Todo.objects.get(id = todo_id)
 
     if todo.space == Profile.objects.get(user = request.user).selected_space:
-        if todo.recurrent_state is None:
-            return render_recurrency_editor(request, todo_id)
+        if todo.schedule_state is None:
+            return render_schedule_editor(request, todo_id)
         
-        todo.recurrent_state.day_rotation = rate
-        todo.recurrent_state.save()
-        return render_recurrency_editor(request, todo_id)
+        todo.schedule_state.day_rotation = rate
+        todo.schedule_state.save()
+        return render_schedule_editor(request, todo_id)
     else:
         return empty(request)
 
@@ -265,45 +265,45 @@ def recurrency_rate_change(request, todo_id, rate):
 @login_required
 @space_required
 @require_http_methods(['POST'])
-def recurrency_delete_position(request, todo_id, position):
+def schedule_delete_position(request, todo_id, position):
     todo = Todo.objects.get(id = todo_id)
 
     if todo.space == Profile.objects.get(user = request.user).selected_space:
-        # If it isn't recurrant do nothing
-        if todo.recurrent_state is None or position < 0:
-            return render_recurrency_editor(request, todo_id)
+        # If it isn't scheduled do nothing
+        if todo.schedule_state is None or position < 0:
+            return render_schedule_editor(request, todo_id)
         
-        todo.recurrent_state.remove_user_at_position(position)
+        todo.schedule_state.remove_user_at_position(position)
 
-        return render_recurrency_editor(request, todo_id)
+        return render_schedule_editor(request, todo_id)
     else:
         return empty(request)
 
 @login_required
 @space_required
-def recurrency_reorder_user(request, todo_id, prev_pos, pos):
+def schedule_reorder_user(request, todo_id, prev_pos, pos):
     todo = Todo.objects.get(id = todo_id)
 
     if todo.space == Profile.objects.get(user = request.user).selected_space:
 
-        if todo.recurrent_state is None:
-            return render_recurrency_editor(request, todo_id)
+        if todo.schedule_state is None:
+            return render_schedule_editor(request, todo_id)
         
-        todo.recurrent_state.reorder_user(int(prev_pos), int(pos))
+        todo.schedule_state.reorder_user(int(prev_pos), int(pos))
 
-        return render_recurrency_editor(request, todo_id)
+        return render_schedule_editor(request, todo_id)
     else:
         return empty(request)
 
 @login_required
 @space_required
-def make_recurrent(request, todo_id):
+def make_scheduled(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
 
     if todo.space == Profile.objects.get(user = request.user).selected_space:
 
         user = Profile.objects.get(user = request.user)
-        todo.make_recurrent([user])
+        todo.make_scheduled([user])
 
         return render(request, "todos/components/todo.html", {"todo": todo})
     else:
@@ -311,13 +311,13 @@ def make_recurrent(request, todo_id):
 
 @login_required
 @space_required
-def remove_recurrency(request, todo_id):
+def remove_schedule(request, todo_id):
     todo = Todo.objects.get(id = todo_id)
 
     if todo.space == Profile.objects.get(user = request.user).selected_space:
         user = Profile.objects.get(user = request.user)
 
-        todo.recurrent_state = None
+        todo.schedule_state = None
         todo.save()
 
         todo.assign_user(user)
@@ -328,24 +328,25 @@ def remove_recurrency(request, todo_id):
 
 @login_required
 @space_required
-def recurrency_set_position(request, todo_id, position):
+def schedule_set_position(request, todo_id, position):
     todo = Todo.objects.get(id = todo_id)
 
     if todo.space == Profile.objects.get(user = request.user).selected_space:
-        recurrent_state = todo.recurrent_state
+        schedule = todo.schedule_state
 
-        if recurrent_state is None:
+        if schedule is None:
             return render_todo_list(request)
-        if position > len(recurrent_state.assigned_users.all()):
-            recurrent_state.recurrency_turn = len(recurrent_state.assigned_users) - 1
+        if position > len(schedule.assigned_users.all()):
+            schedule.schedule_turn = len(schedule.assigned_users) - 1
         else:
-            recurrent_state.recurrency_turn = position
-        recurrent_state.save()
+            schedule.schedule_turn = position
+        schedule.save()
     
     
-        return render_recurrency_editor(request, todo_id)
+        return render_schedule_editor(request, todo_id)
     else:
         return empty(request)
+
 
 
 

@@ -13,9 +13,9 @@ urlpatterns = [
 
     path('<int:todo_id>/<str:left>/<str:right>/<str:status>/reorder', views.reorder, name="todo_reorder"),
 
-    path('<int:todo_id>/edit/', views.edit_todo, name="edit_todo"),
+    path('<int:pk>/edit/', views.EditTodoView.as_view(), name="edit_todo"),
     path('<int:todo_id>/finish_edit/', views.finish_edit_todo, name="finish_todo_edit"),
-    
+
     path('<int:todo_id>/close_todo/', views.close_todo, name="close_todo"),
     path('<int:todo_id>/open_todo/', views.open_todo, name="open_todo"),
     path('<int:todo_id>/make_recurrent', views.make_recurrent, name="make_recurrent"),

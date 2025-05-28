@@ -2,7 +2,7 @@ from functools import wraps
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView, View, CreateView, FormView
+from django.views.generic import ListView, View, CreateView, FormView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -12,8 +12,8 @@ from hub.decorators import space_required
 from hub.mixins import HTMXMixin
 from hub.models import Profile
 from todos.forms import TodoForm
-from todos.renderers import render_todo_list
-from todos.actions import create_todo, delete_todo
+from todos.renderers import *
+from todos.actions import *
 
 from .models import Todo
 
@@ -83,23 +83,31 @@ class CreateTodoView(HTMXMixin, View):
         create_todo(request, *args, **kwargs)
         return redirect("todos:todos")
 
-class EditTodoView(HTMXMixin, FormView):
-    form_class = TodoForm
+class EditTodoView(UpdateView):
+    model = Todo
+    fields = ["name", "description", "assigned_user"]
     template_name = "todos/components/todo_edit.html"
 
-@login_required
-@space_required
-@require_http_methods(['POST'])
-def edit_todo(request, todo_id):
-    """
-    Swap the todo with the editable version
-    """
-    user  = Profile.objects.get(user = request.user)
+    def form_valid(self, form):
+        if form.is_valid():
+            todo = form.save(commit = False)
+            todo.position
+        return render_todo(self.request, self.get_object().id)
+
+
+# @login_required
+# @space_required
+# @require_http_methods(['POST'])
+# def edit_todo(request, todo_id):
+#     """
+#     Swap the todo with the editable version
+#     """
+#     user  = Profile.objects.get(user = request.user)
     
-    todo = Todo.objects.get(id = todo_id)
-    if todo.space in user.spaces:
-        return render(request, "todos/components/todo_edit.html", {"todo": todo})
-    return empty(request)
+#     todo = Todo.objects.get(id = todo_id)
+#     if todo.space in user.spaces:
+#         return render(request, "todos/components/todo_edit.html", {"todo": todo})
+#     return empty(request)
 
 @login_required
 @space_required

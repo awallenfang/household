@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from hub.decorators import space_required
 from hub.models import Profile
 from todos.models import Todo
@@ -29,3 +29,13 @@ def render_todo_list(request, *args, **kwargs):
 
 def empty(_request):
     return HttpResponse("")
+
+@login_required
+@space_required
+def render_todo(request, todo_id, *args, **kwargs):
+    todo = get_object_or_404(Todo, id=todo_id)
+    profile = get_object_or_404(Profile, user = request.user)
+
+    if todo.space in profile.spaces.all():
+        return render(request, "todos/components/todo.html", {'todo': todo})
+    

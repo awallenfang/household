@@ -8,8 +8,9 @@ class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         fields = ["description", "name", "assigned_user"]
-
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.fields["assigned_user"].queryset = Profile.objects.filter(space__contains = self.instance.space)
+        if self.instance is not None:
+            self.fields["assigned_user"].queryset = Profile.objects.filter(spaces__in = [self.instance.space])
+        self.fields["description"].required = False

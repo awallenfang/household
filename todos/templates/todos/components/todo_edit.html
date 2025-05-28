@@ -1,15 +1,16 @@
 {%load static%}
 <div class="card w-30vw minw-20 draggable-container" todo-id="{{todo.id}}">
-    <form action="{% url 'todos:finish_todo_edit' todo.id %}" 
+    <form action="{% url 'todos:edit_todo' todo.id %}" 
     method="post" id="todo-edit" 
-    hx-post="{% url 'todos:finish_todo_edit' todo.id %}"
+    hx-post="{% url 'todos:edit_todo' todo.id %}"
     hx-target="closest .card"
     hx-swap="outerHTML">
         {% csrf_token %}
         <div class="card-header font-w-500">
             <div class="row gap-medium">
                 <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
-                <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input">
+                {{ form.name }}
+                <!-- <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input"> -->
             </div>
             <p>{{todo.assigned_user.user.username}}</p>
             
@@ -18,7 +19,8 @@
         <div class="card-body collapse" id="collapse-{{todo.id}}">
             <div class="row justify-between align-start">
                 <div class="col">
-                    <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea> 
+                    {{form.description}}
+                    <!-- <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea>  -->
                 </div>
                 
                 <div class="col gap-small">
@@ -32,7 +34,7 @@
                         Delete!
                     </a>
                     <p>Assigned user:</p>
-                    <p>{{todo.assigned_user.user.username}}</p>
+                    <p>{{form.assigned_user}}</p>
                 </div>
             </div>
         </div>

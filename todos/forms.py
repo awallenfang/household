@@ -11,6 +11,4 @@ class TodoForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance is not None:
-            self.fields["assigned_user"].queryset = Profile.objects.filter(spaces__in = [self.instance.space])
         self.fields["description"].required = False

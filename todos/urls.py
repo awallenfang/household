@@ -10,11 +10,9 @@ urlpatterns = [
     path('', views.TodoDashboard.as_view(), name="todos"),
     path('add/', views.CreateTodoView.as_view(), name="add_todo"),
     path('<int:todo_id>/delete/', views.DeleteTodoView.as_view(), name="delete_todo"),
+    path('<int:todo_id>/edit/', views.EditTodoView.as_view(), name="edit_todo"),
 
     path('<int:todo_id>/<str:left>/<str:right>/<str:status>/reorder', views.reorder, name="todo_reorder"),
-
-    path('<int:pk>/edit/', views.EditTodoView.as_view(), name="edit_todo"),
-    path('<int:todo_id>/finish_edit/', views.finish_edit_todo, name="finish_todo_edit"),
 
     path('<int:todo_id>/close_todo/', views.close_todo, name="close_todo"),
     path('<int:todo_id>/open_todo/', views.open_todo, name="open_todo"),

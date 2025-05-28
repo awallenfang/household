@@ -85,51 +85,20 @@ class CreateTodoView(HTMXMixin, View):
 
 class EditTodoView(UpdateView):
     model = Todo
-    fields = ["name", "description", "assigned_user"]
+    form_class = TodoForm
     template_name = "todos/components/todo_edit.html"
+    pk_url_kwarg = "todo_id"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # For some reason this doesn't populate the form properly
+        context["form"] = self.form_class(instance=self.get_object())
+        return context
+    
     def form_valid(self, form):
         if form.is_valid():
-            todo = form.save(commit = False)
-            todo.position
+            todo = form.save()
         return render_todo(self.request, self.get_object().id)
-
-
-# @login_required
-# @space_required
-# @require_http_methods(['POST'])
-# def edit_todo(request, todo_id):
-#     """
-#     Swap the todo with the editable version
-#     """
-#     user  = Profile.objects.get(user = request.user)
-    
-#     todo = Todo.objects.get(id = todo_id)
-#     if todo.space in user.spaces:
-#         return render(request, "todos/components/todo_edit.html", {"todo": todo})
-#     return empty(request)
-
-@login_required
-@space_required
-@require_http_methods(['POST'])
-def finish_edit_todo(request, todo_id):
-    """
-    Finish and submit the editing of a todo with the given ID
-    """
-    todo = Todo.objects.get(id = todo_id)
-
-    if todo.space == Profile.objects.get(user = request.user).selected_space:
-        todo_name = request.POST.get("todo_name", todo.name)
-        todo_description = request.POST.get("todo_description", todo.description)
-
-        todo.name = todo_name
-        todo.description = todo_description
-
-        todo.save()
-
-        return render(request, "todos/components/todo.html", {"todo": todo})
-    else:
-        return empty(request)
 
 @login_required
 @space_required

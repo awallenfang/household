@@ -40,13 +40,13 @@
                     <a class="button" 
                     hx-get="{% url 'todos:make_scheduled' todo.id %}"
                     hx-target="closest .card"
-                    hx-swap="innerHTML">Make recurrent</a>
+                    hx-swap="innerHTML">Add schedule</a>
                 {%else%}
                     <a class="button" 
                     hx-get="{% url 'todos:schedule_editor' todo.id %}"
                     hx-target="#schedule-block"
                     hx-swap="innerHTML"
-                    onclick="clearSelectedUsers()">Recurrency</a>
+                    onclick="clearSelectedUsers()">Schedule</a>
                 {% endif %}
                 <a class="button" 
                 hx-get="{% url 'todos:delete_todo' todo.id %}?hxp=todo_list" 

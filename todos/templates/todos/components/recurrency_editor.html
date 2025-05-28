@@ -26,8 +26,8 @@
         if (Math.abs(position - prev_position) == 0) {
             return
         }
-        var url = `/todos/${id}/${prev_position}/${position}/recurrency_reorder_user`
-        htmx.ajax("POST", url, '#recurrent-block')
+        var url = `/todos/${id}/${prev_position}/${position}/schedule_reorder_user`
+        htmx.ajax("POST", url, '#schedule-block')
     }
 
     // Setup for dragging users
@@ -84,8 +84,8 @@
         if (Math.abs(position - prev_position) == 0) {
             return
         }
-        var url = `/todos/${id}/${position}/recurrency_set_position`
-        htmx.ajax("POST", url, '#recurrent-block')
+        var url = `/todos/${id}/${position}/schedule_set_position`
+        htmx.ajax("POST", url, '#schedule-block')
     }
 
     // Setup for dragging positions
@@ -110,7 +110,7 @@
                 e.dataTransfer.setData('todo-id', todo_id)
 
                 e.dataTransfer.setData('text/plain', 'handle');
-                var position_drop_spots = document.getElementsByClassName("recurrent-position-drop-spot")
+                var position_drop_spots = document.getElementsByClassName("schedule-position-drop-spot")
 
                 for (var drop_spot of position_drop_spots) {
                     console.log(drop_spot)
@@ -123,7 +123,7 @@
             }
             draggable_elem.ondragend = function(e) {
                 e.target.setAttribute('draggable', 'false')
-                var position_drop_spots = document.getElementsByClassName("recurrent-position-drop-spot")
+                var position_drop_spots = document.getElementsByClassName("schedule-position-drop-spot")
 
                 for (var drop_spot of position_drop_spots) {
                     drop_spot.style.visibility = "hidden"
@@ -152,7 +152,7 @@
     <div class="row justify-between">
         <div></div>
         <a hx-get="{% url 'todos:empty'%}" 
-        hx-target="#recurrent-block"
+        hx-target="#schedule-block"
         hx-swap="innerHTML" 
         onclick="clearSelectedUsers()"
         class="cursor-pointer">
@@ -175,15 +175,15 @@
                         <img src="{% static 'todos/assets/select.svg' %}" class="select-icon">
                     </div>
                 {% else %}
-                    <div class="recurrent-position-drop-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}" ondragover="allowDrop(event)" todo-id="{{forloop.counter0}}"></div>
+                    <div class="schedule-position-drop-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}" ondragover="allowDrop(event)" todo-id="{{forloop.counter0}}"></div>
                 {% endif %}
                 <div class="row draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
                     <div class="row w-10 justify-between background-mid p-05 border-radius-025">
                         
                         <p>{{user.user.username}}</p>
                         <div cass="row">
-                            <a hx-post="{% url 'todos:recurrency_remove_position' todo.id forloop.counter0%}" 
-                            hx-target="#recurrent-block"
+                            <a hx-post="{% url 'todos:schedule_delete_position' todo.id forloop.counter0%}" 
+                            hx-target="#schedule-block"
                             hx-swap="innerHTML"
                             class="trash-container">
                                 <img src="{% static 'todos/assets/trash.svg' %}">
@@ -222,12 +222,12 @@
                 <p>Rate in days:</p>
                 <input type="number" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
             </div>
-            <a hx-get="{% url 'todos:remove_recurrency' todo.id%}" 
+            <a hx-get="{% url 'todos:remove_schedule' todo.id%}" 
             hx-target="#todo-list"
             hx-swap="innerHTML" 
-            onclick="return confirm('Are you sure? By removing the recurrency all the settings will be lost.')"
+            onclick="return confirm('Are you sure? By removing the schedule all the settings will be lost.')"
             class="button">
-                Remove Recurrency
+                Remove Schedule
             </a>
         </div>
         

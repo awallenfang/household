@@ -36,7 +36,7 @@ textarea {
     max-width: 15vw
 }
 
-/* ############### Recurrency view ################## */
+/* ############### Schedule view ################## */
 
 .trash-container {
     display: inline-block;
@@ -62,7 +62,7 @@ textarea {
     cursor: grab;
 }
 
-.recurrent-position-drop-spot {
+.schedule-position-drop-spot {
     background-color: var(--mid-bg);
     border-style: dashed;
     border-radius: 0.5rem;

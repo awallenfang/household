@@ -16,15 +16,15 @@ urlpatterns = [
 
     path('<int:todo_id>/close_todo/', views.close_todo, name="close_todo"),
     path('<int:todo_id>/open_todo/', views.open_todo, name="open_todo"),
-    path('<int:todo_id>/make_recurrent', views.make_recurrent, name="make_recurrent"),
-    path('<int:todo_id>/editor', views.recurrency_editor, name="recurrency_editor"),
-    path('<int:todo_id>/add_users', views.recurrency_add_users, name="recurrency_add_users"),
-    path('<int:todo_id>/rate_change/<int:rate>', views.recurrency_rate_change, name="recurrency_rate_change"),
+    path('<int:todo_id>/make_scheduled', views.make_scheduled, name="make_scheduled"),
+    path('<int:todo_id>/editor', views.schedule_editor, name="schedule_editor"),
+    path('<int:todo_id>/add_users', views.schedule_add_users, name="schedule_add_users"),
+    path('<int:todo_id>/rate_change/<int:rate>', views.schedule_add_users, name="schedule_add_users"),
     # Maybe move this path to the hub
     path('empty', renderers.empty, name="empty"),
-    path('<int:todo_id>/remove_position/<int:position>', views.recurrency_delete_position, name="recurrency_remove_position"),
-    path('<int:todo_id>/<int:prev_pos>/<int:pos>/recurrency_reorder_user', views.recurrency_reorder_user, name="todo_recurrency_reorder_user"),
-    path('<int:todo_id>/remove_recurrency', views.remove_recurrency, name="remove_recurrency"),
-    path('<int:todo_id>/<int:position>/recurrency_set_position', views.recurrency_set_position, name="todo_recurrency_set_position"),
+    path('<int:todo_id>/remove_position/<int:position>', views.schedule_delete_position, name="schedule_delete_position"),
+    path('<int:todo_id>/<int:prev_pos>/<int:pos>/schedule_reorder_user', views.schedule_reorder_user, name="schedule_reorder_user"),
+    path('<int:todo_id>/remove_schedule', views.remove_schedule, name="remove_schedule"),
+    path('<int:todo_id>/<int:position>/schedule_set_position', views.schedule_set_position, name="todo_schedule_set_position"),
 
 ]

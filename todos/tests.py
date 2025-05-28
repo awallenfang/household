@@ -56,21 +56,21 @@ class TodosTest(TestCase):
         left_todo.reorder(-1,0)
         self.assertEqual(left_todo.position, 0)
 
-    def test_recurrency(self):
+    def test_schedule(self):
         todo = self.create_single_todo()
         users = self.create_random_users(3)
 
-        todo.make_recurrent(users)
+        todo.make_scheduled(users)
 
         self.assertEqual(users[0], todo.get_currently_assigned_user())
         self.assertEqual(users[1], todo.get_next_assigned_user())
     
-    def test_empty_recurrency(self):
+    def test_empty_schedule(self):
         todo = self.create_single_todo()
         users = self.create_random_users(3)
         users[1] = None
 
-        todo.make_recurrent(users)
+        todo.make_scheduled(users)
 
         self.assertEqual(users[0], todo.get_currently_assigned_user())
         self.assertEqual(None, todo.get_next_assigned_user())

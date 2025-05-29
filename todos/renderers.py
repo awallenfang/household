@@ -38,4 +38,30 @@ def render_todo(request, todo_id, *args, **kwargs):
 
     if todo.space in profile.spaces.all():
         return render(request, "todos/components/todo.html", {'todo': todo})
-    
+    else:
+        return empty(request)
+
+@login_required
+@space_required
+def render_schedule_editor(request, todo_id):
+    todo = Todo.objects.get(id = todo_id)
+
+    if todo.schedule_state is None:
+        return empty(request)
+
+    user = Profile.objects.get(user = request.user)
+
+    if todo.space in user.spaces.all():
+        space_users = todo.space.joined_people()
+        existing_order = todo.schedule_state.get_full_order()
+        current_assignment = todo.schedule_state.schedule_turn
+        rate = todo.schedule_state.day_rotation
+        return render(request, 
+                    "todos/components/schedule_editor.html", 
+                    {"todo": todo, 
+                    "available_users": space_users, 
+                    "existing_order": existing_order, 
+                    "current_assignment_idx": current_assignment, 
+                    "rate": rate})
+    else:
+        return empty(request)

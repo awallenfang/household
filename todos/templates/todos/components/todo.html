@@ -17,11 +17,11 @@
         {% endif %}
         {% if not todo.done %}
             <a class="button" 
-            hx-post="{% url 'todos:close_todo' todo.id %}"
+            hx-post="{% url 'todos:todo' todo.id %}?hxp=close_todo"
             hx-target="#todo-list">Done</a>
         {% else %}
             <a class="button" 
-            hx-post="{% url 'todos:open_todo' todo.id %}"
+            hx-post="{% url 'todos:todo' todo.id %}?hxp=open_todo"
             hx-target="#todo-list">Reopen</a>
         {% endif %}
         <button class="dropdown-button" collapse-target="collapse-{{todo.id}}" onclick="toggleCollapse(event)">...</button>
@@ -38,7 +38,7 @@
                 hx-swap="outerHTML">Edit</a>
                 {% if todo.schedule_state is None%}
                     <a class="button" 
-                    hx-get="{% url 'todos:make_scheduled' todo.id %}"
+                    hx-get="{% url 'todos:todo' todo.id %}?hxp=add_schedule"
                     hx-target="closest .card"
                     hx-swap="innerHTML">Add schedule</a>
                 {%else%}

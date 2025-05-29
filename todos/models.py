@@ -118,9 +118,11 @@ class TodoSchedule(models.Model):
         for i, ord_usr in enumerate(ordered_users):
             ord_usr.order = i
             ord_usr.save()
-
-        self.schedule_turn = self.schedule_turn % len(self.assigned_users.all())
-
+        if len(self.assigned_users.all()) > 0:
+            self.schedule_turn = self.schedule_turn % len(self.assigned_users.all())
+        else:
+            self.schedule_turn = 0
+            
     @transaction.atomic 
     def reorder_user(self, prev_pos, new_pos):
         """

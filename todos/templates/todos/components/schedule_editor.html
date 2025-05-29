@@ -26,7 +26,7 @@
         if (Math.abs(position - prev_position) == 0) {
             return
         }
-        var url = `/todos/${id}/${prev_position}/${position}/schedule_reorder_user`
+        var url = `/todos/${id}/editor?hxp=reorder_user&pos=${position}&prev_pos=${prev_position}`
         htmx.ajax("POST", url, '#schedule-block')
     }
 
@@ -84,7 +84,7 @@
         if (Math.abs(position - prev_position) == 0) {
             return
         }
-        var url = `/todos/${id}/${position}/schedule_set_position`
+        var url = `/todos/${id}/editor?hxp=set_position&position=${position}`
         htmx.ajax("POST", url, '#schedule-block')
     }
 
@@ -182,7 +182,7 @@
                         
                         <p>{{user.user.username}}</p>
                         <div cass="row">
-                            <a hx-post="{% url 'todos:schedule_delete_position' todo.id forloop.counter0%}" 
+                            <a hx-post="{% url 'todos:schedule_editor' todo.id %}?hxp=delete_position&position={{forloop.counter0}}" 
                             hx-target="#schedule-block"
                             hx-swap="innerHTML"
                             class="trash-container">
@@ -222,7 +222,7 @@
                 <p>Rate in days:</p>
                 <input type="number" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
             </div>
-            <a hx-get="{% url 'todos:remove_schedule' todo.id%}" 
+            <a hx-get="{% url 'todos:schedule_editor' todo.id%}?hxp=remove_schedule" 
             hx-target="#todo-list"
             hx-swap="innerHTML" 
             onclick="return confirm('Are you sure? By removing the schedule all the settings will be lost.')"

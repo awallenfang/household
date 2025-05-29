@@ -8,12 +8,9 @@ function drop(ev) {
     let right = ev.target.getAttribute("right")
     let status = ev.target.getAttribute("todo-status")
     let id = ev.dataTransfer.getData('todo-id')
-    let url = `/todos/${id}/${left}/${right}/${status}/reorder`
-    $.ajax(url).done(() => {
+    let url = `/todos/?hxp=reorder_list&todo_id=${id}&left=${left}&right=${right}&status=${status}`
+    htmx.ajax("GET", url, {target:'#todo-list', swap:'outerHTML'})
 
-        let swap_url = "/todos/?hxp=todo_list"
-        htmx.ajax("GET", swap_url, {target:'#todo-list', swap:'outerHTML'})
-    })
 }
 
 function allowDrop(ev) {
@@ -55,7 +52,7 @@ function setupDragEnv(e) {
 function addSelectedUsers(e) {
     let id = e.target.getAttribute("todo-id")
 
-    let url = `/todos/${id}/add_users?users=`
+    let url = `/todos/${id}/editor?hxp=add_users&users=`
     for (let user of selected_users) {
         url += user + ","
     }
@@ -81,7 +78,7 @@ function clearSelectedUsers() {
 
 function rateChanged(e) {
     let id = e.target.getAttribute("todo-id")
-    let url = `/todos/${id}/rate_change/${e.target.value}`
+    let url = `/todos/${id}/editor?hxp=change_rate&rate=${e.target.value}`
     htmx.ajax("POST", url, '#schedule-block')
 }
 

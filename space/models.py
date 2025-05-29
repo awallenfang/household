@@ -2,7 +2,7 @@ import random
 import string
 
 from django.db import models
-
+from django.urls import reverse
 
 
 # Create your models here.
@@ -18,6 +18,10 @@ class SharedSpace(models.Model):
     def __str__(self):
         return f'Shared Space: {self.name}'
     
+    def get_absolute_url(self):
+        return reverse("space:space_view", kwargs={"space_id": self.id})
+    
+
     @staticmethod
     def create_space(name: str, owner):
         # string.digits[1:] is used to avoid the digit '0' in the token
@@ -43,6 +47,9 @@ class SharedSpace(models.Model):
 
     def leave(self, user):
         user.spaces.remove(self)
+        if user.selected_space == self:
+            user.selected_space = None
+            user.save()
         if user == self.owner:
             try:
                 self.owner = self.joined_people()[0]

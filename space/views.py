@@ -1,21 +1,32 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView
+from django.views.generic import DetailView, UpdateView
+
 from hub.models import Profile
+from hub.decorators import space_required
+from hub.mixins import HTMXMixin
 from space.models import InvalidTokenError, SharedSpace
+from space.forms import SpaceForm
+from space.renderers import *
+from space.actions import *
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
-@method_decorator(require_http_methods(['GET']), name='dispatch')
-class SpaceSettingsView(DetailView):
+@method_decorator(space_required, name='dispatch')
+class SpaceSettingsView(HTMXMixin, UpdateView):
     model = SharedSpace
+    form_class = SpaceForm
     template_name = "space/space-full.html"
     context_object_name = "space"
     pk_url_kwarg = "space_id"
+
+    partials = {
+        "kick_person": (render_people_list, kick_person),
+        "new_token": (render_token, regen_token)
+    }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

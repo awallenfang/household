@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="col gap-small pt-1 pb-2 align-center">
+<div class="col gap-small pt-1 pb-2 align-center" id="people-list">
     {% for person in joined_people %}
         <div class="p-05 background-mid border-radius-05 row justify-between w-80p h-3">
             <b>{{ person.user.username }}</b>
@@ -8,12 +8,30 @@
                 <span>Owner</span>
             {% endif %}
             {% if selected_space.owner == user or person == user %}
-                <a href="{% url 'space:kick_from_space' space.id person.id %}" 
+                <a hx-delete="{% url 'space:space_view' space.id %}?hxp=kick_person&person_id={{ person.id }}" hx-confirm=
+                {% if joined_people|length == 1%}
+                    "Are you sure? By leaving as the last person the space and all connected data will be lost!"
+                {% else %}
+                    "Are you sure that you want to kick this person from the space?"
+                {% endif %}
+                hx-target="#people-list"
+                hx-swap="outerHTML">
+                    {% if person == user %}
+                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Leave {{space.name}}" title="Leave {{space.name}}">
+                    {% else %}
+                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Kick {{person.user.username}}" title="Kick {{person.user.username}}">
+                    {% endif %}
+                </a>
+                {% comment %} <a href="{% url 'space:kick_from_space' space.id person.id %}" 
                 {% if joined_people|length == 1%}
                     onclick="return confirm('Are you sure? By leaving as the last person the space and all connected data will be lost!')"
                 {%endif%}>
-                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Kick {{person.user.username}}">
-                </a>
+                    {% if person == user %}
+                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Leave {{space.name}}" title="Leave {{space.name}}">
+                    {% else %}
+                    <img src="{% static 'space/assets/door-kick.svg' %}" alt="Kick {{person.user.username}}" title="Kick {{person.user.username}}">
+                    {% endif %}
+                </a> {% endcomment %}
             {% else %}
                 <div></div>
             {% endif %}

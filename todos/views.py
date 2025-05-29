@@ -1,8 +1,6 @@
-from functools import wraps
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView, View, CreateView, FormView, UpdateView
+from django.views.generic import ListView, View, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -112,7 +110,7 @@ class EditTodoView(UpdateView):
     
     def form_valid(self, form):
         if form.is_valid():
-            todo = form.save()
+            form.save()
         return render_todo(self.request, self.get_object().id)
 
 @method_decorator(login_required, name='dispatch')

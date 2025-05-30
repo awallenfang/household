@@ -21,9 +21,9 @@ from django.conf.urls.i18n import i18n_patterns
 
 
 urlpatterns = [
-] + i18npatterns([
+] + i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include(("hub.urls", "hub"), namespace="hub")),
     path('todos/', include(("todos.urls", "urls"), namespace="todos")),
     path('space/', include(("space.urls", "space"), namespace="space")),
-]) + debug_toolbar_urls()
+) + debug_toolbar_urls()

@@ -8,6 +8,9 @@ class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
         fields = ["description", "name", "assigned_user"]
+        widgets = {
+            "description": forms.Textarea
+        }
         
     def __init__(self, space=None, *args, **kwargs):
         super().__init__(*args, **kwargs)

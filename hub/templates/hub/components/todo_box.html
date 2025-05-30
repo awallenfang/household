@@ -6,11 +6,11 @@
     </div>
     <div class="card-body">
         <div class="col align-start gap-medium">
-            <p>Open todos:</p>
+            <p>Open todos: {{ open_todo_amt }}</p>
 
-            <p>Open todos assigned to you:</p>
-            <p>Open todos due this week:</p>
-            <p>Weekly stats:</p>
+            <p>Open todos assigned to you: {{ open_assigned_todo_amt }}</p>
+            {% comment %} <p>Open todos due this week: {{ open_todos_due }} </p> {% endcomment %}
+            {% comment %} <p>Weekly stats:</p> {% endcomment %}
         </div>
     </div>
 </div>

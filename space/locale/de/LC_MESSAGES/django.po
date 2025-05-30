@@ -1,0 +1,83 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-30 21:03+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: models.py:14
+msgid "Space name"
+msgstr "Space Name"
+
+#: models.py:14
+msgid "My Space"
+msgstr "Mein Space"
+
+#: models.py:15
+#, fuzzy
+#| msgid "Invite Token:"
+msgid "Invite Token"
+msgstr "Einladungs Token:"
+
+#: models.py:16 templates/space/components/people_list.html:9
+msgid "Owner"
+msgstr "Besitzer"
+
+#: templates/space/components/people_list.html:14
+msgid ""
+"Are you sure? By leaving as the last person the space and all connected data "
+"will be lost!"
+msgstr ""
+"Bist du dir sicher? Wenn der Space als letzte Person verlassen wird, werden "
+"alle Daten verloren!"
+
+#: templates/space/components/people_list.html:16
+msgid "Are you sure that you want to kick this person from the space?"
+msgstr "Bist du dir sicher, dass du diese Person aus dem Space kicken willst?"
+
+#: templates/space/components/people_list.html:21
+#, python-format
+msgid "Leave %(space_name)s"
+msgstr "%(space_name)s verlassen"
+
+#: templates/space/components/people_list.html:23
+#, python-format
+msgid "Kick %(user_name)s"
+msgstr "%(user_name)s kicken"
+
+#: templates/space/space.html:8
+msgid "Space Settings and Information"
+msgstr "Space Einstellungen und Informationen"
+
+#: templates/space/space.html:9
+msgid "Name:"
+msgstr "Name:"
+
+#: templates/space/space.html:12
+msgid "Invite Token:"
+msgstr "Einladungs Token:"
+
+#: templates/space/space.html:17
+msgid "Reset invite token"
+msgstr "Einladungs Token erneuern"
+
+#: templates/space/space.html:26
+msgid "Are you sure?"
+msgstr "Bist du dir sicher?"
+
+#: templates/space/space.html:26
+msgid "DELETE SPACE"
+msgstr "SPACE LÖSCHEN"

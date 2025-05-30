@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-30 21:02+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: models.py:16 models.py:28
+msgid "User"
+msgstr "User"
+
+#: models.py:17
+msgid "Todo Schedule"
+msgstr "Todo Plan"
+
+#: models.py:18
+msgid "Order"
+msgstr "Position"
+
+#: models.py:19
+msgid "Empty"
+msgstr "Leer"
+
+#: models.py:29
+msgid "Schedule Turn"
+msgstr "Plan Zug"
+
+#: models.py:30
+msgid "Started at"
+msgstr "Gestartet am"
+
+#: models.py:31
+msgid "Day rotation"
+msgstr "Tagesrotation"
+
+#: models.py:32
+msgid "Last check"
+msgstr "Letzter Check"
+
+#: models.py:190
+msgid "Name"
+msgstr "Name"
+
+#: models.py:191
+msgid "Description"
+msgstr "Beschreibung"
+
+#: models.py:192 models.py:334 templates/todos/components/todo.html:22
+msgid "Done"
+msgstr "Fertig"
+
+#: models.py:193
+msgid "Position"
+msgstr "Position"
+
+#: models.py:195 templates/todos/components/todo.html:50
+msgid "Schedule"
+msgstr "Plan"
+
+#: models.py:196
+msgid "Assigned user"
+msgstr "Zugewiesener User"
+
+#: models.py:333
+msgid "Title"
+msgstr "Titel"
+
+#: models.py:335
+msgid "Todo"
+msgstr "Todo"
+
+#: templates/todos/components/schedule_editor.html:209
+msgid "Empty space"
+msgstr "Leerer Platz"
+
+#: templates/todos/components/schedule_editor.html:220
+msgid "Add Selected Users"
+msgstr "Füge ausgewählten User hinzu"
+
+#: templates/todos/components/schedule_editor.html:224
+msgid "Rate in days:"
+msgstr "Rate in Tagen:"
+
+#: templates/todos/components/schedule_editor.html:230
+msgid "Are you sure? By removing the schedule all the settings will be lost."
+msgstr "Bist du dir sicher? Wenn ein Plan gelöscht wird, gehen alle Einstellungen verloren."
+
+#: templates/todos/components/schedule_editor.html:232
+msgid "Remove Schedule"
+msgstr "Plan löschen"
+
+#: templates/todos/components/todo.html:26
+msgid "Reopen"
+msgstr "Wieder öffnen"
+
+#: templates/todos/components/todo.html:44
+msgid "Add schedule"
+msgstr "Plan hinzufügen"
+
+#: templates/todos/components/todo.html:54
+#: templates/todos/components/todo_edit.html:31
+msgid "Are you sure you would like to delete this todo?"
+msgstr "Bist du dir sicher, dass du dieses Todo löschen willst?"
+
+#: templates/todos/components/todo.html:57
+#: templates/todos/components/todo_edit.html:34
+msgid "Delete!"
+msgstr "Löschen!"
+
+#: templates/todos/components/todo.html:59
+#: templates/todos/components/todo_edit.html:36
+msgid "Assigned user:"
+msgstr "Zugewiesener User"
+
+#: templates/todos/components/todo.html:76
+msgid "No one"
+msgstr "Niemand"
+
+#: templates/todos/components/todo_list.html:5
+msgid "Open Todos"
+msgstr "Offene Todos"
+
+#: templates/todos/components/todo_list.html:44
+msgid "New Todo"
+msgstr "Neuer Todo"
+
+#: templates/todos/components/todo_list.html:48
+msgid "Finished Todos"
+msgstr "Fertige Todos"

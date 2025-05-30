@@ -3,7 +3,7 @@ import string
 
 from django.db import models
 from django.urls import reverse
-
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -11,9 +11,9 @@ class InvalidTokenError(Exception):
     pass
 
 class SharedSpace(models.Model):
-    name = models.TextField(null=False, blank=False, default="My Shared Living Space", max_length=100)
-    invite_token = models.TextField(max_length=10, null=False, blank=False)
-    owner = models.ForeignKey('hub.Profile', on_delete=models.CASCADE, null=True, blank=True)
+    name = models.TextField(null=False, blank=False, verbose_name=_("Space name"), default=_("My Space"), max_length=100)
+    invite_token = models.TextField(verbose_name= _("Invite Token"), max_length=10, null=False, blank=False)
+    owner = models.ForeignKey('hub.Profile', verbose_name=_("Owner"), on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f'Shared Space: {self.name}'

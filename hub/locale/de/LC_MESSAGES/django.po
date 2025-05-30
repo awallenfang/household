@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-30 21:02+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: models.py:10
+msgid "Auth user"
+msgstr "Authentikations User"
+
+#: models.py:13
+#, fuzzy
+#| msgctxt "Header Title"
+#| msgid "Spaces"
+msgid "Spaces"
+msgstr "Spaces"
+
+#: models.py:15
+msgid "Selected Space"
+msgstr "Augewählter Space"
+
+#: templates/hub/base.html:19 templates/hub/login.html:19
+#: templates/hub/signup.html:20
+msgctxt "Page title"
+msgid "Household Planner"
+msgstr "Haushalts Planer"
+
+#: templates/hub/base.html:39
+msgctxt "Header Title"
+msgid "Hub"
+msgstr "Dashboard"
+
+#: templates/hub/base.html:41
+msgctxt "Header Title"
+msgid "Todos"
+msgstr "Todos"
+
+#: templates/hub/base.html:49
+msgctxt "Header Title"
+msgid "Spaces"
+msgstr "Spaces"
+
+#: templates/hub/base.html:54
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: templates/hub/components/todo_box.html:6
+msgctxt "Todos section title"
+msgid "Todos"
+msgstr "Todos"
+
+#: templates/hub/components/todo_box.html:10
+msgid "Open todos:"
+msgstr "Offene Todos:"
+
+#: templates/hub/components/todo_box.html:12
+msgid "Open todos assigned to you:"
+msgstr "Offene Todos, dir zugewiesen:"
+
+#: templates/hub/login.html:37 templates/hub/signup.html:49
+msgid "Login"
+msgstr "Einloggen"
+
+#: templates/hub/login.html:49
+msgid "Don't have an account?"
+msgstr "Noch keinen Account?"
+
+#: templates/hub/login.html:49 templates/hub/signup.html:45
+msgid "Sign Up"
+msgstr "Account erstellen"
+
+#: templates/hub/signup.html:49
+msgid "Already have an account?"
+msgstr "Bereits registriert?"

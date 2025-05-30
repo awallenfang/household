@@ -1,16 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 from space.models import SharedSpace
-
 class Profile(models.Model):
     user = models.OneToOneField(User, 
+                                    verbose_name=_("Auth user"),
                                      null=False, 
                                      on_delete=models.CASCADE)
-    spaces = models.ManyToManyField(SharedSpace)
+    spaces = models.ManyToManyField(SharedSpace, verbose_name=_("Spaces"))
     selected_space = models.ForeignKey(SharedSpace, 
+                                        verbose_name=_("Selected Space"),
                                        on_delete=models.SET_NULL, 
                                        related_name="selected_space", 
                                        null=True, 

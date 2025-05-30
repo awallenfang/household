@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static%}
+{% load i18n %}
 
 {% load django_htmx %}
 <head>
@@ -15,7 +16,7 @@
     <link rel="stylesheet" href="{% static 'hub/filters.css' %}">
     <link rel="stylesheet" href="{% static 'hub/text.css' %}">
     <link rel="stylesheet" href="{% static 'space/space.css' %}">
-    <title>{% block title %}Household Planner{% endblock %}</title>
+    <title>{% block title %}{% trans 'Household Planner' context 'Page title' %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block css_links %}{% endblock %}
 </head>
@@ -35,9 +36,9 @@
     {% block header %}
     <header>
         <div class="header-section">
-            <a href="{% url 'hub:hub' %}" class="button">Hub</a>
+            <a href="{% url 'hub:hub' %}" class="button">{% trans 'Hub' context 'Header Title' %}</a>
             {% if selected_space %}
-                <a href="{% url 'todos:todos' %}" class="button">Todos</a>
+                <a href="{% url 'todos:todos' %}" class="button">{% trans 'Todos' context 'Header Title' %}</a>
             {% endif %}
         </div>
         <div class="header-section">
@@ -45,12 +46,12 @@
                 {% if selected_space%}
                     <a class="button space-button" onclick="toggleQuickspace(event)">{{selected_space.name}}</a>
                 {% else %}
-                    <a class="button space-button" onclick="toggleQuickspace(event)">Spaces</a>
+                    <a class="button space-button" onclick="toggleQuickspace(event)">{% trans 'Spaces' context 'Header Title' %}</a>
                 {% endif %}
                 {% include "space/components/quick_space.html" %}
             </div>
             
-            <a href="{% url 'hub:logout' %}" class="button">Logout</a>
+            <a href="{% url 'hub:logout' %}" class="button">{% trans 'Logout' %}</a>
         </div>
         
     </header>

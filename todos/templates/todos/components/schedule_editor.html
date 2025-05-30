@@ -1,4 +1,6 @@
 {% load static%}
+{% load i18n %}
+
 <script>
     // Save checked boxes for sending them on
     // TODO: Make this into a multiselect form
@@ -204,7 +206,7 @@
             <div class="col p-05 maxh-15 gap-small">
                 <div class="col align-stretch p-05 gap-small">
                     <div class="row align-stretch justify-between background-mid p-05 border-radius-025">
-                        <p>Empty space</p>
+                        <p>{% trans 'Empty space' %}</p>
                         <input  class="user-add-check" type="checkbox" name="-1_checked" id="-1" change="userChecked(event)">
                     </div>
                     {% for user in available_users%}
@@ -215,19 +217,19 @@
                         
                     {% endfor %}
                 </div>
-                <a onclick="addSelectedUsers(event)" class="button" todo-id="{{todo.id}}">Add Selected Users</a>
+                <a onclick="addSelectedUsers(event)" class="button" todo-id="{{todo.id}}">{% trans 'Add Selected Users' %}</a>
             </div>
             <div class="horizontal-line" style="background-color: var(--mid-bg); margin: 0.5rem 0;"></div>
             <div>
-                <p>Rate in days:</p>
+                <p>{% trans 'Rate in days:' %}</p>
                 <input type="number" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
             </div>
             <a hx-get="{% url 'todos:schedule_editor' todo.id%}?hxp=remove_schedule" 
             hx-target="#todo-list"
             hx-swap="innerHTML" 
-            onclick="return confirm('Are you sure? By removing the schedule all the settings will be lost.')"
+            onclick="return confirm('{% trans 'Are you sure? By removing the schedule all the settings will be lost.' %}%')"
             class="button">
-                Remove Schedule
+                {% trans 'Remove Schedule' %}%
             </a>
         </div>
         

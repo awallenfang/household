@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static%}
+{% load i18n %}
 
 {% load django_htmx %}
 <head>
@@ -16,7 +17,7 @@
     <link rel="stylesheet" href="{% static 'hub/login.css' %}">
 
 
-    <title>{% block title %}Household Planner{% endblock %}</title>
+    <title>{% block title %}{% trans 'Household Planner' context 'Page title' %}{% endblock %}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=albert-sans:400,600,800" rel="stylesheet" />
@@ -41,11 +42,11 @@
                         <p id="error-message">{{error_message}}</p>
                     {%endif%}
                     {{form}}
-                    <button type="submit">Sign Up</button>
+                    <button type="submit">{% trans 'Sign Up' %}</button>
                 </form>
             </div>
             <div id="signup">
-                <p>Already have an account? <a href="{% url 'hub:login'%}">Login</a></p>
+                <p>{% trans 'Already have an account?' %} <a href="{% url 'hub:login'%}">{% trans 'Login' %}</a></p>
             </div>
         </div>
     </main>

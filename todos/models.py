@@ -3,6 +3,7 @@ from datetime import date
 from django.db import models, transaction
 from django.db.models import F
 from django.utils.timezone import localtime, now
+from django.utils.translation import gettext_lazy as _
 
 from hub.models import SharedSpace, Profile
 
@@ -12,10 +13,10 @@ class OrderedUser(models.Model):
     """
     Corresponds to the order of users in a schedule
     """
-    user = models.ForeignKey("hub.Profile", on_delete=models.CASCADE, null=True, blank=True)
-    scheduled_todo = models.ForeignKey("todos.TodoSchedule", on_delete=models.CASCADE)
-    order = models.IntegerField(default=0)
-    empty = models.BooleanField(default=False)
+    user = models.ForeignKey("hub.Profile", verbose_name=_("User"), on_delete=models.CASCADE, null=True, blank=True)
+    scheduled_todo = models.ForeignKey("todos.TodoSchedule", verbose_name=_("Todo Schedule"), on_delete=models.CASCADE)
+    order = models.IntegerField(default=0, verbose_name=_("Order"))
+    empty = models.BooleanField(default=False, verbose_name=_("Empty"))
 
     def __str__(self):
         return f'OrderedUser: {self.user} - {self.scheduled_todo} | {self.order}'
@@ -24,11 +25,11 @@ class TodoSchedule(models.Model):
     """
     Tracks the assignment of a todo along time with the todo opening up after some time and changing the assigned users
     """
-    assigned_users = models.ManyToManyField("hub.Profile", through=OrderedUser)
-    schedule_turn = models.IntegerField(default=0, blank=False, null=False)
-    started_at = models.DateField(auto_created=True, default=now)
-    day_rotation = models.IntegerField(default=7)
-    last_check = models.DateTimeField(auto_created=True, default=now)
+    assigned_users = models.ManyToManyField("hub.Profile", verbose_name=_("User"), through=OrderedUser)
+    schedule_turn = models.IntegerField(default=0, verbose_name=_("Schedule Turn"), blank=False, null=False)
+    started_at = models.DateField(auto_created=True, verbose_name=_("Started at"), default=now)
+    day_rotation = models.IntegerField(default=7, verbose_name=_("Day rotation"))
+    last_check = models.DateTimeField(auto_created=True, verbose_name=_("Last check"), default=now)
 
     @staticmethod
     def create_with_settings(users, rate):
@@ -186,13 +187,13 @@ class TodoSchedule(models.Model):
 #######
 
 class Todo(models.Model):
-    name = models.CharField(max_length=500, blank=False, null=False)
-    description = models.CharField(max_length=2000, blank=False, null=False)
-    done = models.BooleanField(default=False)
-    position = models.IntegerField()
-    space = models.ForeignKey(SharedSpace, on_delete=models.CASCADE)
-    schedule_state = models.ForeignKey(TodoSchedule, on_delete=models.CASCADE, blank=True, null=True)
-    assigned_user = models.ForeignKey("hub.Profile", on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(verbose_name=_("Name"), max_length=500, blank=False, null=False)
+    description = models.CharField(verbose_name=_("Description"), max_length=2000, blank=False, null=False)
+    done = models.BooleanField(verbose_name=_("Done"), default=False)
+    position = models.IntegerField(verbose_name=_("Position"))
+    space = models.ForeignKey(SharedSpace, verbose_name=("Space"), on_delete=models.CASCADE)
+    schedule_state = models.ForeignKey(TodoSchedule, verbose_name=_("Schedule"), on_delete=models.CASCADE, blank=True, null=True)
+    assigned_user = models.ForeignKey("hub.Profile", verbose_name=_("Assigned user"), on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}: {self.description} | Position: {self.position} | Done: {self.done}'
@@ -329,9 +330,9 @@ class Todo(models.Model):
             todo.schedule_state.tick_rotation()
 
 class SubTask(models.Model):
-    title = models.CharField(max_length=500, blank=False, null=False)
-    done = models.BooleanField(default=False)
-    todo = models.ForeignKey(Todo, on_delete=models.CASCADE)
+    title = models.CharField(verbose_name=_("Title"), max_length=500, blank=False, null=False)
+    done = models.BooleanField(verbose_name=_("Done"), default=False)
+    todo = models.ForeignKey(Todo, verbose_name=_("Todo"), on_delete=models.CASCADE)
 
     def __str__(self):
         return f'SubTask: {self.title} on {self.todo.name}'

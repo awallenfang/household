@@ -36,7 +36,7 @@ def regen_token(request, space_id, *args, **kwargs):
     user = Profile.objects.get(user=request.user)
     space = get_object_or_404(SharedSpace, id = space_id)
 
-    if user.spaces.contains(space):
+    if user.spaces.contains(space) and user == space.owner:
         invite_token = ''.join(random.choice(string.ascii_uppercase + string.digits[1:]) for _ in range(10))
 
         # Check if invite_token exists already

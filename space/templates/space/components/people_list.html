@@ -4,10 +4,10 @@
     {% for person in joined_people %}
         <div class="p-05 background-mid border-radius-05 row justify-between w-80p h-3">
             <b>{{ person.user.username }}</b>
-            {% if selected_space.owner == person %}
+            {% if space.owner == person %}
                 <span>Owner</span>
             {% endif %}
-            {% if selected_space.owner == user or person == user %}
+            {% if space.owner == user or person == user %}
                 <a hx-delete="{% url 'space:space_view' space.id %}?hxp=kick_person&person_id={{ person.id }}" hx-confirm=
                 {% if joined_people|length == 1%}
                     "Are you sure? By leaving as the last person the space and all connected data will be lost!"

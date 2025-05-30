@@ -43,6 +43,7 @@ class SharedSpace(models.Model):
         except SharedSpace.DoesNotExist as exc:
             raise InvalidTokenError("There is no space with the given token") from exc
         user.spaces.add(space_with_token)
+        user.selected_space = space_with_token
         user.save()
 
     def leave(self, user):

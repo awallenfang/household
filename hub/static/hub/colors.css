@@ -19,3 +19,7 @@
 .background-mid {
     background-color: var(--mid-bg);
 }
+
+.background-light-highlight {
+    background-color: var(--light-highlight);
+}

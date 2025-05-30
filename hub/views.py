@@ -20,7 +20,7 @@ def hub(request):
     user_spaces = user.spaces.all()
     selected_space = user.selected_space
     return render(request, 
-                    "hub/base.html", 
+                    "hub/hub.html", 
                     {"user_spaces": user_spaces, "selected_space": selected_space})
     
 def login(request):

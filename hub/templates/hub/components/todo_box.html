@@ -1,0 +1,16 @@
+{% load static %}
+
+<div class="card w-30vw" id="todo-card">
+    <div class="card-header background-light-highlight">
+        Todos
+    </div>
+    <div class="card-body">
+        <div class="col align-start gap-medium">
+            <p>Open todos: {{ open_todo_amt }}</p>
+
+            <p>Open todos assigned to you: {{ open_assigned_todo_amt }}</p>
+            {% comment %} <p>Open todos due this week: {{ open_todos_due }} </p> {% endcomment %}
+            {% comment %} <p>Weekly stats:</p> {% endcomment %}
+        </div>
+    </div>
+</div>

@@ -1,13 +1,54 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
-
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
+from django.views.generic import DetailView, UpdateView
 
 from hub.models import Profile
+from hub.decorators import space_required
+from hub.mixins import HTMXMixin
 from space.models import InvalidTokenError, SharedSpace
+from space.forms import SpaceForm
+from space.renderers import *
+from space.actions import *
 
 # Create your views here.
+@method_decorator(login_required, name='dispatch')
+@method_decorator(space_required, name='dispatch')
+class SpaceSettingsView(HTMXMixin, UpdateView):
+    model = SharedSpace
+    form_class = SpaceForm
+    template_name = "space/space-full.html"
+    context_object_name = "space"
+    pk_url_kwarg = "space_id"
+
+    partials = {
+        "kick_person": (render_people_list, kick_person),
+        "new_token": (render_token, regen_token)
+    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = Profile.objects.get(user=self.request.user)
+        space = self.get_object()
+
+        if user.spaces.contains(space):
+            user_spaces = user.spaces.all()
+            selected_space = user.selected_space
+
+            joined_people = space.joined_people()
+            context.update({
+                "user": user,
+                "space": space,
+                "user_spaces": user_spaces,
+                "selected_space": selected_space,
+                "joined_people": joined_people
+            })
+        else:
+            return HttpResponseRedirect("/")
+
+        return context
 
 @login_required
 @require_http_methods(['GET', 'POST'])
@@ -48,10 +89,11 @@ def join_space(request):
 @require_http_methods(['GET'])
 def kick_from_space(request, space_id, user_id):
     user = Profile.objects.get(user = request.user)
-    space = SharedSpace.objects.get(id = space_id)
-    user_to_kick = Profile.objects.get(auth_user__id = user_id)
+    space = get_object_or_404(SharedSpace, id = space_id)
+    
     # Only the owner can kick people
     if user == space.owner:
+        user_to_kick = get_object_or_404(Profile, user__id = user_id)
         if user_to_kick in space.joined_people():
 
             # If the owner is leaving, assign the space to the next person
@@ -68,39 +110,9 @@ def kick_from_space(request, space_id, user_id):
     return HttpResponseRedirect("/space/" + str(space_id))
 
 @login_required
-@require_http_methods(['GET', 'POST'])
-def space_view(request, space_id):
-    if request.method == "GET":
-        user = Profile.objects.get(user = request.user)
-        try:
-            space = SharedSpace.objects.get(id = space_id)
-        except SharedSpace.DoesNotExist:
-            return HttpResponseRedirect("/")
-        if user.spaces.contains(space):
-            user_spaces = user.spaces.all()
-            selected_space = user.selected_space
-
-            joined_people = space.joined_people()
-            return render(request, "space/space-full.html", 
-                          {"user": user, 
-                           "space": space, 
-                           "user_spaces": user_spaces, 
-                           "selected_space": selected_space, 
-                           'joined_people': joined_people})
-
-        return HttpResponseRedirect("/")
-    
-
-    name = request.POST.get("name", "My Space")
-    space = SharedSpace.objects.get(id = space_id)
-    space.name = name
-    space.save()
-    return HttpResponseRedirect("/space/" + str(space_id))
-
-@login_required
 def delete_space(request, space_id):
     user = Profile.objects.get(user = request.user)
-    space = SharedSpace.objects.get(id = space_id)
+    space = get_object_or_404(SharedSpace, id = space_id)
 
     if space.owner == user:
         space.delete_space()

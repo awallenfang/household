@@ -2,7 +2,7 @@ import random
 import string
 
 from django.db import models
-
+from django.urls import reverse
 
 
 # Create your models here.
@@ -18,9 +18,14 @@ class SharedSpace(models.Model):
     def __str__(self):
         return f'Shared Space: {self.name}'
     
+    def get_absolute_url(self):
+        return reverse("space:space_view", kwargs={"space_id": self.id})
+    
+
     @staticmethod
     def create_space(name: str, owner):
-        invite_token = ''.join(random.choice(string.ascii_uppercase) for _ in range(10))
+        # string.digits[1:] is used to avoid the digit '0' in the token
+        invite_token = ''.join(random.choice(string.ascii_uppercase + string.digits[1:]) for _ in range(10))
 
         # Check if invite_token exists already
         spaces = SharedSpace.objects.filter(invite_token = invite_token)
@@ -38,10 +43,14 @@ class SharedSpace(models.Model):
         except SharedSpace.DoesNotExist as exc:
             raise InvalidTokenError("There is no space with the given token") from exc
         user.spaces.add(space_with_token)
+        user.selected_space = space_with_token
         user.save()
 
     def leave(self, user):
         user.spaces.remove(self)
+        if user.selected_space == self:
+            user.selected_space = None
+            user.save()
         if user == self.owner:
             try:
                 self.owner = self.joined_people()[0]

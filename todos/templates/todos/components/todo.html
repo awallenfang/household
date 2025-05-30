@@ -4,24 +4,24 @@
         <div class="row gap-medium">
             <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
             <p>{{ todo.name }}</p>
-            {% if todo.recurrent_state is not None%}
+            {% if todo.schedule_state is not None%}
             <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
             {% endif %}
         </div>
-        {% if todo.recurrent_state is None %}
+        {% if todo.schedule_state is None %}
             <p>{{ todo.assigned_user.user.username }}</p>
         {% else %}
-            {% with current=todo.recurrent_state.get_current_user %}
+            {% with current=todo.schedule_state.get_current_user %}
             <p>{{ current.user.username }}</p>
             {% endwith %}
         {% endif %}
         {% if not todo.done %}
             <a class="button" 
-            hx-post="{% url 'todos:close_todo' todo.id %}"
+            hx-post="{% url 'todos:todo' todo.id %}?hxp=close_todo"
             hx-target="#todo-list">Done</a>
         {% else %}
             <a class="button" 
-            hx-post="{% url 'todos:open_todo' todo.id %}"
+            hx-post="{% url 'todos:todo' todo.id %}?hxp=open_todo"
             hx-target="#todo-list">Reopen</a>
         {% endif %}
         <button class="dropdown-button" collapse-target="collapse-{{todo.id}}" onclick="toggleCollapse(event)">...</button>
@@ -36,36 +36,36 @@
                 <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
                 hx-target="closest .card"
                 hx-swap="outerHTML">Edit</a>
-                {% if todo.recurrent_state is None%}
+                {% if todo.schedule_state is None%}
                     <a class="button" 
-                    hx-get="{% url 'todos:make_recurrent' todo.id %}"
+                    hx-get="{% url 'todos:todo' todo.id %}?hxp=add_schedule"
                     hx-target="closest .card"
-                    hx-swap="innerHTML">Make recurrent</a>
+                    hx-swap="innerHTML">Add schedule</a>
                 {%else%}
                     <a class="button" 
-                    hx-get="{% url 'todos:recurrency_editor' todo.id %}"
-                    hx-target="#recurrent-block"
+                    hx-get="{% url 'todos:schedule_editor' todo.id %}"
+                    hx-target="#schedule-block"
                     hx-swap="innerHTML"
-                    onclick="clearSelectedUsers()">Recurrency</a>
+                    onclick="clearSelectedUsers()">Schedule</a>
                 {% endif %}
                 <a class="button" 
-                hx-delete="{% url 'todos:delete_todo' todo.id %}" 
+                hx-get="{% url 'todos:delete_todo' todo.id %}?hxp=todo_list" 
                 hx-confirm="Are you sure you would like to delete this todo?"
                 hx-target="#todo-list"
                 >
                     Delete!
                 </a>
                 <b>Assigned user:</b>
-                {% if todo.recurrent_state is None %}
+                {% if todo.schedule_state is None %}
                     <p>{{ todo.assigned_user }}</p>
                 {% else %}
-                    {% with current=todo.recurrent_state.get_current_user %}
+                    {% with current=todo.schedule_state.get_current_user %}
                         <p>{{ current.user.username }}</p>
                     {% endwith %}
                 {% endif %}
 
-                {% if todo.recurrent_state is not None %}
-                    {% with next=todo.recurrent_state.get_next_user %}
+                {% if todo.schedule_state is not None %}
+                    {% with next=todo.schedule_state.get_next_user %}
                     <b>Next user:</b>
                         {% if next is not None %}
                             <br>

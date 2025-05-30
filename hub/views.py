@@ -7,11 +7,9 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-
-
 from .forms import LoginForm, SignupForm
 from .models import Profile
-
+from todos.models import Todo
 
 @login_required
 def hub(request):
@@ -19,9 +17,20 @@ def hub(request):
         
     user_spaces = user.spaces.all()
     selected_space = user.selected_space
+
+    open_todo_amt = Todo.objects.filter(space = selected_space, done = False).count()
+    closed_todo_amt = Todo.objects.filter(space = selected_space, done = True).count()
+    assigned_todo_amt = Todo.objects.filter(space = selected_space, done = False, assigned_user = user).count()
+
+    context = {"user_spaces": user_spaces, 
+    "selected_space": selected_space,
+    "open_todo_amt": open_todo_amt,
+    "closed_todo_amt": closed_todo_amt,
+    "open_assigned_todo_amt": assigned_todo_amt,
+    "open_todos_due": 42}
     return render(request, 
-                    "hub/base.html", 
-                    {"user_spaces": user_spaces, "selected_space": selected_space})
+                    "hub/hub.html", 
+                    context)
     
 def login(request):
     # If the user is alread logged in, redirect

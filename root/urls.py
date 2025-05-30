@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 
 urlpatterns = [
@@ -24,4 +25,4 @@ urlpatterns = [
     path('', include(("hub.urls", "hub"), namespace="hub")),
     path('space/', include(("space.urls", "space"), namespace="space")),
 
-]
+] + debug_toolbar_urls()

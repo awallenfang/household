@@ -7,13 +7,19 @@
         <div class="row justify-center"><h2>Space Settings and Information</h2></div>
         <label for="space-name"><b>Name:</b></label>
         <input type="text" name="name" id="space-name" value="{{space.name}}">
-        <div>
-            <b>Invite Token: {{space.invite_token}}</b>
+        <div class="row align-center gap-medium">
+            <b id="invite-token">Invite Token: <samp>{{space.invite_token}}</samp></b>
+            {% if space.owner == user %}
+            <div class="button"            
+            hx-post="{% url 'space:space_view' space.id %}?hxp=new_token"
+            hx-target="#invite-token"
+            hx-swap="innerHTML">Reset invite token</div>
+            {% endif %}
         </div>
     </form>
     
     {% include "space/components/people_list.html" %}
-    {% if selected_space.owner == user%}
+    {% if space.owner == user%}
     <div class="row justify-center gap-medium">
         <input class="button" type="submit" value="Save" form="space-form">
         <a class="button button-red" href="{% url 'space:delete_space' space.id%}" onclick="return confirm('Are you sure?')">DELETE SPACE</a>

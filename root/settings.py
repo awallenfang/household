@@ -26,15 +26,19 @@ SECRET_KEY = 'django-insecure-s8-u1#9unm%f6+o%rsnhgo1r+ptpww$+l=5!5q_6wxjsu=tz9&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if DEBUG:
+    # `debug` is only True in templates if the vistor IP is in INTERNAL_IPS.
+    INTERNAL_IPS = type(str("c"), (), {"__contains__": lambda *a: True, "copy": lambda self: self})()
+else:
+    INTERNAL_IPS = [
+        "127.0.0.1",
+        "0.0.0.0"
+    ]
 ALLOWED_HOSTS = [
     "0.0.0.0",
     "127.0.0.1",
     ]
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-    "0.0.0.0"
-]
 
 # Application definition
 

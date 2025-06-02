@@ -37,7 +37,7 @@ class TodoDashboard(HTMXMixin, ListView):
         finished_todos = Todo.get_closed(self.request)
 
         user = Profile.objects.get(user = self.request.user)
-        user_spaces = user.spaces.all()
+        user_spaces = user.get_spaces
         selected_space = user.selected_space
         context.update({
             'todos': todos,

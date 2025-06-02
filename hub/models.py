@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
+from django.utils.functional import cached_property
+
 # Create your models here.
 
 from space.models import SharedSpace
@@ -27,3 +29,10 @@ class Profile(models.Model):
             self.selected_space = space
             self.save()
 
+    @cached_property
+    def has_space(self):
+        return self.selected_space is not None
+    
+    @cached_property
+    def get_spaces(self):
+        return  self.spaces.all()

@@ -13,7 +13,7 @@ def render_dashboard(request):
     finished_todos = Todo.get_closed(request)
 
     user = Profile.objects.get(user = request.user)
-    user_spaces = user.spaces.all()
+    user_spaces = user.get_spaces
     selected_space = user.selected_space
 
     return render(request, "todos/dashboard_full.html", {'todos': todos, 'finished_todos': finished_todos, 'user_spaces': user_spaces, 'selected_space': selected_space})
@@ -36,7 +36,7 @@ def render_todo(request, todo_id, *args, **kwargs):
     todo = get_object_or_404(Todo, id=todo_id)
     profile = get_object_or_404(Profile, user = request.user)
 
-    if todo.space in profile.spaces.all():
+    if todo.space in profile.get_spaces:
         return render(request, "todos/components/todo.html", {'todo': todo})
     else:
         return empty(request)
@@ -51,7 +51,7 @@ def render_schedule_editor(request, todo_id):
 
     user = Profile.objects.get(user = request.user)
 
-    if todo.space in user.spaces.all():
+    if todo.space in user.get_spaces:
         space_users = todo.space.joined_people()
         existing_order = todo.schedule_state.get_full_order()
         current_assignment = todo.schedule_state.schedule_turn

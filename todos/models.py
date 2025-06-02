@@ -2,9 +2,9 @@
 from datetime import date
 from django.db import models, transaction
 from django.db.models import F
+from django.utils.functional import cached_property
 from django.utils.timezone import localtime, now
 from django.utils.translation import gettext_lazy as _
-
 from hub.models import SharedSpace, Profile
 
 ######## Scheduled Todo helpers
@@ -76,6 +76,7 @@ class TodoSchedule(models.Model):
         idx = (n // self.day_rotation) % len(users)
         return users[idx].user
     
+    @cached_property
     def get_current_user(self) -> Profile:
         """
         Get the currently assigned user. 
@@ -88,6 +89,7 @@ class TodoSchedule(models.Model):
             self.schedule_turn = self.schedule_turn % len(users)
         return users[self.schedule_turn].user
 
+    @cached_property
     def get_next_user(self) -> Profile:
         """
         Get the user of the next turn. 
@@ -98,6 +100,7 @@ class TodoSchedule(models.Model):
             return None
         return users[(self.schedule_turn + 1) % len(users)].user
     
+    @cached_property
     def get_full_order(self):
         """
         Returns the full list of users as a list of user objects. Empty users are shown as None
@@ -292,6 +295,7 @@ class Todo(models.Model):
             schedule.add_user(user)
             schedule.save()
 
+    @cached_property
     def get_currently_assigned_user(self) -> Profile:
         if self.schedule_state is not None:
             current_time = now().date()
@@ -302,7 +306,8 @@ class Todo(models.Model):
             return self.schedule_state.get_user_at_day(passed_time.days)
         
         return self.assigned_user
-        
+    
+    @cached_property
     def get_next_assigned_user(self) -> Profile:
         if self.schedule_state:
             current_time = now().date()

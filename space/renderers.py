@@ -11,11 +11,10 @@ def empty(_request):
 @login_required
 @space_required
 def render_space_settings(request, space_id, *args, **kwargs):
-    user = Profile.objects.get(user=self.request.user)
+    user = Profile.objects.get(user=request.user)
     space = get_object_or_404(SharedSpace, id = space_id)
 
     if user.spaces.contains(space):
-        user_spaces = user.spaces.all()
         selected_space = user.selected_space
         joined_people = space.joined_people()
         context = {
@@ -34,7 +33,6 @@ def render_people_list(request, space_id, *args, **kwargs):
     space = get_object_or_404(SharedSpace, id = space_id)
 
     if user.spaces.contains(space):
-        user_spaces = user.spaces.all()
         selected_space = user.selected_space
         joined_people = space.joined_people()
         context = {

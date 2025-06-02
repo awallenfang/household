@@ -7,7 +7,7 @@ def space_required(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
         user = Profile.objects.get(user = request.user)
-        if user.selected_space is None:
+        if not user.has_space:
             raise PermissionDenied
         return function(request, *args, **kwargs)
     return wrap

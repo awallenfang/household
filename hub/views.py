@@ -15,7 +15,7 @@ from todos.models import Todo
 def hub(request):
     user = Profile.objects.get(user = request.user)
         
-    user_spaces = user.spaces.all()
+    user_spaces = user.get_spaces
     selected_space = user.selected_space
 
     open_todo_amt = Todo.objects.filter(space = selected_space, done = False).count()

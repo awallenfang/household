@@ -34,7 +34,7 @@ class SpaceSettingsView(HTMXMixin, UpdateView):
         space = self.get_object()
 
         if user.spaces.contains(space):
-            user_spaces = user.spaces.all()
+            user_spaces = user.get_spaces
             selected_space = user.selected_space
 
             joined_people = space.joined_people()

@@ -1,4 +1,5 @@
 from celery import Celery
+from celery.schedules import crontab
 import os
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'root.settings')
@@ -13,3 +14,10 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
+
+app.conf.beat_schedule = {
+    "Update todos": {
+        "task": "todos.tasks.update_todo_schedules",
+        "schedule": crontab(hour = 0, minute=0)
+    }
+}

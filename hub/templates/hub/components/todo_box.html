@@ -1,6 +1,31 @@
 {% load static %}
 {% load i18n %}
-
+<style>
+    #todo-hub-box {
+        width: 5rem;
+        height: 5rem;
+        background: conic-gradient(var(--strong-highlight) {{gradient_deg}}deg, var(--light-error-highlight) {{gradient_deg}}deg 360deg);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center
+    }
+    
+    #todo-hub-box-mask {
+        position: relative;
+        display: block;
+        z-index: 5;
+        width: 4rem;
+        height: 4rem;
+        background: var(--light-bg);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center
+    }
+</style>
 <div class="card w-30vw" id="todo-card">
     <div class="card-header background-light-highlight">
         {% trans 'Todos' context 'Todos section title' %}
@@ -11,7 +36,18 @@
 
             <p>{% trans 'Open todos assigned to you:' %} {{ open_assigned_todo_amt }}</p>
             {% comment %} <p>{% trans 'Open todos due this week:' %} {{ open_todos_due }} </p> {% endcomment %}
-            {% comment %} <p>{% trans 'Weekly stats:' %}</p> {% endcomment %}
+            <h4>{% trans 'Weekly stats:' %}</h4>
+            <div class="row">
+                <div class="col">
+                    <span>{% trans 'Closed Todos:' %}</span>
+                    <div id="todo-hub-box">
+                        <div id="todo-hub-box-mask">
+                            {{gradient_percent}}%
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

@@ -165,3 +165,4 @@ db.sqlite3
 data/
 _logs/
 config.env
+redis/

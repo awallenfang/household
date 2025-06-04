@@ -6,6 +6,7 @@
 {% load django_htmx %}
 <head>
     <script src="{% static 'hub/lib/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'hub/lib/htmx-2.0.4.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'hub/base.css' %}">
     <link rel="stylesheet" href="{% static 'hub/components.css' %}">
     <link rel="stylesheet" href="{% static 'hub/border.css' %}">
@@ -24,7 +25,6 @@
     hx-headers sets the csrf token for htmx, so that all HTTP request types can be used
 {% endcomment %}
 <body>
-    <script src="https://unpkg.com/htmx.org@1.1.0"></script>
     {% django_htmx_script %}
     <script>
         document.body.addEventListener('htmx:configRequest', (event) => {

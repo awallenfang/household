@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-30 22:23+0200\n"
+"POT-Creation-Date: 2025-06-04 19:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,18 +34,18 @@ msgstr "E-Mail Adresse"
 msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
-#: models.py:10
+#: models.py:12
 msgid "Auth user"
 msgstr "Authentikations User"
 
-#: models.py:13
+#: models.py:15
 #, fuzzy
 #| msgctxt "Header Title"
 #| msgid "Spaces"
 msgid "Spaces"
 msgstr "Spaces"
 
-#: models.py:15
+#: models.py:17
 msgid "Selected Space"
 msgstr "Augewählter Space"
 
@@ -74,18 +74,26 @@ msgstr "Spaces"
 msgid "Logout"
 msgstr "Ausloggen"
 
-#: templates/hub/components/todo_box.html:6
+#: templates/hub/components/todo_box.html:31
 msgctxt "Todos section title"
 msgid "Todos"
 msgstr "Todos"
 
-#: templates/hub/components/todo_box.html:10
+#: templates/hub/components/todo_box.html:35
 msgid "Open todos:"
 msgstr "Offene Todos:"
 
-#: templates/hub/components/todo_box.html:12
+#: templates/hub/components/todo_box.html:37
 msgid "Open todos assigned to you:"
 msgstr "Offene Todos, dir zugewiesen:"
+
+#: templates/hub/components/todo_box.html:40
+msgid "Weekly stats:"
+msgstr "Wöchentliche Stats:"
+
+#: templates/hub/components/todo_box.html:43
+msgid "Closed Todos:"
+msgstr "Fertige Todos:"
 
 #: templates/hub/login.html:37 templates/hub/signup.html:49
 msgid "Login"

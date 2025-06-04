@@ -36,7 +36,7 @@
                 
                 <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
                 hx-target="closest .card"
-                hx-swap="outerHTML">Edit</a>
+                hx-swap="outerHTML">{% trans 'Edit' %}</a>
                 {% if todo.schedule_state is None%}
                     <a class="button" 
                     hx-get="{% url 'todos:todo' todo.id %}?hxp=add_schedule"

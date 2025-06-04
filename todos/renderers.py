@@ -53,7 +53,7 @@ def render_schedule_editor(request, todo_id):
 
     if todo.space in user.get_spaces:
         space_users = todo.space.joined_people()
-        existing_order = todo.schedule_state.get_full_order()
+        existing_order = todo.schedule_state.get_full_order
         current_assignment = todo.schedule_state.schedule_turn
         rate = todo.schedule_state.day_rotation
         return render(request, 

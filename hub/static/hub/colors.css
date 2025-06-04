@@ -4,9 +4,10 @@
     --mid-bg: #b7c5c3;
     --dark-bg: #303935;
     --text: #191710;
-    --strong-highlight: rgba(53, 255, 146, 1);
+    --strong-highlight: rgb(0, 255, 136);
     --light-highlight: #90FFD1;
     --error-bg: #ff3c3c;
+    --light-error-highlight: #ff7259;
     --negative-bg: #ebbbbb;
     --positive-bg: #cdebbb;
 

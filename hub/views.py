@@ -21,13 +21,16 @@ def hub(request):
     open_todo_amt = Todo.objects.filter(space = selected_space, done = False).count()
     closed_todo_amt = Todo.objects.filter(space = selected_space, done = True).count()
     assigned_todo_amt = Todo.objects.filter(space = selected_space, done = False, assigned_user = user).count()
-
+    total_todo_amt = open_todo_amt + closed_todo_amt
     context = {"user_spaces": user_spaces, 
     "selected_space": selected_space,
     "open_todo_amt": open_todo_amt,
     "closed_todo_amt": closed_todo_amt,
     "open_assigned_todo_amt": assigned_todo_amt,
-    "open_todos_due": 42}
+    "open_todos_due": 42,
+    "total_todo_amt": total_todo_amt,
+    "gradient_deg": int((closed_todo_amt/total_todo_amt)*360),
+    "gradient_percent": int((closed_todo_amt/total_todo_amt)*100),}
     return render(request, 
                     "hub/hub.html", 
                     context)

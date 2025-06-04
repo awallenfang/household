@@ -8,6 +8,7 @@ COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir -p /var/log/supervisor
 RUN mkdir -p /var/log/nginx
 RUN mkdir -p /var/log/uwsgi
+RUN mkdir -p /var/log/celery
 
 RUN ln -sf /code/docker/nginx/household-nginx.conf /etc/nginx/sites-enabled/household-nginx.conf
 RUN ln -sf /code/docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

@@ -1,0 +1,1 @@
+celery -A root worker --autoscale=10,3 --loglevel=info

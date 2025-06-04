@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_htmx',
     'debug_toolbar',
+    'django_celery_beat',
     'hub',
     'todos',
     'space',
@@ -163,3 +164,6 @@ CURRENCIES = [
 
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/"
+
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"

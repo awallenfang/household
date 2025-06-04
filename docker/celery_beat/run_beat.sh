@@ -1,0 +1,1 @@
+celery -A root beat --autoscale=10,3 -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler

@@ -13,6 +13,8 @@ python manage.py createsuperuser --noinput
 
 echo "Running celery"
 celery -A root worker --loglevel=info -c 4 &
+echo "Running celery beat"
+celery -A root beat --loglevel=info  &
 
 echo "Starting Django application"
 python manage.py runserver 0.0.0.0:5000

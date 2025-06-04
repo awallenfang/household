@@ -14,10 +14,3 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
-
-app.conf.beat_schedule = {
-    "Update todos": {
-        "task": "todos.tasks.update_todo_schedules",
-        "schedule": crontab(hour = 0, minute=0)
-    }
-}

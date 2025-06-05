@@ -11,17 +11,15 @@
             <div class="row gap-medium">
                 <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
                 {{ form.name }}
-                <!-- <input type="text" value="{{ todo.name }}" name="todo_name" class="form-text-input"> -->
             </div>
             <p>{{todo.assigned_user.user.username}}</p>
             
             <button type="button" class="dropdown-button" collapse-target="collapse-{{todo.id}}" onclick="toggleCollapse(event)">...</button>
         </div>
-        <div class="card-body collapse" id="collapse-{{todo.id}}">
+        <div class="card-body" id="collapse-{{todo.id}}">
             <div class="row justify-between align-start">
                 <div class="col">
                     {{form.description}}
-                    <!-- <textarea name="todo_description" rows="10" cols="20">{{todo.description}}</textarea>  -->
                 </div>
                 
                 <div class="col gap-small">
@@ -29,7 +27,7 @@
 
                     <a class="button" 
                     hx-delete="{% url 'todos:delete_todo' todo.id %}" 
-                    hx-confirm="{% trans 'Are you sure you would like to delete this todo?' %}%"
+                    hx-confirm="{% trans 'Are you sure you would like to delete this todo?' %}"
                     hx-target="#todo-block"
                     >
                         {% trans 'Delete!' %}

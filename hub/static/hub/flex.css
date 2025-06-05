@@ -22,6 +22,10 @@
     align-items: baseline;
 }
 
+.align-self-center {
+    align-self: center;
+}
+
 .align-stretch {
     align-items: stretch;
 }

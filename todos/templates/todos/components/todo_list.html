@@ -37,7 +37,7 @@
             ></div>
         {%endif%}
 
-        <div class="row justify-around w-20vw">
+        <div class="row justify-around w-20vw align-self-center">
             <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}?hxp=create_todo"
             hx-target="#todo-list"
             hx-swap="outerHTML">{% trans 'New Todo' %}</a>

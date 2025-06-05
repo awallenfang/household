@@ -24,7 +24,7 @@
     <form action="{% url 'space:join_space' %}" method="post" class="col gap-small">
         {% csrf_token %}
         <input type="text" name="space_token" placeholder="Invite Token" aria-label="Invite Token" required>
-        <input class="button maxw-20vw" type="submit" value="{% trans 'Join Space' %}">
+        <input class="button" type="submit" value="{% trans 'Join Space' %}">
     </form>
     <a href="{% url 'space:create_space' %}"  class="button">{% trans 'Create Space' %}</a>
 </div>

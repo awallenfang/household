@@ -62,8 +62,8 @@ class TodosTest(TestCase):
 
         todo.make_scheduled(users)
 
-        self.assertEqual(users[0], todo.get_currently_assigned_user())
-        self.assertEqual(users[1], todo.get_next_assigned_user())
+        self.assertEqual(users[0], todo.get_currently_assigned_user)
+        self.assertEqual(users[1], todo.get_next_assigned_user)
     
     def test_empty_schedule(self):
         todo = self.create_single_todo()
@@ -72,5 +72,5 @@ class TodosTest(TestCase):
 
         todo.make_scheduled(users)
 
-        self.assertEqual(users[0], todo.get_currently_assigned_user())
-        self.assertEqual(None, todo.get_next_assigned_user())
+        self.assertEqual(users[0], todo.get_currently_assigned_user)
+        self.assertEqual(None, todo.get_next_assigned_user)

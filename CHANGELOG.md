@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.3
+* Added celery background tasks and localization
+
 ## v0.1.2
 * Rewrote parts of code to properly and cleanly use classes and htmx combine
 

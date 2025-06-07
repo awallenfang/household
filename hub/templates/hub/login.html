@@ -2,10 +2,16 @@
 
 
 {% load static%}
+{% load i18n %}
+{% block header %}
+{% endblock %}
 
+{% block css_links %}
+    <link rel="stylesheet" href="{% static 'hub/login.css' %}">
+{% endblock %}
 
 {% block content %}
-     <div id="login-container">
+             <div id="login-container">
         <div id="login">
             <h1>{% trans 'Login' %}</h1>
             <form method="post" id="login-form">

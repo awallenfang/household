@@ -89,3 +89,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
 document.addEventListener('htmx:afterSwap', function(e) {
     setupDragEnv(e)
 });
+
+function editTodo(todo_id) {
+    let url = `/todos/${todo_id}/edit`
+    htmx.ajax("GET", url, {target: htmx.find('.card[todo-id="' + todo_id + '"'), swap:"outerHTML"})
+    console.log("Edit" + todo_id)
+}

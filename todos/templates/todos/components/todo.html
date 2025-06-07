@@ -1,7 +1,7 @@
 {% load static%}
 {% load i18n %}
 <div class="card w-30vw minw-20 draggable-container" todo-id="{{todo.id}}">
-    <div class="card-header font-w-600">
+    <div class="card-header font-w-600" ondblclick="editTodo({{todo.id}})">
         <div class="row gap-medium">
             <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
             <p>{{ todo.name }}</p>

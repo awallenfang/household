@@ -128,5 +128,5 @@ additional = \
 
 sizing_file += additional
 
-with open("hub/static/hub/sizing.css", "w", encoding="utf8") as file:
-    file.write(re.sub(r'\s+', '', sizing_file))
+with open("hub/static/hub/scss/sizing.scss", "w", encoding="utf8") as file:
+    file.write(sizing_file)

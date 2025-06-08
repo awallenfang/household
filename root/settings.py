@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_htmx',
     'debug_toolbar',
     'django_celery_beat',
+    'django_sass',
     'hub',
     'todos',
     'space',

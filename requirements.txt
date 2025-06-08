@@ -12,3 +12,4 @@ django-debug-toolbar
 redis
 celery
 django-celery-beat
+django_sass

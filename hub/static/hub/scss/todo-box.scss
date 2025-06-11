@@ -1,0 +1,9 @@
+@import 'colors';
+
+
+#todo-hub-box-mask {
+    position: relative;
+    z-index: 5;
+    background: $black-500;
+    border-radius: 50%;
+}

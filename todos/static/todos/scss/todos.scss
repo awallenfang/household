@@ -1,0 +1,76 @@
+@import 'hub/scss/colors';
+
+/* ############### General todo view ###############  */
+main {
+    margin: 2rem;
+
+}
+
+.new-todo-container {
+    width: 25vw;
+    display: flex;
+    justify-content: space-around;
+}
+
+h2 {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.todo-drag-handle:hover {
+    background-color: $black-400;
+    border-radius: 0.5rem;
+    cursor: grab;
+}
+
+.todo-drop-spot {
+    background-color: $black-500;
+    width: 2.5rem;
+    border-style: dashed;
+    border-radius: 0.5rem;
+    border-color: $black-400;
+    height: 3.5rem;
+    display: none;
+}
+
+
+textarea {
+    max-width: 15vw
+}
+
+/* ############### Schedule view ################## */
+
+.trash-container {
+    display: inline-block;
+    height: 100%;
+}
+
+.user-drop-spot {
+    background-color: $black-400;
+    width: 5rem;
+    border-style: dashed;
+    border-radius: 0.5rem;
+    border-color: $black-300;
+    height: 2rem;
+    visibility: collapse;
+    flex-shrink: 0;
+}
+
+.user-drag-handle:hover {
+    cursor: grab;
+}
+
+.select-icon:hover {
+    cursor: grab;
+}
+
+.schedule-position-drop-spot {
+    background-color: $black-400;
+    border-style: dashed;
+    border-radius: 0.5rem;
+    border-color: $black-300;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    visibility: hidden;
+}

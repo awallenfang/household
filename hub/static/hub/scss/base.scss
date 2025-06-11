@@ -2,6 +2,7 @@
   font-family: 'Albert Sans';
   src: url(fonts/AlbertSans-Medium.woff2) format('woff2'),
 }
+
 * {
     margin: 0;
     box-sizing: border-box;
@@ -9,18 +10,7 @@
 }
 
 
-header {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 1rem;
-    height: 4rem;
-    background-color: var(--mid-bg);
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
+
 
 main {
     padding: 1rem;
@@ -39,12 +29,6 @@ main {
     border-radius: 0.5rem;
 }
 
-.header-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-}
 
 label {
     /* Make labels align to the left instead of the center */

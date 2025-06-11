@@ -29,8 +29,8 @@ def hub(request):
     "open_assigned_todo_amt": assigned_todo_amt,
     "open_todos_due": 42,
     "total_todo_amt": total_todo_amt,
-    "gradient_deg": int((closed_todo_amt/total_todo_amt)*360),
-    "gradient_percent": int((closed_todo_amt/total_todo_amt)*100),}
+    "gradient_deg": int((closed_todo_amt/total_todo_amt)*360) if total_todo_amt else 0,
+    "gradient_percent": int((closed_todo_amt/total_todo_amt)*100) if total_todo_amt else 0,}
     return render(request, 
                     "hub/hub.html", 
                     context)

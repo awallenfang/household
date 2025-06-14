@@ -17,6 +17,8 @@ services:
             - ./_logs/nginx:/var/log/nginx
             - ./_logs/uwsgi:/var/log/uwsgi
             - ./_logs/django:/var/log/django
+            - ./_logs/celery_beat:/var/log/celery_beat
+            - ./_logs/celery_worker:/var/log/celery_worker
         ports:
             - "5000:5000"
         env_file:
@@ -33,7 +35,7 @@ services:
             - '6379:6379'
         command: redis-server --save 20 1 --loglevel warning
         volumes: 
-            - cache:/data
+            - ./redis_cache:/data
 networks:
   net:
     external: true

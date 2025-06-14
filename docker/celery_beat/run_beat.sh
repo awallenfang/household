@@ -1,1 +1,1 @@
-celery -A root beat --autoscale=10,3 -l INFO 
+celery -A root beat -l INFO 

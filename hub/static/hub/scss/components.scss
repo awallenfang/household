@@ -37,6 +37,7 @@
     font-size:medium;
     background-color: $blue-500;
     border: 1px solid $blue-400;
+    height: 2.25rem;
     
     &:disabled {
         filter: grayscale(90%);

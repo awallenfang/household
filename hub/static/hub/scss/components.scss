@@ -1,0 +1,235 @@
+@import 'mixins';
+@import 'colors';
+
+/* ########### Mobile ######### */
+.mobile-hide {
+    /* This should be set after anything that might change display */
+    @mixin md {
+        display: none;
+    }
+}
+
+.mobile-show {
+    /* This should be set before others that might change display */
+    @mixin max-md {
+        display:block
+    }
+}
+
+
+/* ########### Button ######### */
+.button {
+    appearance: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    color: var(--text);
+    display: inline-block;
+    line-height: 1rem;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+    font-family: 'Albert Sans', sans-serif;
+    font-size:medium;
+    background-color: $blue-500;
+    border: 1px solid $blue-400;
+    height: 2.25rem;
+    
+    &:disabled {
+        filter: grayscale(90%);
+        cursor: default;
+    }
+    &:hover  {
+        filter: brightness(110%);
+        text-decoration: none;
+        transition-duration: 0.1s;
+    }
+    &:active {
+        filter: brightness(130%);
+        transition: 0.1s;
+    }
+    &:focus {
+        outline: 1px transparent;
+    }
+}
+
+.button-strong {
+    background-color: $blue-400;
+    border: 1px solid $blue-300;
+}
+
+.button-red {
+    background-color: $red-500;
+    border: 1px solid $red-400;
+}
+
+.button-disabled {
+    filter:grayscale(90%);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* ############# Floating ############### */
+
+.floating {
+    z-index: 1;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: $black-500;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    -webkit-box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.88);
+    box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.88);
+}
+
+/* ######## Lines ######## */
+.horizontal-line {
+    width: 100%;
+    height: 2px;
+    background-color: $black-400;
+}
+
+.vertical-line {
+    width: 2px;
+    height: 100%;
+    background-color: $black-400;
+}
+
+/* ############### Badge ################# */
+.badge {
+    color: var(--text);
+    background-color: $blue-400;
+    padding: 4px 8px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.badge-strong {
+    color: var(--text);
+    background-color: var(--strong-highlight);
+}
+
+.badge-error {
+    color: white;
+    background-color: var(--error-bg);
+}
+
+/* ############## Card ############### */
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    background-color: $black-500;
+    background-clip: border-box;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: $black-400;
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.25);
+}
+
+.card-header {
+    border-radius: 5px;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border: solid 1px $black-400; 
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 8px;
+    border: solid 1px $black-400; 
+}
+
+/* #################### Collapsing ################### */
+.collapse {
+    display: none !important;
+}
+
+
+/* ################### Navbar ################# */
+.navbar {
+    /* Don't display it on mobile, rather display navbar-mobile */
+    display:none;
+    
+    @include md {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 4rem;
+        align-items: center;
+        justify-content: space-between;
+        background-color: $black-500;
+        border: 1px solid $black-400;
+        gap: 1rem;
+        margin: 0;
+        margin-bottom: 1rem;
+        padding: 1rem;
+
+    
+        .navbar-block {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+        }
+
+    }
+}    
+
+.navbar-mobile {
+    
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: end;
+    background-color: $black-500;
+    border: 1px solid $black-400;
+    
+    height: 4rem;
+    margin: 0;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    
+    .navbar-block {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .navbar-menu {
+        z-index: 10;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: $black-500;
+        border: 1px solid $black-400;
+        margin: 0;
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+    @include md {
+        display: none;
+    }
+    
+}

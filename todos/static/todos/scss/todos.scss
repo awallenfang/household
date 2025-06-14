@@ -1,3 +1,5 @@
+@import 'hub/scss/colors';
+
 /* ############### General todo view ###############  */
 main {
     margin: 2rem;
@@ -16,17 +18,17 @@ h2 {
 }
 
 .todo-drag-handle:hover {
-    background-color: var(--mid-bg);
+    background-color: $black-400;
     border-radius: 0.5rem;
     cursor: grab;
 }
 
 .todo-drop-spot {
-    background-color: var(--light-bg);
+    background-color: $black-500;
     width: 2.5rem;
     border-style: dashed;
     border-radius: 0.5rem;
-    border-color: var(--mid-bg);
+    border-color: $black-400;
     height: 3.5rem;
     display: none;
 }
@@ -44,11 +46,11 @@ textarea {
 }
 
 .user-drop-spot {
-    background-color: var(--mid-bg);
+    background-color: $black-400;
     width: 5rem;
     border-style: dashed;
     border-radius: 0.5rem;
-    border-color: var(--dark-bg);
+    border-color: $black-300;
     height: 2rem;
     visibility: collapse;
     flex-shrink: 0;
@@ -63,10 +65,10 @@ textarea {
 }
 
 .schedule-position-drop-spot {
-    background-color: var(--mid-bg);
+    background-color: $black-400;
     border-style: dashed;
     border-radius: 0.5rem;
-    border-color: var(--dark-bg);
+    border-color: $black-300;
     flex-shrink: 0;
     width: 2rem;
     height: 2rem;

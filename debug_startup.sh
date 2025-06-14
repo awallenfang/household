@@ -11,6 +11,10 @@ python ./manage.py migrate
 echo "Creating superuser"
 python manage.py createsuperuser --noinput
 
+python manage.py sass /code/hub/static/hub/scss /code/hub/static/hub/css -t compressed --watch &
+python manage.py sass /code/todos/static/todos/scss /code/todos/static/todos/css -t compressed --watch &
+python manage.py sass /code/space/static/space/scss /code/space/static/space/css -t compressed --watch &
+
 echo "Running celery"
 celery -A root worker --loglevel=info -c 4 &
 echo "Running celery beat"

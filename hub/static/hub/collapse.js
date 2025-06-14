@@ -1,5 +1,5 @@
-function toggleCollapse(event) {
-    var target_id = event.target.getAttribute("collapse-target")
+function toggleCollapse(target_id) {
+    console.log("Click " + target_id)
     if (target_id === null) {
         return
     }
@@ -17,8 +17,12 @@ function toggleCollapse(event) {
 function addCollapse() {
     var collapse_buttons = document.querySelectorAll("[collapse-target]")
     for (var button of collapse_buttons) {
-        button.setAttribute("onclick", "toggleCollapse(event)")
+        let target_id = button.getAttribute("collapse-target")
+        button.addEventListener("click", function() {
+            toggleCollapse(target_id)
+        })
     }
 }
 
 window.addEventListener("DOMContentLoaded", addCollapse, false)
+document.addEventListener("htmx:afterRequest", addCollapse, false)

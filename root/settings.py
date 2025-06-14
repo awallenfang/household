@@ -14,6 +14,8 @@ from pathlib import Path
 import sys
 from celery.schedules import crontab
 
+from django.utils.translation import gettext_lazy as _
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
     'django_htmx',
     'debug_toolbar',
     'django_celery_beat',
+    'django_sass',
     'hub',
     'todos',
     'space',
@@ -135,6 +138,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
+
+LANGUAGES = [
+    ('de', _('German')),
+    ('en', _('English')),
+]
 
 LANGUAGE_CODE = 'en-us'
 

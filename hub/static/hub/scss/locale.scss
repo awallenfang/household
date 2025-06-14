@@ -1,18 +1,18 @@
+@import 'colors';
 
-
-.space-dropdown {
+.locale-dropdown {
     position: relative;
     display: inline-block;
     z-index: 2;
 }
 
-.quick-space-container {
+
+#language-selector {
     position: absolute;
-    display: none;
     min-width: 15vw;
     max-width: 30vw;
     top: 3rem;
-    background-color: var(--mid-bg);
+    background-color: $black-500;
     padding: 1rem;
     right: 0;
     

@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+from django.utils import translation    
 from .forms import LoginForm, SignupForm
 from .models import Profile
 from todos.models import Todo
@@ -29,8 +29,8 @@ def hub(request):
     "open_assigned_todo_amt": assigned_todo_amt,
     "open_todos_due": 42,
     "total_todo_amt": total_todo_amt,
-    "gradient_deg": int((closed_todo_amt/total_todo_amt)*360),
-    "gradient_percent": int((closed_todo_amt/total_todo_amt)*100),}
+    "gradient_deg": int((closed_todo_amt/total_todo_amt)*360) if total_todo_amt else 0,
+    "gradient_percent": int((closed_todo_amt/total_todo_amt)*100) if total_todo_amt else 0,}
     return render(request, 
                     "hub/hub.html", 
                     context)
@@ -96,3 +96,8 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
 
+def set_language(request):
+    if request.method == 'POST':
+        language = request.POST.get('language')
+        if language:
+            translation.activate(language)

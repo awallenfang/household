@@ -1,6 +1,7 @@
 import re
 
-sizing_file = ""
+sizing_file = """@import 'mixins';
+"""
 
 # width rem
 width_rem_format = """.w-{size} {{
@@ -30,6 +31,46 @@ height_percent_format = """.h-{size}p {{
 # height vw
 height_vh_format = """.h-{size}vh {{
     height: {size}vh;
+}}\n\n"""
+
+# width rem
+mobile_width_rem_format = """.mw-{size} {{
+    @include max-md {{
+    width: {size}rem;
+    }}
+}}\n\n"""
+
+# width percentage
+mobile_width_precent_format = """.mw-{size}p {{
+    @include max-md {{
+    width: {size}%;
+    }}
+}}\n\n"""
+
+# width vw
+mobile_width_vw_format = """.mw-{size}vw {{
+    width: {size}vw;
+}}\n\n"""
+
+# height rem
+mobile_height_rem_format = """.mh-{size} {{
+    @include max-md {{
+    height: {size}rem;
+    }}
+}}\n\n"""
+
+# height percentage
+mobile_height_percent_format = """.mh-{size}p {{
+    @include max-md {{
+    height: {size}%;
+    }}
+}}\n\n"""
+
+# height vw
+mobile_height_vh_format = """.mh-{size}vh {{
+    @include max-md {{
+    height: {size}vh;
+    }}
 }}\n\n"""
 
 max_width_rem_format = """.maxw-{size} {{
@@ -86,7 +127,9 @@ formats_1 = [
     min_width_rem_format,
     height_rem_format,
     max_height_rem_format,
-    min_height_rem_format
+    min_height_rem_format,
+    mobile_height_rem_format,
+    mobile_width_rem_format,
 ]
 
 formats_10 = [
@@ -94,6 +137,10 @@ formats_10 = [
     width_vw_format, 
     height_percent_format, 
     height_vh_format,
+    mobile_width_precent_format, 
+    mobile_width_vw_format, 
+    mobile_height_percent_format, 
+    mobile_height_vh_format,
     max_height_percent_format,
     max_height_vh_format,
     max_width_percent_format,
@@ -128,5 +175,5 @@ additional = \
 
 sizing_file += additional
 
-with open("hub/static/hub/sizing.css", "w", encoding="utf8") as file:
-    file.write(re.sub(r'\s+', '', sizing_file))
+with open("hub/static/hub/scss/sizing.scss", "w", encoding="utf8") as file:
+    file.write(sizing_file)

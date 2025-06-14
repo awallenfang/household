@@ -1,0 +1,35 @@
+@import 'colors';
+
+* {
+    --light: $light;
+    --light-bg: $light-bg;
+    --mid-bg: $mid-bg;
+    --dark-bg: $dark-bg;
+    --text: $text;
+    --strong-highlight: rgb(0, 255, 136);
+    --light-highlight: $light-highlight;
+    --error-bg: $error-bg;
+    --light-error-highlight: #ff7259;
+    --negative-bg: $negative-bg;
+    --positive-bg: $positive-bg;
+}
+
+.background-light {
+    background-color: $black-500;
+}
+
+.background-light-blue {
+    background-color: $blue-500;
+}
+
+.border-light-blue {
+    border: 1px solid $blue-400;
+}
+
+.background-mid {
+    background-color: $black-400;
+}
+
+.background-light-highlight {
+    background-color: $blue-400;
+}

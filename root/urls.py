@@ -21,6 +21,7 @@ from django.conf.urls.i18n import i18n_patterns
 
 
 urlpatterns = [
+    path("i18n/", include("django.conf.urls.i18n"), name="set_language"),
 ] + i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include(("hub.urls", "hub"), namespace="hub")),

@@ -1,5 +1,22 @@
 @import 'mixins';
 @import 'colors';
+
+/* ########### Mobile ######### */
+.mobile-hide {
+    /* This should be set after anything that might change display */
+    @mixin md {
+        display: none;
+    }
+}
+
+.mobile-show {
+    /* This should be set before others that might change display */
+    @mixin max-md {
+        display:block
+    }
+}
+
+
 /* ########### Button ######### */
 .button {
     appearance: none;

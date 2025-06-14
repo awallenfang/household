@@ -27,3 +27,9 @@
        @content;
    }
 }
+
+@mixin max-md {
+    @media (max-width: #{$screen-md-max}) {
+        @content;
+    }
+}

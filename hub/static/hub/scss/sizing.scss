@@ -1,3 +1,4 @@
+@import 'mixins';
 .w-10p {
     width: 10%;
 }
@@ -12,6 +13,28 @@
 
 .h-10vh {
     height: 10vh;
+}
+
+.mw-10p {
+    @include max-md {
+    width: 10%;
+    }
+}
+
+.mw-10vw {
+    width: 10vw;
+}
+
+.mh-10p {
+    @include max-md {
+    height: 10%;
+    }
+}
+
+.mh-10vh {
+    @include max-md {
+    height: 10vh;
+    }
 }
 
 .maxh-10p {
@@ -62,6 +85,28 @@
     height: 20vh;
 }
 
+.mw-20p {
+    @include max-md {
+    width: 20%;
+    }
+}
+
+.mw-20vw {
+    width: 20vw;
+}
+
+.mh-20p {
+    @include max-md {
+    height: 20%;
+    }
+}
+
+.mh-20vh {
+    @include max-md {
+    height: 20vh;
+    }
+}
+
 .maxh-20p {
     max-height: 20%;
 }
@@ -108,6 +153,28 @@
 
 .h-30vh {
     height: 30vh;
+}
+
+.mw-30p {
+    @include max-md {
+    width: 30%;
+    }
+}
+
+.mw-30vw {
+    width: 30vw;
+}
+
+.mh-30p {
+    @include max-md {
+    height: 30%;
+    }
+}
+
+.mh-30vh {
+    @include max-md {
+    height: 30vh;
+    }
 }
 
 .maxh-30p {
@@ -158,6 +225,28 @@
     height: 40vh;
 }
 
+.mw-40p {
+    @include max-md {
+    width: 40%;
+    }
+}
+
+.mw-40vw {
+    width: 40vw;
+}
+
+.mh-40p {
+    @include max-md {
+    height: 40%;
+    }
+}
+
+.mh-40vh {
+    @include max-md {
+    height: 40vh;
+    }
+}
+
 .maxh-40p {
     max-height: 40%;
 }
@@ -204,6 +293,28 @@
 
 .h-50vh {
     height: 50vh;
+}
+
+.mw-50p {
+    @include max-md {
+    width: 50%;
+    }
+}
+
+.mw-50vw {
+    width: 50vw;
+}
+
+.mh-50p {
+    @include max-md {
+    height: 50%;
+    }
+}
+
+.mh-50vh {
+    @include max-md {
+    height: 50vh;
+    }
 }
 
 .maxh-50p {
@@ -254,6 +365,28 @@
     height: 60vh;
 }
 
+.mw-60p {
+    @include max-md {
+    width: 60%;
+    }
+}
+
+.mw-60vw {
+    width: 60vw;
+}
+
+.mh-60p {
+    @include max-md {
+    height: 60%;
+    }
+}
+
+.mh-60vh {
+    @include max-md {
+    height: 60vh;
+    }
+}
+
 .maxh-60p {
     max-height: 60%;
 }
@@ -300,6 +433,28 @@
 
 .h-70vh {
     height: 70vh;
+}
+
+.mw-70p {
+    @include max-md {
+    width: 70%;
+    }
+}
+
+.mw-70vw {
+    width: 70vw;
+}
+
+.mh-70p {
+    @include max-md {
+    height: 70%;
+    }
+}
+
+.mh-70vh {
+    @include max-md {
+    height: 70vh;
+    }
 }
 
 .maxh-70p {
@@ -350,6 +505,28 @@
     height: 80vh;
 }
 
+.mw-80p {
+    @include max-md {
+    width: 80%;
+    }
+}
+
+.mw-80vw {
+    width: 80vw;
+}
+
+.mh-80p {
+    @include max-md {
+    height: 80%;
+    }
+}
+
+.mh-80vh {
+    @include max-md {
+    height: 80vh;
+    }
+}
+
 .maxh-80p {
     max-height: 80%;
 }
@@ -398,6 +575,28 @@
     height: 90vh;
 }
 
+.mw-90p {
+    @include max-md {
+    width: 90%;
+    }
+}
+
+.mw-90vw {
+    width: 90vw;
+}
+
+.mh-90p {
+    @include max-md {
+    height: 90%;
+    }
+}
+
+.mh-90vh {
+    @include max-md {
+    height: 90vh;
+    }
+}
+
 .maxh-90p {
     max-height: 90%;
 }
@@ -444,6 +643,28 @@
 
 .h-100vh {
     height: 100vh;
+}
+
+.mw-100p {
+    @include max-md {
+    width: 100%;
+    }
+}
+
+.mw-100vw {
+    width: 100vw;
+}
+
+.mh-100p {
+    @include max-md {
+    height: 100%;
+    }
+}
+
+.mh-100vh {
+    @include max-md {
+    height: 100vh;
+    }
 }
 
 .maxh-100p {
@@ -502,6 +723,18 @@
     min-height: 0rem;
 }
 
+.mh-0 {
+    @include max-md {
+    height: 0rem;
+    }
+}
+
+.mw-0 {
+    @include max-md {
+    width: 0rem;
+    }
+}
+
 .w-1 {
     width: 1rem;
 }
@@ -524,6 +757,18 @@
 
 .minh-1 {
     min-height: 1rem;
+}
+
+.mh-1 {
+    @include max-md {
+    height: 1rem;
+    }
+}
+
+.mw-1 {
+    @include max-md {
+    width: 1rem;
+    }
 }
 
 .w-2 {
@@ -550,6 +795,18 @@
     min-height: 2rem;
 }
 
+.mh-2 {
+    @include max-md {
+    height: 2rem;
+    }
+}
+
+.mw-2 {
+    @include max-md {
+    width: 2rem;
+    }
+}
+
 .w-3 {
     width: 3rem;
 }
@@ -572,6 +829,18 @@
 
 .minh-3 {
     min-height: 3rem;
+}
+
+.mh-3 {
+    @include max-md {
+    height: 3rem;
+    }
+}
+
+.mw-3 {
+    @include max-md {
+    width: 3rem;
+    }
 }
 
 .w-4 {
@@ -598,6 +867,18 @@
     min-height: 4rem;
 }
 
+.mh-4 {
+    @include max-md {
+    height: 4rem;
+    }
+}
+
+.mw-4 {
+    @include max-md {
+    width: 4rem;
+    }
+}
+
 .w-5 {
     width: 5rem;
 }
@@ -620,6 +901,18 @@
 
 .minh-5 {
     min-height: 5rem;
+}
+
+.mh-5 {
+    @include max-md {
+    height: 5rem;
+    }
+}
+
+.mw-5 {
+    @include max-md {
+    width: 5rem;
+    }
 }
 
 .w-6 {
@@ -646,6 +939,18 @@
     min-height: 6rem;
 }
 
+.mh-6 {
+    @include max-md {
+    height: 6rem;
+    }
+}
+
+.mw-6 {
+    @include max-md {
+    width: 6rem;
+    }
+}
+
 .w-7 {
     width: 7rem;
 }
@@ -668,6 +973,18 @@
 
 .minh-7 {
     min-height: 7rem;
+}
+
+.mh-7 {
+    @include max-md {
+    height: 7rem;
+    }
+}
+
+.mw-7 {
+    @include max-md {
+    width: 7rem;
+    }
 }
 
 .w-8 {
@@ -694,6 +1011,18 @@
     min-height: 8rem;
 }
 
+.mh-8 {
+    @include max-md {
+    height: 8rem;
+    }
+}
+
+.mw-8 {
+    @include max-md {
+    width: 8rem;
+    }
+}
+
 .w-9 {
     width: 9rem;
 }
@@ -716,6 +1045,18 @@
 
 .minh-9 {
     min-height: 9rem;
+}
+
+.mh-9 {
+    @include max-md {
+    height: 9rem;
+    }
+}
+
+.mw-9 {
+    @include max-md {
+    width: 9rem;
+    }
 }
 
 .w-10 {
@@ -742,6 +1083,18 @@
     min-height: 10rem;
 }
 
+.mh-10 {
+    @include max-md {
+    height: 10rem;
+    }
+}
+
+.mw-10 {
+    @include max-md {
+    width: 10rem;
+    }
+}
+
 .w-11 {
     width: 11rem;
 }
@@ -764,6 +1117,18 @@
 
 .minh-11 {
     min-height: 11rem;
+}
+
+.mh-11 {
+    @include max-md {
+    height: 11rem;
+    }
+}
+
+.mw-11 {
+    @include max-md {
+    width: 11rem;
+    }
 }
 
 .w-12 {
@@ -790,6 +1155,18 @@
     min-height: 12rem;
 }
 
+.mh-12 {
+    @include max-md {
+    height: 12rem;
+    }
+}
+
+.mw-12 {
+    @include max-md {
+    width: 12rem;
+    }
+}
+
 .w-13 {
     width: 13rem;
 }
@@ -812,6 +1189,18 @@
 
 .minh-13 {
     min-height: 13rem;
+}
+
+.mh-13 {
+    @include max-md {
+    height: 13rem;
+    }
+}
+
+.mw-13 {
+    @include max-md {
+    width: 13rem;
+    }
 }
 
 .w-14 {
@@ -838,6 +1227,18 @@
     min-height: 14rem;
 }
 
+.mh-14 {
+    @include max-md {
+    height: 14rem;
+    }
+}
+
+.mw-14 {
+    @include max-md {
+    width: 14rem;
+    }
+}
+
 .w-15 {
     width: 15rem;
 }
@@ -860,6 +1261,18 @@
 
 .minh-15 {
     min-height: 15rem;
+}
+
+.mh-15 {
+    @include max-md {
+    height: 15rem;
+    }
+}
+
+.mw-15 {
+    @include max-md {
+    width: 15rem;
+    }
 }
 
 .w-16 {
@@ -886,6 +1299,18 @@
     min-height: 16rem;
 }
 
+.mh-16 {
+    @include max-md {
+    height: 16rem;
+    }
+}
+
+.mw-16 {
+    @include max-md {
+    width: 16rem;
+    }
+}
+
 .w-17 {
     width: 17rem;
 }
@@ -908,6 +1333,18 @@
 
 .minh-17 {
     min-height: 17rem;
+}
+
+.mh-17 {
+    @include max-md {
+    height: 17rem;
+    }
+}
+
+.mw-17 {
+    @include max-md {
+    width: 17rem;
+    }
 }
 
 .w-18 {
@@ -934,6 +1371,18 @@
     min-height: 18rem;
 }
 
+.mh-18 {
+    @include max-md {
+    height: 18rem;
+    }
+}
+
+.mw-18 {
+    @include max-md {
+    width: 18rem;
+    }
+}
+
 .w-19 {
     width: 19rem;
 }
@@ -956,6 +1405,18 @@
 
 .minh-19 {
     min-height: 19rem;
+}
+
+.mh-19 {
+    @include max-md {
+    height: 19rem;
+    }
+}
+
+.mw-19 {
+    @include max-md {
+    width: 19rem;
+    }
 }
 
 .w-20 {
@@ -982,6 +1443,18 @@
     min-height: 20rem;
 }
 
+.mh-20 {
+    @include max-md {
+    height: 20rem;
+    }
+}
+
+.mw-20 {
+    @include max-md {
+    width: 20rem;
+    }
+}
+
 .w-21 {
     width: 21rem;
 }
@@ -1004,6 +1477,18 @@
 
 .minh-21 {
     min-height: 21rem;
+}
+
+.mh-21 {
+    @include max-md {
+    height: 21rem;
+    }
+}
+
+.mw-21 {
+    @include max-md {
+    width: 21rem;
+    }
 }
 
 .w-22 {
@@ -1030,6 +1515,18 @@
     min-height: 22rem;
 }
 
+.mh-22 {
+    @include max-md {
+    height: 22rem;
+    }
+}
+
+.mw-22 {
+    @include max-md {
+    width: 22rem;
+    }
+}
+
 .w-23 {
     width: 23rem;
 }
@@ -1052,6 +1549,18 @@
 
 .minh-23 {
     min-height: 23rem;
+}
+
+.mh-23 {
+    @include max-md {
+    height: 23rem;
+    }
+}
+
+.mw-23 {
+    @include max-md {
+    width: 23rem;
+    }
 }
 
 .w-24 {
@@ -1078,6 +1587,18 @@
     min-height: 24rem;
 }
 
+.mh-24 {
+    @include max-md {
+    height: 24rem;
+    }
+}
+
+.mw-24 {
+    @include max-md {
+    width: 24rem;
+    }
+}
+
 .w-25 {
     width: 25rem;
 }
@@ -1100,6 +1621,18 @@
 
 .minh-25 {
     min-height: 25rem;
+}
+
+.mh-25 {
+    @include max-md {
+    height: 25rem;
+    }
+}
+
+.mw-25 {
+    @include max-md {
+    width: 25rem;
+    }
 }
 
 .overflow-scroll {

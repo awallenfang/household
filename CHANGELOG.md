@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.4
+* Switch to SCSS and redo a lot of styles
+
 ## v0.1.3
 * Added celery background tasks and localization
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 19:09+0200\n"
+"POT-Creation-Date: 2025-06-14 16:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,64 +49,86 @@ msgstr "Spaces"
 msgid "Selected Space"
 msgstr "Augewählter Space"
 
-#: templates/hub/base.html:19 templates/hub/login.html:19
-#: templates/hub/signup.html:20
+#: templates/hub/base.html:23
 msgctxt "Page title"
 msgid "Household Planner"
 msgstr "Haushalts Planer"
 
-#: templates/hub/base.html:39
+#: templates/hub/base.html:42 templates/hub/base.html:74
 msgctxt "Header Title"
 msgid "Hub"
 msgstr "Dashboard"
 
-#: templates/hub/base.html:41
+#: templates/hub/base.html:44 templates/hub/base.html:76
 msgctxt "Header Title"
 msgid "Todos"
 msgstr "Todos"
 
-#: templates/hub/base.html:49
+#: templates/hub/base.html:52
 msgctxt "Header Title"
 msgid "Spaces"
 msgstr "Spaces"
 
-#: templates/hub/base.html:54
+#: templates/hub/base.html:57
+msgctxt "Header Title"
+msgid "Language"
+msgstr "Sprache"
+
+#: templates/hub/base.html:60
 msgid "Logout"
 msgstr "Ausloggen"
 
-#: templates/hub/components/todo_box.html:31
+#: templates/hub/base.html:96
+#, fuzzy
+#| msgctxt "Header Title"
+#| msgid "Spaces"
+msgid "Join Space"
+msgstr "Spaces"
+
+#: templates/hub/base.html:98
+#, fuzzy
+#| msgid "Selected Space"
+msgid "Create Space"
+msgstr "Augewählter Space"
+
+#: templates/hub/components/locale_box.html:16
+msgid "Go"
+msgstr "Los"
+
+#: templates/hub/components/todo_box.html:15
 msgctxt "Todos section title"
 msgid "Todos"
 msgstr "Todos"
 
-#: templates/hub/components/todo_box.html:35
+#: templates/hub/components/todo_box.html:19
 msgid "Open todos:"
 msgstr "Offene Todos:"
 
-#: templates/hub/components/todo_box.html:37
+#: templates/hub/components/todo_box.html:21
 msgid "Open todos assigned to you:"
 msgstr "Offene Todos, dir zugewiesen:"
 
-#: templates/hub/components/todo_box.html:40
+#: templates/hub/components/todo_box.html:24
 msgid "Weekly stats:"
 msgstr "Wöchentliche Stats:"
 
-#: templates/hub/components/todo_box.html:43
+#: templates/hub/components/todo_box.html:27
 msgid "Closed Todos:"
 msgstr "Fertige Todos:"
 
-#: templates/hub/login.html:37 templates/hub/signup.html:49
+#: templates/hub/login.html:16 templates/hub/signup.html:27
 msgid "Login"
 msgstr "Einloggen"
 
-#: templates/hub/login.html:49
+#: templates/hub/login.html:28
 msgid "Don't have an account?"
 msgstr "Noch keinen Account?"
 
-#: templates/hub/login.html:49 templates/hub/signup.html:45
+#: templates/hub/login.html:28 templates/hub/signup.html:16
+#: templates/hub/signup.html:23
 msgid "Sign Up"
 msgstr "Account erstellen"
 
-#: templates/hub/signup.html:49
+#: templates/hub/signup.html:27
 msgid "Already have an account?"
 msgstr "Bereits registriert?"

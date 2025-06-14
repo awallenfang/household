@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{% static 'hub/css/filters.css' %}">
     <link rel="stylesheet" href="{% static 'hub/css/text.css' %}">
     <link rel="stylesheet" href="{% static 'hub/css/todo-box.css' %}">
+    <link rel="stylesheet" href="{% static 'hub/css/locale.css' %}">
     <link rel="stylesheet" href="{% static 'space/css/space.css' %}">
     <title>{% block title %}{% trans 'Household Planner' context 'Page title' %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +53,10 @@
                 {% endif %}
                 {% include "space/components/quick_space.html" %}
             </div>
-            
+            <div class="locale-dropdown">
+                <a class="button" collapse-target="language-selector">{% trans 'Language' context 'Header Title' %}</a>
+                {% include "hub/components/locale_box.html" %}
+            </div>
             <a href="{% url 'hub:logout' %}" class="button">{% trans 'Logout' %}</a>
         </div>
         

@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+from django.utils import translation    
 from .forms import LoginForm, SignupForm
 from .models import Profile
 from todos.models import Todo
@@ -96,3 +96,8 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
 
+def set_language(request):
+    if request.method == 'POST':
+        language = request.POST.get('language')
+        if language:
+            translation.activate(language)

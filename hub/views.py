@@ -65,7 +65,7 @@ def signup(request):
     
     if request.method == "GET":
         form = SignupForm()
-        return render(request, "hub/signup.html", {'form': form})
+        return render(request, "registration/signup.html", {'form': form})
     
     
     form = SignupForm(request.POST)

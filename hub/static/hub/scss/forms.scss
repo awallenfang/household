@@ -4,10 +4,10 @@
 input {
     background-color: $black-500;
     border-radius: 5px;
-    border: solid 1px $black-400;
+    border: solid 1px $black-300;
     height: 1.5rem;
     &:focus {
-        border: solid 1px $black-400;
+        background-color: $black-400;
     }
 }
 
@@ -23,3 +23,41 @@ select {
     }
 }
 
+button {
+        appearance: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    color: var(--text);
+    display: inline-block;
+    line-height: 1rem;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+    font-family: 'Albert Sans', sans-serif;
+    font-size:medium;
+    background-color: $blue-500;
+    border: 1px solid $blue-400;
+    height: 2.25rem;
+    
+    &:disabled {
+        filter: grayscale(90%);
+        cursor: default;
+    }
+    &:hover  {
+        filter: brightness(110%);
+        text-decoration: none;
+        transition-duration: 0.1s;
+    }
+    &:active {
+        filter: brightness(130%);
+        transition: 0.1s;
+    }
+    &:focus {
+        outline: 1px transparent;
+    }
+}

@@ -1,0 +1,35 @@
+{%extends "hub/base.html" %}
+
+
+{% load static%}
+{% load i18n %}
+{% block header %}
+{% endblock %}
+
+{% block css_links %}
+    <link rel="stylesheet" href="{% static 'hub/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+             <div id="login-container mw-100">
+        <div id="login">
+            <h1>{% trans 'Login' %}</h1>
+            <form method="post" id="login-form">
+                {% csrf_token %}
+                {%if error_message%}
+                    <p id="error-message">{{error_message}}</p>
+                {%endif%}
+                {{form}}
+                <button class="button" id="submit" type="submit">Login</button>
+            </form>
+        </div>
+        
+        <div id="signup">
+            <p>{% trans "Forgot your password?" %} <a href="{% url 'password_reset' %}">{% trans 'Reset password!' %}</a></p>
+        </div>
+        <div id="signup">
+            <p>{% trans "Don't have an account?" %} <a href="{% url 'hub:signup' %}">{% trans 'Sign Up' %}</a></p>
+        </div>
+    </div>
+{%endblock content%}
+

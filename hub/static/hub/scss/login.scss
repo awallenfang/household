@@ -1,4 +1,5 @@
 @import 'colors';
+@import 'mixins';
 
 * {
     margin: 0;
@@ -23,6 +24,9 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    @mixin max-md {
+        width: 100%;
+    }
 }
 #login {
     width: 100%;
@@ -34,6 +38,7 @@
     display:flex;
     flex-direction: column;
     align-items: center;
+    padding: 1rem;
 }
 
 #signup {
@@ -58,19 +63,20 @@ h1 {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    gap: 2rem;
 }
 
-#login-form input {
-    margin: 1.5rem;
-}
+// #login-form input {
+//     margin: 1.5rem;
+// }
 
-#login-form button {
-    margin: 1.5rem;
-}
+// #login-form button {
+//     margin: 1.5rem;
+// }
 
-#login-form p {
-    margin: 1.5rem;
-}
+// #login-form p {
+//     margin: 1.5rem;
+// }
 
 // #login-form input {
 //     width: 100%;

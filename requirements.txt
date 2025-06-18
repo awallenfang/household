@@ -13,3 +13,4 @@ redis
 celery
 django-celery-beat
 django_sass
+django-gmailapi-backend

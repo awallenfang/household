@@ -182,5 +182,9 @@ CELERY_BEAT_SCHEDULE = {
     "Update todos": {
         "task": "todos.tasks.update_todo_schedules",
         "schedule": crontab(hour = 0, minute=0)
+    },
+    "Reset playground": {
+        "task": "space.tasks.reset_playground",
+        "schedule": crontab(hour = 0, minute=0)
     }
 }

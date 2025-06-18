@@ -20,6 +20,8 @@ class Profile(models.Model):
                                        null=True, 
                                        blank=True)
 
+    playground_account = models.BooleanField(_("Playground Account"), default=False)
+
     def __str__(self):
         return f'Profile: {self.user.username}'
     

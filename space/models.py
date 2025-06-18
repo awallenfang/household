@@ -14,6 +14,7 @@ class SharedSpace(models.Model):
     name = models.TextField(null=False, blank=False, verbose_name=_("Space name"), default=_("My Space"), max_length=100)
     invite_token = models.TextField(verbose_name= _("Invite Token"), max_length=10, null=False, blank=False)
     owner = models.ForeignKey('hub.Profile', verbose_name=_("Owner"), on_delete=models.CASCADE, null=True, blank=True)
+    locked = models.BooleanField(_("Locked"), default=False)
 
     def __str__(self):
         return f'Shared Space: {self.name}'
@@ -24,6 +25,8 @@ class SharedSpace(models.Model):
 
     @staticmethod
     def create_space(name: str, owner):
+        if owner.playground_account:
+            raise PermissionError("Playground accounts cannot create spaces")
         # string.digits[1:] is used to avoid the digit '0' in the token
         invite_token = ''.join(random.choice(string.ascii_uppercase + string.digits[1:]) for _ in range(10))
 
@@ -38,8 +41,10 @@ class SharedSpace(models.Model):
     
     @staticmethod
     def join(user, token):
+        if user.playground_account:
+            raise PermissionError("Playground accounts cannot join other spaces")
         try:
-            space_with_token = SharedSpace.objects.get(invite_token = token)
+            space_with_token = SharedSpace.objects.get(invite_token = token, locked = False)
         except SharedSpace.DoesNotExist as exc:
             raise InvalidTokenError("There is no space with the given token") from exc
         user.spaces.add(space_with_token)

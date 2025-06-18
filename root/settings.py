@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_celery_beat',
     'django_sass',
-    'gmail_backend',
+    'gmailapi_backend',
     'hub',
     'todos',
     'space',
@@ -189,3 +189,10 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(hour = 0, minute=0)
     }
 }
+
+if os.environ.get("GMAIL_API_CLIENT_ID"):
+    EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
+    GMAIL_API_CLIENT_ID = os.environ["GMAIL_API_CLIENT_ID"]
+    GMAIL_API_CLIENT_SECRET = os.environ["GMAIL_API_CLIENT_SECRET"]
+    GMAIL_API_REFRESH_TOKEN = os.environ["GMAIL_API_REFRESH_TOKEN"]
+

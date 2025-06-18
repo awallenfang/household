@@ -30,7 +30,9 @@ def kick_person(request, space_id, *args, **kwargs):
             space.leave(user_to_kick)
         else:
             return False    
-    return  True
+    return True
+
+
 
 def regen_token(request, space_id, *args, **kwargs):
     user = Profile.objects.get(user=request.user)

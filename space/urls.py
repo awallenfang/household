@@ -11,4 +11,5 @@ urlpatterns = [
     path('select_space/<int:space_id>', views.select_space, name="select_space"),
     path('create_space', views.create_space, name="create_space"),
     path('join_space', views.join_space, name="join_space"),
+    path('leave_space/<int:space_id>', views.leave_space, name="leave_space"),
 ]

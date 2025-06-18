@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
@@ -117,3 +117,11 @@ def delete_space(request, space_id):
     if space.owner == user:
         space.delete_space()
     return HttpResponseRedirect("/")
+
+@login_required
+def leave_space(request, space_id):
+    user = Profile.objects.get(user=request.user)
+    space = get_object_or_404(SharedSpace, id = space_id)
+    if user in space.profile_set.all():
+        space.leave(user)
+    return redirect("hub:hub")

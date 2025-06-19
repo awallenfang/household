@@ -7,14 +7,15 @@
     hx-target="closest .card"
     hx-swap="outerHTML">
         {% csrf_token %}
-        <div class="card-header font-w-500">
-            <div class="row gap-medium">
-                <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false">
-                {{ form.name }}
+        <div class="card-header font-w-500 cursor-pointer" collapse-target="collapse-{{todo.id}}">
+            <div class="row justify-between w-50p" >
+                {{form.name}}
+                {% if todo.schedule_state is not None%}
+                <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
+                {% endif %}
             </div>
-            <p>{{todo.assigned_user.user.username}}</p>
-            
-            <button type="button" class="dropdown-button" collapse-target="collapse-{{todo.id}}" onclick="toggleCollapse(event)">...</button>
+            <p>{{form.assigned_user}}</p>
+            <input type="submit" value="Save" class="button">
         </div>
         <div class="card-body" id="collapse-{{todo.id}}">
             <div class="row justify-between align-start">
@@ -23,7 +24,7 @@
                 </div>
                 
                 <div class="col gap-small">
-                    <input type="submit" value="Save" class="button">
+                    
 
                     <a class="button" 
                     hx-delete="{% url 'todos:delete_todo' todo.id %}" 
@@ -32,8 +33,6 @@
                     >
                         {% trans 'Delete!' %}
                     </a>
-                    <p>{% trans 'Assigned user:' %}</p>
-                    <p>{{form.assigned_user}}</p>
                 </div>
             </div>
         </div>

@@ -1,9 +1,8 @@
 {% load static%}
 {% load i18n %}
 <div class="card w-30vw minw-20 draggable-container" todo-id="{{todo.id}}">
-    <div class="card-header todo-header font-w-600 gap-small" ondblclick="editTodo({{todo.id}})" collapse-target="collapse-{{todo.id}}">
-        <div class="row justify-between w-50p" >
-            {% comment %} <img src="{% static 'todos/assets/drag.svg' %}" class="todo-drag-handle" draggable="false"> {% endcomment %}
+    <div class="card-header todo-header font-w-600 gap-small cursor-grab" >
+        <div class="row justify-between maxw-50p cursor-pointer" ondblclick="editTodo({{todo.id}})" collapse-target="collapse-{{todo.id}}">
         <p class="todo-title">{{ todo.name }}</p>
             {% if todo.schedule_state is not None%}
             <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >

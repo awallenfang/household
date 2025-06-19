@@ -108,6 +108,7 @@ class EditTodoView(UpdateView):
 
         # For some reason this doesn't populate the form properly
         context["form"] = self.form_class(profile.selected_space, instance=self.get_object())
+        context["todo"] = self.get_object()
         return context
     
     def form_valid(self, form):

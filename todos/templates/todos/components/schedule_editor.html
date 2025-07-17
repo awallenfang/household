@@ -19,16 +19,20 @@
         });
         setupUserDragEnv();
         setupPositionDragEnv()
-    })
-    // Save checked boxes for sending them on
-    // TODO: Make this into a multiselect form
-    var checks = document.getElementsByClassName("user-add-check")
 
-    for (var check of checks) {
-        check.addEventListener("change", (event) => {
-            userChecked(event)
-        })
-    }
+        // Save checked boxes for sending them on
+        // TODO: Make this into a multiselect form
+        var checks = document.getElementsByClassName("user-add-check")
+
+        for (var check of checks) {
+            console.log(check)
+            check.addEventListener("change", (event) => {
+                console.log(event)
+                userChecked(event)
+            })
+        }
+    })
+    
 
     
 

@@ -2,6 +2,24 @@
 {% load i18n %}
 
 <script>
+    $(document).ready(() => {
+        // Add event listener to rate changes
+        document.getElementById("rate-change-input").addEventListener("change", (event) => {
+            rateChanged(event)
+        });
+
+            
+        document.addEventListener("DOMContentLoaded", function(e) {
+            setupUserDragEnv(e);
+            setupPositionDragEnv(e)
+        })
+        document.addEventListener('htmx:afterSwap', function(e) {
+            setupUserDragEnv(e);
+            setupPositionDragEnv(e)
+        });
+        setupUserDragEnv();
+        setupPositionDragEnv()
+    })
     // Save checked boxes for sending them on
     // TODO: Make this into a multiselect form
     var checks = document.getElementsByClassName("user-add-check")
@@ -12,10 +30,7 @@
         })
     }
 
-    // Add event listener to rate changes
-    document.getElementById("rate-change-input").addEventListener("change", (event) => {
-        rateChanged(event)
-    })
+    
 
     // Callback for dropping users
     function drop_user(ev) {
@@ -139,16 +154,6 @@
         
     }
 
-    document.addEventListener("DOMContentLoaded", function(e) {
-        setupUserDragEnv(e);
-        setupPositionDragEnv(e)
-    })
-    document.addEventListener('htmx:afterSwap', function(e) {
-        setupUserDragEnv(e);
-        setupPositionDragEnv(e)
-    });
-    setupUserDragEnv();
-    setupPositionDragEnv()
 </script>
 <div class="floating">
     <div class="row justify-between">

@@ -309,8 +309,8 @@ class Todo(models.Model):
     
     @cached_property
     def get_next_assigned_user(self) -> Profile:
-        todo = Todo.objects.get(schedule_state__id = self)
         if self.schedule_state:
+            todo = Todo.objects.get(schedule_state__id = self.schedule_state.id)
             current_time = now().date()
             start_time = self.schedule_state.started_at
 

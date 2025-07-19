@@ -164,8 +164,6 @@ class TodoSchedule(models.Model):
                 self.schedule_turn = (self.schedule_turn + day_difference) % self.ordereduser_set.count()
                 new_turn = self.schedule_turn
 
-                self.last_check = now()
-                self.save()
                 if old_turn != new_turn:
                     user = self.get_current_user()
                     todo = Todo.objects.get(schedule_state = self)
@@ -180,6 +178,8 @@ class TodoSchedule(models.Model):
 
                         todo.assigned_user = self.get_current_user()
                         todo.save()
+        self.last_check = now()
+        self.save()
                     
 
     

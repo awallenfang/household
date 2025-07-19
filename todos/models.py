@@ -157,6 +157,9 @@ class TodoSchedule(models.Model):
         """
         date_now = now().date()
         last_date = self.last_check.date()
+        print(date_now)
+        print("BBBBBBBBBBBBBBBBBb")
+        print(last_date)
         if date_now > self.last_check.date():
             day_difference = (date_now - last_date).days
             print(day_difference)

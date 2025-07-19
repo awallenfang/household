@@ -19,6 +19,7 @@ services:
             - ./_logs/django:/var/log/django
             - ./_logs/celery_beat:/var/log/celery_beat
             - ./_logs/celery_worker:/var/log/celery_worker
+            - ./_logs/redis:/var/log/redis
         ports:
             - "5000:5000"
         env_file:

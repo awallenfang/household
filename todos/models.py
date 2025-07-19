@@ -166,7 +166,7 @@ class TodoSchedule(models.Model):
 
                 if old_turn != new_turn:
                     user = self.get_current_user()
-                    todo = Todo.objects.get(schedule_state = self)
+                    todo = self.todo_set.first()
                     self.last_check = now()
                     self.save()
 

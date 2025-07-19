@@ -170,7 +170,7 @@ class TodoSchedule(models.Model):
 
                     # If there are no users or this time no one is assigned set it to be closed
                     if user is None:
-                        todo.set_open()
+                        todo.set_closed()
                         todo.assigned_user = None
                         todo.save()
                     else:

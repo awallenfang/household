@@ -155,13 +155,13 @@ class TodoSchedule(models.Model):
         """
         Ticks the schedule rotation to continue it if there are day changes
         """
-        self.last_check = now()
-        self.save()
         date_now = now().date()
         last_date = self.last_check.date()
         if date_now > self.last_check.date():
             day_difference = (date_now - last_date).days
             if day_difference > 0:
+                self.last_check = now()
+                self.save()
                 old_turn = self.schedule_turn
                 self.schedule_turn = (self.schedule_turn + day_difference) % self.ordereduser_set.count()
                 new_turn = self.schedule_turn

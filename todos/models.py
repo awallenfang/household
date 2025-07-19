@@ -159,7 +159,7 @@ class TodoSchedule(models.Model):
         last_date = self.last_check
 
         day_difference = (date_now - last_date).days
-        self.schedule_turn = self.assigned_users.count()
+        self.schedule_turn = self.ordereduser_set.count()
         self.save()
         # if day_difference > 0:
         #     old_turn = self.schedule_turn

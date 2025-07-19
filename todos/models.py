@@ -80,7 +80,7 @@ class TodoSchedule(models.Model):
     def get_current_user(self) -> Profile:
         """
         Get the currently assigned user. 
-        If there are no users or if there is no assigned user in the next turn return none
+        If there are no users or if there is no assigned user this turn return none
         """
         users = OrderedUser.objects.filter(scheduled_todo = self).order_by("order")
         if len(users) == 0:
@@ -170,7 +170,7 @@ class TodoSchedule(models.Model):
 
                     # If there are no users or this time no one is assigned set it to be closed
                     if user is None:
-                        todo.set_closed()
+                        todo.set_open()
                         todo.assigned_user = None
                         todo.save()
                     else:

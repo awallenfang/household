@@ -169,15 +169,16 @@ class TodoSchedule(models.Model):
                     todo = Todo.objects.get(schedule_state = self)
 
                     # If there are no users or this time no one is assigned set it to be closed
-                    if user is None:
-                        todo.set_closed()
-                        todo.assigned_user = None
-                        todo.save()
-                    else:
-                        todo.set_open()
+                    todo.set_open()
+                    # if user is None:
+                    #     todo.set_closed()
+                    #     todo.assigned_user = None
+                    #     todo.save()
+                    # else:
+                    #     todo.set_open()
 
-                        todo.assigned_user = self.get_current_user()
-                        todo.save()
+                    #     todo.assigned_user = self.get_current_user()
+                    #     todo.save()
                     
         self.last_check = now()
         self.save()

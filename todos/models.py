@@ -166,7 +166,7 @@ class TodoSchedule(models.Model):
 
                 if old_turn != new_turn:
                     user = self.get_current_user()
-                    todo = self.todo_set.first()
+                    todo = Todo.objects.get(schedule_state__id = self)
                     self.last_check = now()
                     self.save()
 
@@ -309,6 +309,7 @@ class Todo(models.Model):
     
     @cached_property
     def get_next_assigned_user(self) -> Profile:
+        todo = Todo.objects.get(schedule_state__id = self)
         if self.schedule_state:
             current_time = now().date()
             start_time = self.schedule_state.started_at

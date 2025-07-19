@@ -161,27 +161,27 @@ class TodoSchedule(models.Model):
         day_difference = (date_now - last_date).days
         self.schedule_turn = self.assigned_users.count()
         self.save()
-        if day_difference > 0:
-            old_turn = self.schedule_turn
-            self.schedule_turn += day_difference % len(self.assigned_users.all())
-            self.save()
-            new_turn = self.schedule_turn
+        # if day_difference > 0:
+        #     old_turn = self.schedule_turn
+        #     self.schedule_turn += day_difference % len(self.assigned_users.all())
+        #     self.save()
+        #     new_turn = self.schedule_turn
 
-            if old_turn != new_turn:
-                user = self.get_current_user()
-                todo = Todo.objects.get(schedule_state = self)
+        #     if old_turn != new_turn:
+        #         user = self.get_current_user()
+        #         todo = Todo.objects.get(schedule_state = self)
 
-                # If there are no users or this time no one is assigned set it to be closed
-                todo.set_open()
-                # if user is None:
-                #     todo.set_closed()
-                #     todo.assigned_user = None
-                #     todo.save()
-                # else:
-                #     todo.set_open()
+        #         # If there are no users or this time no one is assigned set it to be closed
+        #         todo.set_open()
+        #         # if user is None:
+        #         #     todo.set_closed()
+        #         #     todo.assigned_user = None
+        #         #     todo.save()
+        #         # else:
+        #         #     todo.set_open()
 
-                #     todo.assigned_user = self.get_current_user()
-                #     todo.save()
+        #         #     todo.assigned_user = self.get_current_user()
+        #         #     todo.save()
                     
         self.last_check = now()
         self.save()

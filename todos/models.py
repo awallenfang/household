@@ -160,6 +160,7 @@ class TodoSchedule(models.Model):
 
         day_difference = (date_now - last_date).days
         self.schedule_turn += 1 % len(self.assigned_users.all())
+        self.save()
         if day_difference > 0:
             old_turn = self.schedule_turn
             self.schedule_turn += day_difference % len(self.assigned_users.all())

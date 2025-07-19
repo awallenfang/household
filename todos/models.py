@@ -155,36 +155,30 @@ class TodoSchedule(models.Model):
         """
         Ticks the schedule rotation to continue it if there are day changes
         """
-        date_now = now().date()
-        last_date = self.last_check.date()
-        print(date_now)
-        print("BBBBBBBBBBBBBBBBBb")
-        print(last_date)
-        if date_now > self.last_check.date():
-            day_difference = (date_now - last_date).days
-            print(day_difference)
-            print("AAAAAAAAAAAAAAAAAAAAA")
-            print(day_difference)
-            if day_difference > 0:
-                old_turn = self.schedule_turn
-                self.schedule_turn += day_difference % len(self.assigned_users.all())
-                new_turn = self.schedule_turn
+        date_now = now()
+        last_date = self.last_check
 
-                if old_turn != new_turn:
-                    user = self.get_current_user()
-                    todo = Todo.objects.get(schedule_state = self)
+        day_difference = (date_now - last_date).days
+        if day_difference > 0:
+            old_turn = self.schedule_turn
+            self.schedule_turn += day_difference % len(self.assigned_users.all())
+            new_turn = self.schedule_turn
 
-                    # If there are no users or this time no one is assigned set it to be closed
-                    todo.set_open()
-                    # if user is None:
-                    #     todo.set_closed()
-                    #     todo.assigned_user = None
-                    #     todo.save()
-                    # else:
-                    #     todo.set_open()
+            if old_turn != new_turn:
+                user = self.get_current_user()
+                todo = Todo.objects.get(schedule_state = self)
 
-                    #     todo.assigned_user = self.get_current_user()
-                    #     todo.save()
+                # If there are no users or this time no one is assigned set it to be closed
+                todo.set_open()
+                # if user is None:
+                #     todo.set_closed()
+                #     todo.assigned_user = None
+                #     todo.save()
+                # else:
+                #     todo.set_open()
+
+                #     todo.assigned_user = self.get_current_user()
+                #     todo.save()
                     
         self.last_check = now()
         self.save()

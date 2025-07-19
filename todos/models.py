@@ -185,7 +185,7 @@ class TodoSchedule(models.Model):
     
 
     def __str__(self):
-        todo = Todo.objects.get(schedule_state__id = self.id)
+        todo = Todo.objects.get(schedule_state = self)
         return f'Schedule for {todo.name} in {todo.space}'
 #######
 

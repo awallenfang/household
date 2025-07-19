@@ -167,6 +167,8 @@ class TodoSchedule(models.Model):
                 if old_turn != new_turn:
                     user = self.get_current_user()
                     todo = Todo.objects.get(schedule_state = self)
+                    self.last_check = now()
+                    self.save()
 
                     # If there are no users or this time no one is assigned set it to be closed
                     if user is None:
@@ -178,8 +180,6 @@ class TodoSchedule(models.Model):
 
                         todo.assigned_user = self.get_current_user()
                         todo.save()
-        self.last_check = now()
-        self.save()
                     
 
     

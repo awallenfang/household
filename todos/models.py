@@ -150,36 +150,69 @@ class TodoSchedule(models.Model):
             ord_usr.order = i
             ord_usr.save()
 
-
     def tick_rotation(self):
         """
         Ticks the schedule rotation to continue it if there are day changes
         """
+        user_count = self.ordereduser_set.count()
+        if user_count == 0:
+            # If no users, just update last_check and exit, as there's no rotation to tick
+            self.last_check = now()
+            self.save()
+            return
+
         date_now = now().date()
         last_date = self.last_check.date()
-        if date_now > self.last_check.date():
+        
+        if date_now > last_date:
             day_difference = (date_now - last_date).days
-            if day_difference > 0:
+
+            # Number of turns to advance
+            turns_to_advance = day_difference // self.day_rotation
+            
+            if turns_to_advance > 0: # Only advance if a full rotation period has passed
                 old_turn = self.schedule_turn
-                self.schedule_turn = (self.schedule_turn + day_difference) % self.ordereduser_set.count()
+                
+                # Advance the turn by the number of full rotations, modulo the number of users
+                self.schedule_turn = (self.schedule_turn + turns_to_advance) % user_count
                 new_turn = self.schedule_turn
 
+                # Only proceed if the turn has actually changed
                 if old_turn != new_turn:
-                    user = self.get_current_user()
-                    todo = Todo.objects.get(schedule_state__id = self.id)
+                    try:
+                        todo = Todo.objects.get(schedule_state__id = self.id)
+                    except Todo.DoesNotExist:
+                        self.last_check = now()
+                        self.save()
+                        return
+
                     self.last_check = now()
                     self.save()
-
-                    # If there are no users or this time no one is assigned set it to be closed
+                    
+                    user = self.get_current_user # Use the cached property
+                    
+                    # Update Todo's state and assigned user
                     if user is None:
+                        # If the new turn points to an empty/None user slot
+                        # Assuming set_closed() is defined on the Todo model
                         todo.set_closed()
                         todo.assigned_user = None
-                        todo.save()
                     else:
+                        # If the new turn points to a user slot
+                        # Assuming set_open() is defined on the Todo model
                         todo.set_open()
-
-                        todo.assigned_user = self.get_current_user()
-                        todo.save()
+                        todo.assigned_user = user # self.get_current_user returns the profile object
+                    
+                    todo.save()
+                else:
+                    # Turn hasn't changed but days have passed, still update last_check
+                    self.last_check = now()
+                    self.save()
+            else:
+                # Day(s) passed, but not enough for a full rotation turn.
+                # Just update last_check to prevent re-running on the same day(s).
+                self.last_check = now()
+                self.save()
                     
 
     

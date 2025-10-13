@@ -1,9 +1,9 @@
 {% load i18n %}
 
-<div class="col w-10 card collapse" id="language-selector">
+<div class="container" >
     <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
     <input name="next" type="hidden" value="/">
-    <select name="language">
+    <select name="language" class="form-control">
         {% get_current_language as LANGUAGE_CODE %}
         {% get_available_languages as LANGUAGES %}
         {% get_language_info_list for LANGUAGES as languages %}
@@ -13,7 +13,7 @@
             </option>
         {% endfor %}
     </select>
-    <input class="button" type="submit" value="{% trans 'Go' %}">
+    <input class="button form-control"  type="submit" value="{% trans 'Go' %}">
 </form>
 
 </div>

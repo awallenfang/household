@@ -166,3 +166,4 @@ data/
 _logs/
 config.env
 redis/
+served_static/

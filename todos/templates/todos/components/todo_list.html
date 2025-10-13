@@ -1,11 +1,30 @@
 {% load i18n %}
 {% load static %}
 {% load filters %}
-<div id="todo-list">
+<style>
+    /* Target the accordion items in your horizontal layout */
+#todo-block .accordion-item {
+    /* Remove default accordion borders and rounding */
+    border: 1px solid rgba(0, 0, 0, .125); /* Re-add a standard card border */
+    border-radius: .25rem; /* Add standard card rounding */
+    margin-bottom: 1rem; /* Add spacing below each item */
+}
+
+/* Ensure the open item looks correct */
+#todo-block .accordion-item:has(.card-body:not(.show)) {
+    /* Remove any background/box-shadow that extends beyond the item */
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+
+</style>
+<div class="container" id="todo-list">
     <div id="schedule-block"></div>
     <h2>{% trans 'Open Todos' %}</h2>
-    <div class="row align-start justify-center gap-medium f-wrap" id="todo-block">
-
+    <div class="d-flex flex-row align-start justify-content-around flex-wrap row-gap-2" id="todo-block">
+        <div id="open-accordion-parent" class="d-none"></div>
         {% for todo in todos%}
             <div class="todo-drop-spot" 
             ondrop="drop(event)"  
@@ -17,7 +36,7 @@
 
             {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
         {% endfor %}
-
+            <!--
         {% comment %} Edge Case if the todos are empty. If there's nothing at all, there's nothing to move anyways {% endcomment %}
         {% if todos|length == 0 and finished_todos|length > 0%}
             <div class="todo-drop-spot" 
@@ -35,18 +54,18 @@
             right="-1"
             todo-status="open"
             ></div>
-        {%endif%}
+        {%endif%} -->
+        <div class="d-flex align-items-center justify-content-center w-25">
 
-        <div class="row justify-around w-20vw align-self-center">
-            <a class="button new-todo-btn" hx-post="{% url 'todos:add_todo' %}?hxp=create_todo"
+            <a class="btn btn-primary " hx-post="{% url 'todos:add_todo' %}?hxp=create_todo"
             hx-target="#todo-list"
             hx-swap="outerHTML">{% trans 'New Todo' %}</a>
         </div>
     </div>
 
     <h2>{% trans 'Finished Todos' %}</h2>
-    <div class="row align-start justify-center gap-medium f-wrap" id="todo-block">
-        {% for todo in finished_todos%}
+    <div class="d-flex flex-row align-start justify-content-around flex-wrap row-gap-2" id="todo-block">
+         {% for todo in finished_todos%}
             <div class="todo-drop-spot" 
             ondrop="drop(event)"  
             ondragover="allowDrop(event)" 
@@ -57,7 +76,7 @@
 
             {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
         {% endfor %}
-
+        <!--
         {% comment %} Edge Case if the todos are empty. If there's nothing at all, there's nothing to move anyways {% endcomment %}
         {% if finished_todos|length == 0 and todos|length > 0%}
             <div class="todo-drop-spot" 
@@ -75,7 +94,7 @@
             right="-1"
             todo-status="done"
             ></div>
-        {%endif%}
+        {%endif%} -->
         
     </div>
 

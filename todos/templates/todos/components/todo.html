@@ -1,32 +1,33 @@
 {% load static%}
 {% load i18n %}
-<div class="card w-30vw minw-20 draggable-container" todo-id="{{todo.id}}">
-    <div class="card-header todo-header font-w-600 gap-small cursor-grab" >
-        <div class="row justify-between maxw-50p cursor-pointer" ondblclick="editTodo({{todo.id}})" collapse-target="collapse-{{todo.id}}">
-        <p class="todo-title">{{ todo.name }}</p>
+<div class="accordion-item card" style="width: 30%;" todo-id="{{todo.id}}">
+    <div class="accordion-header card-header d-flex flex-row justify-content-between border" >
+        <div class="d-flex flex-row justify-content-between align-items-center column-gap-2" ondblclick="editTodo({{todo.id}})" data-bs-toggle="collapse" data-bs-target="#collapse-{{todo.id}}">
+            {{ todo.name }}
             {% if todo.schedule_state is not None%}
-            <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
+                <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
+            {% endif %}
+            <div class="vr"></div>
+            {% if todo.schedule_state is None %}
+                {{ todo.assigned_user.user.username }}
+            {% else %}
+                {% with current=todo.schedule_state.get_current_user %}
+                    {{ current.user.username }}
+                {% endwith %}
             {% endif %}
         </div>
-        {% if todo.schedule_state is None %}
-            <p>{{ todo.assigned_user.user.username }}</p>
-        {% else %}
-            {% with current=todo.schedule_state.get_current_user %}
-            <p>{{ current.user.username }}</p>
-            {% endwith %}
-        {% endif %}
         {% if not todo.done %}
-            <a class="button" 
+            <a class="btn btn-primary btn-sm" 
             hx-post="{% url 'todos:todo' todo.id %}?hxp=close_todo"
             hx-target="#todo-list">{% trans 'Done' %}</a>
         {% else %}
-            <a class="button" 
+            <a class="btn btn-primary btn-sm" 
             hx-post="{% url 'todos:todo' todo.id %}?hxp=open_todo"
             hx-target="#todo-list">{% trans 'Reopen' %}</a>
         {% endif %}
     </div>
-    <div class="card-body collapse" id="collapse-{{todo.id}}">
-        <div class="row justify-between">
+    <div class="card-body accordion-collapse collapse" id="collapse-{{todo.id}}" data-bs-parent="#open-accordion-parent">
+        <div class="accordion-body row justify-between">
             <div class="w-60p">
                 <p>{{todo.description}} </p>
             </div>

@@ -1,21 +1,19 @@
 {% load static %}
 {% load i18n %}
 
-<link rel="stylesheet" href="{% static 'hub/css/todo-box.css' %}">
 
 <style>
 #todo-gradient {
-    background: conic-gradient(var(--strong-highlight) {{gradient_deg}}deg, var(--light-error-highlight) {{gradient_deg}}deg 360deg);
+    background: conic-gradient(green {{gradient_deg}}deg, red {{gradient_deg}}deg 360deg);
     border-radius: 50%;
-
 }
 </style>
-<div class="card w-30vw mw-100p" id="todo-card">
-    <div class="card-header background-light-highlight">
+<div class="card">
+    <div class="card-header">
         {% trans 'Todos' context 'Todos section title' %}
     </div>
     <div class="card-body">
-        <div class="col align-start gap-medium">
+        <div class="d-flex flex-column align-items-start">
             <p>{% trans "Open todos:" %} {{ open_todo_amt }}</p>
 
             <p>{% trans 'Open todos assigned to you:' %} {{ open_assigned_todo_amt }}</p>
@@ -24,8 +22,8 @@
             <div class="row">
                 <div class="col">
                     <span>{% trans 'Closed Todos:' %}</span>
-                    <div class="w-5 h-5 col align-center justify-center" id="todo-gradient">
-                        <div id="todo-hub-box-mask" class="w-4 h-4 col align-center justify-center">
+                    <div class="d-flex flex-row justify-content-center align-items-center" id="todo-gradient" style="width: 5rem; height: 5rem;">
+                        <div id="todo-hub-box-mask" class="d-flex flex-column justify-content-center align-items-center" style="width: 4rem; height: 4rem;">
                             {{gradient_percent}}%
                         </div>
                     </div>

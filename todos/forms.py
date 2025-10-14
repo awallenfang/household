@@ -9,7 +9,7 @@ class TodoForm(forms.ModelForm):
         model = Todo
         fields = ["description", "name", "assigned_user"]
         widgets = {
-            "description": forms.Textarea
+            "description": forms.Textarea(attrs={"cols": 25, "rows": 10})
         }
         
     def __init__(self, space=None, *args, **kwargs):

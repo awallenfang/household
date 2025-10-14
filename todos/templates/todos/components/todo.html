@@ -27,28 +27,28 @@
         {% endif %}
     </div>
     <div class="card-body accordion-collapse collapse" id="collapse-{{todo.id}}" data-bs-parent="#open-accordion-parent">
-        <div class="accordion-body row justify-between">
-            <div class="w-60p">
+        <div class="accordion-body d-flex flex-row justify-content-between">
+            <div class="w-75">
                 <p>{{todo.description}} </p>
             </div>
-            <div class="w-40p col gap-small">
+            <div class="w-25 d-flex flex-column align-items-center row-gap-1">
                 
-                <a class="button" hx-post="{% url 'todos:edit_todo' todo.id %}"
+                <a class="btn btn-primary btn-sm" hx-post="{% url 'todos:edit_todo' todo.id %}"
                 hx-target="closest .card"
                 hx-swap="outerHTML">{% trans 'Edit' %}</a>
                 {% if todo.schedule_state is None%}
-                    <a class="button" 
+                    <a class="btn btn-primary btn-sm" 
                     hx-get="{% url 'todos:todo' todo.id %}?hxp=add_schedule"
                     hx-target="closest .card"
                     hx-swap="innerHTML">{% trans 'Add schedule' %}</a>
                 {%else%}
-                    <a class="button" 
+                    <a class="btn btn-primary btn-sm" 
                     hx-get="{% url 'todos:schedule_editor' todo.id %}"
                     hx-target="#schedule-block"
                     hx-swap="innerHTML"
                     onclick="clearSelectedUsers()">{% trans 'Schedule' %}</a>
                 {% endif %}
-                <a class="button" 
+                <a class="btn btn-primary btn-sm" 
                 hx-get="{% url 'todos:delete_todo' todo.id %}?hxp=todo_list" 
                 hx-confirm="{% trans 'Are you sure you would like to delete this todo?' %}%"
                 hx-target="#todo-list"

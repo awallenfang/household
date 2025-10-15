@@ -7,6 +7,8 @@ services:
             - config.env
         ports:
             - "5432:5432"
+        networks:
+            - net
     web:
         build: .
         command: bash debug_startup.sh
@@ -19,6 +21,8 @@ services:
         depends_on:
             - db
             - redis
+        networks:
+            - net
     redis:
         image: redis:8.0.2
         restart: always
@@ -27,3 +31,8 @@ services:
         command: redis-server --save 20 1 --loglevel warning
         volumes: 
             - ./redis/cache:/data
+        networks:
+            - net
+networks:
+  net:
+    external: true

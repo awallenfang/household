@@ -27,5 +27,6 @@ urlpatterns = [
     path('', include(("hub.urls", "hub"), namespace="hub")),
     path('todos/', include(("todos.urls", "urls"), namespace="todos")),
     path('space/', include(("space.urls", "space"), namespace="space")),
+    path('budget/', include(("budget.urls", "budget"), namespace="budget")),
     path('accounts/', include("django.contrib.auth.urls"))
 ) + debug_toolbar_urls()

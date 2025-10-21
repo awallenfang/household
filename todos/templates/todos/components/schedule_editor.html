@@ -235,7 +235,7 @@
             <a hx-get="{% url 'todos:schedule_editor' todo.id%}?hxp=remove_schedule" 
             hx-target="#todo-list"
             hx-swap="innerHTML" 
-            onclick="return confirm('{% trans 'Are you sure? By removing the schedule all the settings will be lost.' %}%')"
+            onclick="return confirm('{% trans 'Are you sure? By removing the schedule all the settings will be lost.' %}')"
             class="button">
                 {% trans 'Remove Schedule' %}
             </a>

@@ -57,9 +57,12 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_sass',
     'gmailapi_backend',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'hub',
     'todos',
     'space',
+    'budget'
 ]
 
 MIDDLEWARE = [
@@ -197,3 +200,6 @@ if os.environ.get("GMAIL_API_CLIENT_ID"):
     GMAIL_API_CLIENT_SECRET = os.environ["GMAIL_API_CLIENT_SECRET"]
     GMAIL_API_REFRESH_TOKEN = os.environ["GMAIL_API_REFRESH_TOKEN"]
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"

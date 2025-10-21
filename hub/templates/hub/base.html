@@ -66,6 +66,9 @@
                     <li class="nav-item">
                         <a href="{% url 'todos:todos' %}" class="nav-link">{% trans 'Todos' context 'Header Title' %}</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{% url 'budget:budget_dashboard' %}" class="nav-link">{% trans 'Budgeting' context 'Header Title' %}</a>
+                    </li>
                 {% endif %}
                 <li class="nav-item dropdown">
                     {% if selected_space%}

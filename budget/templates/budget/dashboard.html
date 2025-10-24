@@ -4,5 +4,56 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-{% crispy current_form %}
+<div class="container">
+    <form method="post">
+        <div class="card">
+            <h5 class="card-header">
+                {% trans 'Week entries' %}
+            </h5>
+            <div class="card-body">
+                {% crispy current_form helper %}
+            </div>
+        </div>
+        <div class="card">
+            <h5 class="card-header">
+                {% trans 'Weekly stats' %}
+            </h5>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for user, sum in people_sum.items %}
+                    {% if user == "open"%}
+                    <li class="list-group-item">{% trans 'Unclear' %}: {{sum}}</li>
+                    {% else %}
+                    <li class="list-group-item">{{user}}: {{sum}}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                <span>{% trans 'Outstanding sum' %}: <b>{{outstanding_sum}}</b></span>
+
+                <div class="accordion" id="distributionAccordion">
+                    {% for person, dist in week.get_distribution.items %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-{{person.id}}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{person.id}}" aria-expanded="false" aria-controls="collapse-{{person.id}}">
+                            {{person}}
+                        </button>
+                        </h2>
+                        <div id="collapse-{{person.id}}" class="accordion-collapse collapse" aria-labelledby="heading-{{person.id}}" data-bs-parent="#distributionAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                            {% for outstanding in dist%}
+                                <li class="list-group-item">{{outstanding.0}} : {{outstanding.1}}</li>
+                            {% endfor%}
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+                {% crispy week_form %}
+            </div>
+        </div>
+    </form>
+
+</div>
 {% endblock %}

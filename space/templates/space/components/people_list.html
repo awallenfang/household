@@ -2,28 +2,34 @@
 {% load i18n %}
 
 <div class="col gap-small pt-1 pb-2 align-center" id="people-list">
-    {% for person in joined_people %}
-        <div class="p-05 background-light-blue border-light-blue border-radius-05 row justify-between w-80p h-3">
-            <b>{{ person.user.username }}</b>
-            {% if space.owner == person %}
-                <span>{% trans 'Owner' %}</span>
-            {% endif %}
-            {% if person.user == request.user %}
-                <a href="{% url 'space:leave_space' space.id %}" onclick="return confirm('{% trans 'Are you sure? By leaving as the last person the space and all connected data will be lost!' %}')">
-                                            <img src="{% static 'space/assets/door-kick.svg' %}" alt="{% blocktranslate with space_name=space.name %}Leave {{space_name}}{% endblocktranslate %}" title="{% blocktranslate with space_name=space.name %}Leave {{space_name}}{% endblocktranslate %}">
+    <ul class="list-group">
 
-                </a>
-            {% else %}
-                {% if space.owner == user%}
-                    <a hx-delete="{% url 'space:space_view' space.id %}?hxp=kick_person&person_id={{ person.id }}" 
-                    hx-confirm = "{% trans 'Are you sure that you want to kick this person from the space?' %}%"
-                    hx-target="#people-list"
-                    hx-swap="outerHTML">
-                        <img src="{% static 'space/assets/door-kick.svg' %}" alt="{% blocktranslate with user_name=person.user.username%}Kick {{user_name}}{% endblocktranslate %}" title="{% blocktranslate with user_name=person.user.username%}Kick {{user_name}}{% endblocktranslate %}">
-                    </a>
+        {% for person in joined_people %}
+        <li class="list-group-item">
+
+            <div class="d-flex align-items-center justify-content-between">
+                <b>{{ person.user.username }}</b>
+                {% if space.owner == person %}
+                    <span>{% trans 'Owner' %}</span>
                 {% endif %}
-            {% endif %}
-        </div>
+                {% if person.user == request.user %}
+                    <a href="{% url 'space:leave_space' space.id %}" onclick="return confirm('{% trans 'Are you sure? By leaving as the last person the space and all connected data will be lost!' %}')">
+                                                <img src="{% static 'space/assets/door-kick.svg' %}" alt="{% blocktranslate with space_name=space.name %}Leave {{space_name}}{% endblocktranslate %}" title="{% blocktranslate with space_name=space.name %}Leave {{space_name}}{% endblocktranslate %}">
+    
+                    </a>
+                {% else %}
+                    {% if space.owner == user%}
+                        <a hx-delete="{% url 'space:space_view' space.id %}?hxp=kick_person&person_id={{ person.id }}" 
+                        hx-confirm = "{% trans 'Are you sure that you want to kick this person from the space?' %}%"
+                        hx-target="#people-list"
+                        hx-swap="outerHTML">
+                            <img src="{% static 'space/assets/door-kick.svg' %}" alt="{% blocktranslate with user_name=person.user.username%}Kick {{user_name}}{% endblocktranslate %}" title="{% blocktranslate with user_name=person.user.username%}Kick {{user_name}}{% endblocktranslate %}">
+                        </a>
+                    {% endif %}
+                    {% endif %}
+            </div>
+        </li>
     {% endfor %}
+    </ul>
 </div>
 

@@ -9,19 +9,7 @@
     <script src="{% static 'hub/lib/htmx-2.0.4.min.js' %}"></script>  
     <script src="{% static 'hub/lib/popper.min.js' %}" defer></script>  
     <script src="{% static 'hub/lib/bootstrap.min.js' %}" defer></script>  
-    <!-- <link rel="stylesheet" href="{% static 'hub/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/forms.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/components.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/border.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/base_colors.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/flex.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/spacing.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/sizing.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/filters.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/text.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/todo-box.css' %}">
-    <link rel="stylesheet" href="{% static 'hub/css/locale.css' %}">
-    <link rel="stylesheet" href="{% static 'space/css/space.css' %}"> -->
+
     <link rel="stylesheet" href="{% static 'hub/css/bootstrap-grid.min.css' %}">
     <link rel="stylesheet" href="{% static 'hub/css/bootstrap-grid.rtl.min.css' %}">
     <link rel="stylesheet" href="{% static 'hub/css/bootstrap-reboot.min.css' %}">
@@ -72,11 +60,11 @@
                 {% endif %}
                 <li class="nav-item dropdown">
                     {% if selected_space%}
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >{{selected_space.name}}</a>
+                        <a class="nav-link dropdown-toggle text-truncate" style="max-width: 10rem;"  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >{{selected_space.name}}</a>
                     {% else %}
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >{% trans 'Spaces' context 'Header Title' %}</a>
                     {% endif %}
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" style="min-width: 15rem;">
                         {% include "space/components/quick_space_new.html" %}
                     </ul>
                 </li>

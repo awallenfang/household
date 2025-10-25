@@ -3,7 +3,7 @@ from datetime import date
 from django.db import models, transaction
 from django.db.models import F
 from django.utils.functional import cached_property
-from django.utils.timezone import localtime, now
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from hub.models import SharedSpace, Profile
 

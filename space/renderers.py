@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render
-from hub.decorators import space_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+
+from hub.decorators import space_required
 from hub.models import Profile
 from space.models import SharedSpace
 

@@ -1,9 +1,9 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import UpdateView
 
 from hub.models import Profile
 from hub.decorators import space_required

@@ -38,8 +38,7 @@ def render_todo(request, todo_id, *args, **kwargs):
 
     if todo.space in profile.get_spaces:
         return render(request, "todos/components/todo.html", {'todo': todo})
-    else:
-        return empty(request)
+    return empty(request)
 
 @login_required
 @space_required
@@ -63,5 +62,4 @@ def render_schedule_editor(request, todo_id):
                     "existing_order": existing_order, 
                     "current_assignment_idx": current_assignment, 
                     "rate": rate})
-    else:
-        return empty(request)
+    return empty(request)

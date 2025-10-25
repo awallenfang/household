@@ -1,10 +1,10 @@
 import logging
 
 from celery import shared_task
+from django.contrib.auth.models import User
+
 from .models import SharedSpace
 from todos.models import Todo
-
-from django.contrib.auth.models import User
 from hub.models import Profile
 
 playground_todos = [

@@ -1,13 +1,14 @@
+from decimal import Decimal
+from datetime import datetime, timedelta
+from datetime import date
+
 from django.db import models
 from django.db.models import CASCADE
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import localtime, now
 from django.contrib.auth.models import User
-from hub.models import Profile
-from decimal import Decimal
 
-from datetime import datetime, timedelta
-from datetime import date
+from hub.models import Profile
 from space.models import SharedSpace
 
 
@@ -27,14 +28,16 @@ class BudgetWeekList(models.Model):
         user = Profile.objects.get(user = request.user)
         selected_space = user.selected_space
 
-        date = now().date()
-        monday = date - timedelta(days=date.weekday())
+        cur_date = now().date()
+        monday = cur_date - timedelta(days=cur_date.weekday())
         return BudgetWeekList.objects.get_or_create(week=monday, space = selected_space)[0]
 
     @staticmethod
-    def get_list_from_date(request, date: date):
-        monday = date - timedelta(days=date.weekday())
-        return BudgetWeekList.objects.get_or_create(week=monday)[0]
+    def get_list_from_date(request, list_date: date):
+        user = Profile.objects.get(user = request.user)
+        selected_space = user.selected_space
+        monday = list_date - timedelta(days=list_date.weekday())
+        return BudgetWeekList.objects.get_or_create(week=monday, space = selected_space)[0]
 
     def get_sum(self, include_cleared = False):
         people_sum = {}
@@ -59,7 +62,6 @@ class BudgetWeekList(models.Model):
         Returns what everyone gets from everyone else per person.
         """
         people_sum = self.get_sum()
-        distribution = {}
         people_amt = len(people_sum)
         if "open" in people_sum.keys():
             people_amt -= 1
@@ -71,7 +73,6 @@ class BudgetWeekList(models.Model):
         sendings = {}
         # Set up sendings
         for p in people:
-            own_amt = people_sum[p]
             sendings[p] = []
             for o_p in people:
                 if o_p == p:

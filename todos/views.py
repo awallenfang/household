@@ -1,5 +1,4 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import ListView, View, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
@@ -47,7 +46,7 @@ class TodoDashboard(HTMXMixin, ListView):
         })
         return context
     
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request, **kwargs):
         """
         Handle the deletion of a todo item.
         """
@@ -67,7 +66,7 @@ class DeleteTodoView(HTMXMixin, View):
     }
 
     def delete(self, request, todo_id):
-        delete_todo(todo_id)
+        delete_todo(request, todo_id)
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(space_required, name='dispatch')

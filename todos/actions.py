@@ -1,8 +1,8 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from todos.models import Todo
 from hub.models import Profile
-from django.contrib.auth.decorators import login_required
 from hub.decorators import space_required
-from django.shortcuts import get_object_or_404
 
 @login_required
 @space_required
@@ -62,7 +62,7 @@ def create_todo(request, *args, **kwargs):
         todo.assign_user(user)
 
         return True
-    except:
+    except Exception:
         return False
 
 @login_required
@@ -99,14 +99,15 @@ def add_users(request, *args, **kwargs):
     todo = Todo.objects.get(id = todo_id)
     if todo.space == Profile.objects.get(user = request.user).selected_space:
         if len(users) > 0:
-            ids = map(int, users)
+            ids = [int(u) for u in users]
             todo = Todo.objects.get(id = todo_id)
-            for user_id in ids:
-                if user_id == -1:
-                    todo.schedule_state.add_empty()
-                else:
-                    user = get_object_or_404(Profile, id = user_id)
-                    todo.schedule_state.add_user(user)
+            if todo.schedule_state:
+                for user_id in ids:
+                    if user_id == -1:
+                        todo.schedule_state.add_empty()
+                    else:
+                        user = get_object_or_404(Profile, id = user_id)
+                        todo.schedule_state.add_user(user)
         return True
     return False
 

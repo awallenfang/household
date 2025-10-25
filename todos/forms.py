@@ -12,7 +12,7 @@ class TodoForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"cols": 25, "rows": 10})
         }
         
-    def __init__(self, space=None, *args, **kwargs):
+    def __init__(self, *args, space=None,  **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["description"].required = False
         if space:

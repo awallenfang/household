@@ -8,12 +8,16 @@ from hub.models import Profile
 from django.contrib.auth.decorators import login_required
 from hub.decorators import space_required
 from django.utils.decorators import method_decorator
-
+from hub.mixins import HTMXMixin
+from .renderers import create_budget_form
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
 @method_decorator(space_required, name='dispatch')
-class WeeklyDashboard(TemplateView):
+class WeeklyDashboard(HTMXMixin, TemplateView):
     template_name = "budget/dashboard.html"
+    partials = {
+        "add_form": create_budget_form
+    }
 
     def get_context_data(self, **kwargs: Any):
         context = super().get_context_data(**kwargs)
@@ -26,12 +30,16 @@ class WeeklyDashboard(TemplateView):
             'selected_space': selected_space
         })
         context["week"] = BudgetWeekList.get_current_list(self.request)
-        context["current_form"] = inlineformset_factory(BudgetWeekList, BudgetWeekListItem, BudgetListEntryForm, extra=5, can_delete=True)(instance=context["week"])
+        formset = inlineformset_factory(BudgetWeekList, BudgetWeekListItem, BudgetListEntryForm, extra=5, can_delete=True)(instance=context["week"], initial = [{"paid_by": self.request.user} for _ in range(5)])
+
+        context["current_form"] = formset
         context["helper"] = BudgetListEntryFormHelper()
         people_sum = context["week"].get_sum()
         context["people_sum"] = people_sum
         context["outstanding_sum"] = sum(map(lambda k: people_sum[k], people_sum.keys()))
         context["week_form"] = BudgetListForm(instance = context["week"])
+
+        
         return context
 
     def post(self, request, *args, **kwargs):

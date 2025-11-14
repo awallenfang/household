@@ -4,6 +4,26 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+<script>
+    function cloneMore(selector, type) {
+        var newElement = $(selector).clone(true);
+        console.log(selector)
+        console.log($(selector))
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        newElement.find('label').each(function() {
+            var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+            $(this).attr('for', newFor);
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+    }
+</script>
 <div class="container">
     <form method="post">
         <div class="card">
@@ -11,7 +31,24 @@
                 {% trans 'Week entries' %}
             </h5>
             <div class="card-body">
-                {% crispy current_form helper %}
+                <table class="table">
+                    <thead>
+                        <th>{% trans 'Cost cleared'  %}</th>
+                        <th>{% trans 'Label'  %}</th>
+                        <th>{% trans 'Amount'  %}</th>
+                        <th>{% trans 'Paid by'  %}</th>
+                    </thead>
+                    <tbody id="budget-forms">
+
+                        {% crispy current_form helper %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary btn-sm" 
+                {% comment %} hx-get="{% url 'budget:budget_dashboard' %}?hxp=add_form" 
+                hx-target="#budget-forms" 
+                hx-swap="beforeend" {% endcomment %}
+                onclick="cloneMore('tbody:nth-last-child(-n + 3)', 'week_items')"
+                >Add</button>
             </div>
         </div>
         <div class="card">
@@ -34,7 +71,7 @@
                     {% for person, dist in week.get_distribution.items %}
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading-{{person.id}}">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{person.id}}" aria-expanded="false" aria-controls="collapse-{{person.id}}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{person.id}}" aria-expanded="false" aria-controls="collapse-{{person.id}}">
                             {{person}}
                         </button>
                         </h2>

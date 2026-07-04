@@ -1,96 +1,170 @@
-{%extends "hub/base.html" %}
-
+{% extends "hub/base.html" %}
 {% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
+<div class="budget-page">
 <script>
-    function cloneMore(selector, type) {
-        var newElement = $(selector).clone(true);
-        console.log(selector)
-        console.log($(selector))
-        var total = $('#id_' + type + '-TOTAL_FORMS').val();
-        newElement.find(':input').each(function() {
-            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
-            var id = 'id_' + name;
-            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
-        });
-        newElement.find('label').each(function() {
-            var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
-            $(this).attr('for', newFor);
-        });
-        total++;
-        $('#id_' + type + '-TOTAL_FORMS').val(total);
-        $(selector).after(newElement);
-    }
+function cloneMore(selector, type) {
+    var newElement = $(selector).clone(true, true);
+    var total = parseInt($('#id_' + type + '-TOTAL_FORMS').val(), 10);
+    var re = new RegExp('(\\b' + type + '-\\d+-)', 'g');
+    newElement.find(':input').each(function() {
+        var newName = $(this).attr('name').replace(re, type + '-' + total + '-');
+        $(this).attr({'name': newName, 'id': 'id_' + newName});
+        if ($(this).is(':checkbox')) {
+            $(this).prop('checked', false);
+        } else if (!$(this).is('select')) {
+            $(this).val('');
+        }
+    });
+    newElement.find('label').each(function() {
+        var newFor = $(this).attr('for').replace(re, type + '-' + total + '-');
+        $(this).attr('for', newFor);
+    });
+    total++;
+    $('#id_' + type + '-TOTAL_FORMS').val(total);
+    $(selector).after(newElement);
+}
 </script>
-<div class="container">
-    <form method="post">
-        <div class="card">
-            <h5 class="card-header">
-                {% trans 'Week entries' %}
-            </h5>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <th>{% trans 'Cost cleared'  %}</th>
-                        <th>{% trans 'Label'  %}</th>
-                        <th>{% trans 'Amount'  %}</th>
-                        <th>{% trans 'Paid by'  %}</th>
-                    </thead>
-                    <tbody id="budget-forms">
 
-                        {% crispy current_form helper %}
-                    </tbody>
-                </table>
-                <button type="button" class="btn btn-primary btn-sm" 
-                {% comment %} hx-get="{% url 'budget:budget_dashboard' %}?hxp=add_form" 
-                hx-target="#budget-forms" 
-                hx-swap="beforeend" {% endcomment %}
-                onclick="cloneMore('tbody:nth-last-child(-n + 3)', 'week_items')"
-                >Add</button>
-            </div>
+<div class="container py-3">
+    {% if form_errors %}
+    <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+        <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+        <span>{% trans 'Some entries could not be saved. Please correct the highlighted fields and try again.' %}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h2 class="mb-1 fw-semibold">{% trans 'Budget' %}</h2>
+            <span class="text-body-secondary">{{ week.week|date:"l, j F Y" }}</span>
         </div>
-        <div class="card">
-            <h5 class="card-header">
-                {% trans 'Weekly stats' %}
-            </h5>
-            <div class="card-body">
-                <ul class="list-group">
-                    {% for user, sum in people_sum.items %}
-                    {% if user == "open"%}
-                    <li class="list-group-item">{% trans 'Unclear' %}: {{sum}}</li>
-                    {% else %}
-                    <li class="list-group-item">{{user}}: {{sum}}</li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-                <span>{% trans 'Outstanding sum' %}: <b>{{outstanding_sum}}</b></span>
+        <div class="d-flex align-items-baseline gap-2">
+            <span class="text-body-secondary">{% trans 'Outstanding' %}</span>
+            <span class="badge bg-primary bg-opacity-10 text-primary fs-5 fw-bold px-3 py-2">{{ outstanding_sum }}</span>
+        </div>
+    </div>
 
-                <div class="accordion" id="distributionAccordion">
-                    {% for person, dist in week.get_distribution.items %}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-{{person.id}}">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{person.id}}" aria-expanded="false" aria-controls="collapse-{{person.id}}">
-                            {{person}}
+    <form method="post" id="budget-form">
+        {% csrf_token %}
+        <div class="row g-4">
+            <div class="col-12 col-lg-7">
+                <div class="card shadow-sm">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 budget-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-center" style="width: 3rem;">{% trans 'Cleared' %}</th>
+                                    <th>{% trans 'Label' %}</th>
+                                    <th style="width: 30%;">{% trans 'Amount' %}</th>
+                                    <th style="width: 30%;">{% trans 'Paid by' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="budget-forms">
+                                {% crispy current_form helper %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer bg-body d-flex align-items-center justify-content-between py-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                onclick="cloneMore('#budget-forms tr:last', 'week_items')">
+                            <i class="bi bi-plus-lg me-1"></i>{% trans 'Add' %}
                         </button>
-                        </h2>
-                        <div id="collapse-{{person.id}}" class="accordion-collapse collapse" aria-labelledby="heading-{{person.id}}" data-bs-parent="#distributionAccordion">
-                        <div class="accordion-body">
-                            <ul class="list-group">
-                            {% for outstanding in dist%}
-                                <li class="list-group-item">{{outstanding.0}} : {{outstanding.1}}</li>
-                            {% endfor%}
-                            </ul>
+                        <small class="text-body-secondary">
+                            {% blocktrans with count=current_form.total_form_count %}Entries: {{ count }}{% endblocktrans %}
+                        </small>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" name="submit_week" class="btn btn-primary px-4">
+                        <i class="bi bi-check-lg me-1"></i>{% trans 'Save week' %}
+                    </button>
+                    <button type="submit" name="paid_week" class="btn btn-outline-success px-4">
+                        <i class="bi bi-check-all me-1"></i>{% trans 'All has been paid' %}
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-body d-flex align-items-center justify-content-between py-3">
+                        <span class="fw-semibold text-uppercase small text-body-secondary">{% trans 'Summary' %}</span>
+                        <span class="fs-2 fw-bold text-primary">{{ outstanding_sum }}</span>
+                    </div>
+                    <div class="card-body">
+                        {% if people_sum %}
+                        <div class="mb-3">
+                            <small class="text-body-secondary fw-semibold text-uppercase d-block mb-2">{% trans 'Per person' %}</small>
+                            {% for person, total in people_sum.items %}
+                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                <span>{% if person == "open" %}<em>{% trans 'Unassigned' %}</em>{% else %}{{ person }}{% endif %}</span>
+                                <span class="fw-semibold text-primary">{{ total }}</span>
+                            </div>
+                            {% endfor %}
                         </div>
+                        {% endif %}
+
+                        {% with distribution=week.get_distribution %}
+                        {% if distribution %}
+                        <div class="mb-3">
+                            <small class="text-body-secondary fw-semibold text-uppercase d-block mb-2">{% trans 'Distribution' %}</small>
+                            <div class="accordion" id="distributionAccordion">
+                                {% for person, dist in distribution.items %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed py-2" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapse-{{ person.id }}"
+                                                aria-expanded="false">
+                                            {{ person }}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-{{ person.id }}"
+                                         class="accordion-collapse collapse"
+                                         data-bs-parent="#distributionAccordion">
+                                        <div class="accordion-body py-2 px-3">
+                                            {% for recipient, amount in dist %}
+                                            <div class="d-flex justify-content-between align-items-center py-1 small">
+                                                <span><span class="text-body-secondary">→</span> {{ recipient }}</span>
+                                                <span class="fw-semibold text-primary">{{ amount }}</span>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        {% if people_sum %}
+                        <hr class="my-3">
+                        {% endif %}
+
+                        <div>
+                            <small class="text-body-secondary fw-semibold text-uppercase d-block mb-2">{% trans 'Weekly goal' %}</small>
+                            <div class="mb-3">
+                                {{ week_form.week_goal }}
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" name="submit_week" class="btn btn-primary btn-sm px-3">
+                                    <i class="bi bi-check-lg me-1"></i>{% trans 'Save' %}
+                                </button>
+                                <button type="submit" name="paid_week" class="btn btn-outline-success btn-sm px-3">
+                                    <i class="bi bi-check-all me-1"></i>{% trans 'Paid' %}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    {% endfor %}
-                    </div>
-                {% crispy week_form %}
+                </div>
             </div>
         </div>
     </form>
-
+</div>
 </div>
 {% endblock %}

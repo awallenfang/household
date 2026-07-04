@@ -1,3 +1,7 @@
-{% load crispy_forms_tags %}
-
-{% crispy form helper %}
+{% load i18n %}
+<tr>
+    <td class="text-center">{{ form.cleared }}</td>
+    <td>{{ form.title }}</td>
+    <td>{{ form.cost }}</td>
+    <td>{{ form.paid_by }}</td>
+</tr>

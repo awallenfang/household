@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from hub.decorators import space_required
 from hub.models import Profile
 from space.models import SharedSpace
+from space.forms import SpaceForm
 
 def empty(_request):
     return HttpResponse("")
@@ -22,7 +23,8 @@ def render_space_settings(request, space_id, *args, **kwargs):
             "user": user,
             "space": space,
             "selected_space": selected_space,
-            "joined_people": joined_people
+            "joined_people": joined_people,
+            "form": SpaceForm(instance=space),
         }
         return render(request, "space/space.html", context)
     return empty(request)

@@ -5,7 +5,8 @@ from crispy_forms import layout
 
 from .models import BudgetWeekListItem, BudgetWeekList
 
-class   BudgetListForm(forms.ModelForm):
+
+class BudgetListForm(forms.ModelForm):
     class Meta:
         model = BudgetWeekList
         fields = ["week_goal"]
@@ -30,58 +31,40 @@ class   BudgetListForm(forms.ModelForm):
                 )
             ),
         )
-    
+
 
 class BudgetListEntryForm(forms.ModelForm):
     class Meta:
         model = BudgetWeekListItem
         fields = ["title", "cost", "cleared", "paid_by"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.empty_permitted = True
         self.fields["cleared"].label = False
-        self.helper = FormHelper()
-        self.helper.form_show_labels = False
-        self.helper.form_tag = False
-        self.helper.layout = layout.Layout(
-            layout.HTML("<tr>"),            
-            layout.HTML("<td>"),
-            layout.Field("cleared", wrapper_class='d-flex align-items-center justify-content-center'),
-            layout.HTML("</td>"),
-            layout.HTML("<td>"),
-            "title", 
-            layout.HTML("</td>"),
-            layout.HTML("<td>"),
-            "cost", 
-            layout.HTML("</td>"),
-            layout.HTML("<td>"),
-            "paid_by", 
-            layout.HTML("</td>"),
-            layout.HTML("</tr>"),            
-        )
 
 
 class BudgetListEntryFormHelper(FormHelper):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
         self.form_show_labels = False
         self.form_tag = False
+        self.render_hidden_fields = False
         self.layout = layout.Layout(
-            layout.HTML("<tr>"),            
-            layout.HTML("<td>"),
+            layout.HTML("<tr>"),
+            layout.HTML('<td class="text-center" style="width: 3rem;">'),
             layout.Field("cleared", wrapper_class='d-flex align-items-center justify-content-center'),
             layout.HTML("</td>"),
             layout.HTML("<td>"),
-            "title", 
+            "title",
             layout.HTML("</td>"),
-            layout.HTML("<td>"),
-            "cost", 
+            layout.HTML('<td style="width: 30%;">'),
+            "cost",
             layout.HTML("</td>"),
-            layout.HTML("<td>"),
-            "paid_by", 
+            layout.HTML('<td style="width: 30%;">'),
+            "paid_by",
             layout.HTML("</td>"),
-            layout.HTML("</tr>"),            
+            "id",
+            "list",
+            layout.HTML("</tr>"),
         )
-

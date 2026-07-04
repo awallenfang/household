@@ -1,11 +1,9 @@
 {% load i18n %}
-{% load static %}
 
 <div id="people-list">
-    <ul class="list-group list-group-flush">
-
+    <div class="list-group list-group-flush">
         {% for person in joined_people %}
-        <li class="list-group-item d-flex align-items-center justify-content-between py-2 px-0">
+        <div class="list-group-item d-flex align-items-center justify-content-between px-0">
             <div class="d-flex align-items-center gap-2">
                 <span class="fw-medium">{{ person.user.username }}</span>
                 {% if space.owner == person %}
@@ -17,7 +15,7 @@
                     <a href="{% url 'space:leave_space' space.id %}"
                        class="btn btn-outline-danger btn-sm"
                        onclick="return confirm('{% trans 'Are you sure? By leaving as the last person the space and all connected data will be lost!' %}')">
-                       {% trans 'Leave' %}
+                       <i class="bi bi-box-arrow-right me-1"></i>{% trans 'Leave' %}
                     </a>
                 {% elif space.owner == user %}
                     <a hx-delete="{% url 'space:space_view' space.id %}?hxp=kick_person&person_id={{ person.id }}"
@@ -25,12 +23,11 @@
                        hx-confirm="{% trans 'Are you sure you want to kick this person from the space?' %}"
                        hx-target="#people-list"
                        hx-swap="outerHTML">
-                       {% trans 'Kick' %}
+                       <i class="bi bi-x-circle me-1"></i>{% trans 'Kick' %}
                     </a>
                 {% endif %}
             </div>
-        </li>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
-

@@ -11,7 +11,7 @@ class InvalidTokenError(Exception):
     pass
 
 class SharedSpace(models.Model):
-    name = models.TextField(null=False, blank=False, verbose_name=_("Space name"), default=_("My Space"), max_length=100)
+    name = models.CharField(null=False, blank=False, verbose_name=_("Space name"), default=_("My Space"), max_length=100)
     invite_token = models.TextField(verbose_name= _("Invite Token"), max_length=10, null=False, blank=False)
     owner = models.ForeignKey('hub.Profile', verbose_name=_("Owner"), on_delete=models.CASCADE, null=True, blank=True)
     locked = models.BooleanField(_("Locked"), default=False)

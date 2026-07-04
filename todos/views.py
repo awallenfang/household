@@ -105,8 +105,7 @@ class EditTodoView(UpdateView):
         context = super().get_context_data(**kwargs)
         profile = Profile.objects.get(user = self.request.user)
 
-        # For some reason this doesn't populate the form properly
-        context["form"] = self.form_class(profile.selected_space, instance=self.get_object())
+        context["form"] = self.form_class(space=profile.selected_space, instance=self.get_object())
         context["todo"] = self.get_object()
         return context
     

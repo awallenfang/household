@@ -191,8 +191,9 @@ def set_position(request, todo_id, *args, **kwargs):
         position = int(request.GET.get("position", "-2"))
         if schedule is None or position == -2:
             return False
-        if position > len(schedule.assigned_users.all()):
-            schedule.schedule_turn = len(schedule.assigned_users) - 1
+        user_count = schedule.ordereduser_set.count()
+        if position > user_count:
+            schedule.schedule_turn = user_count - 1
         else:
             schedule.schedule_turn = position
         schedule.save()

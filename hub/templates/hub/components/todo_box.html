@@ -1,31 +1,21 @@
-{% load static %}
 {% load i18n %}
 
-
-<style>
-#todo-gradient {
-    background: conic-gradient(green {{gradient_deg}}deg, red {{gradient_deg}}deg 360deg);
-    border-radius: 50%;
-}
-</style>
 <div class="card">
     <div class="card-header">
         {% trans 'Todos' context 'Todos section title' %}
     </div>
     <div class="card-body">
-        <div class="d-flex flex-column align-items-start">
-            <p>{% trans "Open todos:" %} {{ open_todo_amt }}</p>
-
-            <p>{% trans 'Open todos assigned to you:' %} {{ open_assigned_todo_amt }}</p>
-            {% comment %} <p>{% trans 'Open todos due this week:' %} {{ open_todos_due }} </p> {% endcomment %}
-            <h4>{% trans 'Weekly stats:' %}</h4>
-            <div class="d-flex flex-column align-items-center">
-                    <span>{% trans 'Closed Todos:' %}</span>
-                    <div class="d-flex flex-row justify-content-center align-items-center" id="todo-gradient" style="width: 5rem; height: 5rem;">
-                        <div id="todo-hub-box-mask" class="d-flex flex-column justify-content-center align-items-center" style="width: 4rem; height: 4rem;">
-                            {{gradient_percent}}%
-                        </div>
-                    </div>
+        <p>{% trans 'Open todos:' %} {{ open_todo_amt }}</p>
+        <p>{% trans 'Open todos assigned to you:' %} {{ open_assigned_todo_amt }}</p>
+        <h5>{% trans 'Weekly stats:' %}</h5>
+        <div class="d-flex flex-column align-items-center">
+            <span class="mb-1">{% trans 'Closed Todos:' %}</span>
+            <div class="rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center"
+                 style="width: 5rem; height: 5rem; background: conic-gradient(green {{gradient_deg}}deg, red {{gradient_deg}}deg 360deg);">
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-body"
+                     style="width: 4rem; height: 4rem;">
+                    {{ gradient_percent }}%
+                </div>
             </div>
         </div>
     </div>

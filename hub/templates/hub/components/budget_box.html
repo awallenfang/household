@@ -1,0 +1,58 @@
+{% load i18n %}
+
+<div class="card">
+    <div class="card-header">
+        {% trans 'Budget' %}
+    </div>
+    <div class="card-body">
+        {% if not selected_space %}
+            <p class="text-body-secondary mb-0">{% trans 'Select a space to view budget data.' %}</p>
+        {% elif not budget_week %}
+            <p class="text-body-secondary mb-0">{% trans 'No budget entries for this week.' %}</p>
+        {% else %}
+            <div class="d-flex align-items-baseline gap-2 mb-3">
+                <span class="fs-4 fw-semibold">{{ budget_outstanding_sum }}</span>
+                <span class="text-body-secondary">{% trans 'outstanding' %}</span>
+            </div>
+
+            {% if budget_people_sum %}
+                <ul class="list-group list-group-flush mb-3">
+                    {% for person, total in budget_people_sum.items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>{% if person == "open" %}<em>{% trans 'Unassigned' %}</em>{% else %}{{ person }}{% endif %}</span>
+                            <span class="fw-medium">{{ total }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% with distribution=budget_week.get_distribution %}
+                {% if distribution %}
+                    <div class="accordion" id="budgetDistribution">
+                        {% for person, dist in distribution.items %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="budget-heading-{{ person.id }}">
+                                    <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#budget-collapse-{{ person.id }}" aria-expanded="false">
+                                        {{ person }}
+                                    </button>
+                                </h2>
+                                <div id="budget-collapse-{{ person.id }}" class="accordion-collapse collapse" data-bs-parent="#budgetDistribution">
+                                    <div class="accordion-body py-2">
+                                        <ul class="list-group list-group-flush">
+                                            {% for recipient, amount in dist %}
+                                                <li class="list-group-item d-flex justify-content-between px-0 py-1">
+                                                    <span>→ {{ recipient }}</span>
+                                                    <span class="fw-medium">{{ amount }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    </div>
+</div>

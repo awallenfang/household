@@ -6,6 +6,13 @@
 
 {% block content %}
 <div class="container">
-    {% include "hub/components/todo_box.html" %}
+    <div class="row g-3">
+        <div class="col-12 col-md-6">
+            {% include "hub/components/todo_box.html" %}
+        </div>
+        <div class="col-12 col-md-6">
+            {% include "hub/components/budget_box.html" %}
+        </div>
+    </div>
 </div>
 {%endblock content%}

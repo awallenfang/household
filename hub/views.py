@@ -6,10 +6,13 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.utils import translation    
+from django.utils import translation
+from django.utils.timezone import now
+from datetime import timedelta
 from .forms import LoginForm, SignupForm
 from .models import Profile
 from todos.models import Todo
+from budget.models import BudgetWeekList
 
 @login_required
 def hub(request):
@@ -22,6 +25,22 @@ def hub(request):
     closed_todo_amt = Todo.objects.filter(space = selected_space, done = True).count()
     assigned_todo_amt = Todo.objects.filter(space = selected_space, done = False, assigned_user = user).count()
     total_todo_amt = open_todo_amt + closed_todo_amt
+
+    if selected_space:
+        monday = now().date() - timedelta(days=now().date().weekday())
+        week_list = BudgetWeekList.objects.filter(week=monday, space=selected_space).first()
+        if week_list:
+            budget_people_sum = week_list.get_sum()
+            budget_outstanding_sum = sum(budget_people_sum.values())
+        else:
+            week_list = None
+            budget_people_sum = {}
+            budget_outstanding_sum = 0
+    else:
+        week_list = None
+        budget_people_sum = {}
+        budget_outstanding_sum = 0
+
     context = {"user_spaces": user_spaces, 
     "selected_space": selected_space,
     "open_todo_amt": open_todo_amt,
@@ -30,7 +49,10 @@ def hub(request):
     "open_todos_due": 42,
     "total_todo_amt": total_todo_amt,
     "gradient_deg": int((closed_todo_amt/total_todo_amt)*360) if total_todo_amt else 0,
-    "gradient_percent": int((closed_todo_amt/total_todo_amt)*100) if total_todo_amt else 0,}
+    "gradient_percent": int((closed_todo_amt/total_todo_amt)*100) if total_todo_amt else 0,
+    "budget_week": week_list,
+    "budget_people_sum": budget_people_sum,
+    "budget_outstanding_sum": budget_outstanding_sum,}
     return render(request, 
                     "hub/hub.html", 
                     context)

@@ -1,15 +1,3 @@
-.dropdown-menu-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-}
-
-.dropdown-content {
-    transition: height 0.5s;
-    width: 100%;
-}
-
 .dropdown-open {
     height: 10rem;
     background-color: var(--light-bg);
@@ -22,7 +10,5 @@
     height: 0rem;
     overflow: hidden;
     background-color: var(--light-bg);
-
-
     width: 100%;
 }

@@ -23,7 +23,7 @@
 <div class="container" id="todo-list">
     <div id="schedule-block"></div>
     <h2>{% trans 'Open Todos' %}</h2>
-    <div class="d-flex flex-row align-start justify-content-around flex-wrap row-gap-2" id="todo-block">
+    <div class="d-flex flex-row align-items-start justify-content-around flex-wrap row-gap-2" id="todo-block">
         <div id="open-accordion-parent" class="d-none"></div>
         {% for todo in todos%}
             <div class="todo-drop-spot" 
@@ -64,7 +64,7 @@
     </div>
 
     <h2>{% trans 'Finished Todos' %}</h2>
-    <div class="d-flex flex-row align-start justify-content-around flex-wrap row-gap-2" id="todo-block">
+    <div class="d-flex flex-row align-items-start justify-content-around flex-wrap row-gap-2" id="todo-block">
          {% for todo in finished_todos%}
             <div class="todo-drop-spot" 
             ondrop="drop(event)"  

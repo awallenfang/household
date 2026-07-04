@@ -24,7 +24,7 @@ def render_space_settings(request, space_id, *args, **kwargs):
             "selected_space": selected_space,
             "joined_people": joined_people
         }
-        return render("space/space.html", context)
+        return render(request, "space/space.html", context)
     return empty(request)
 
 @login_required
@@ -52,5 +52,5 @@ def render_token(request, space_id, *args, **kwargs):
     space = get_object_or_404(SharedSpace, id = space_id)
 
     if user.spaces.contains(space):
-        return HttpResponse('Invite Token: <samp>' + str(space.invite_token) + "</samp>")
+        return HttpResponse(str(space.invite_token))
     return empty(request)

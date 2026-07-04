@@ -1,17 +1,17 @@
 <div class="collapsible-container">
-    <div class="transaction {{trans.direction}} ">
-        <div class="transaction-text">
+    <div class="d-flex flex-row justify-content-between align-items-center p-2 mb-2 rounded-2" style="width: 80vw; margin-left: auto; margin-right: auto; background-color: var(--light-bg);">
+        <div class="d-flex align-items-center gap-2">
             <p><b>{{trans.name}}</b></p>
-            <p class="transaction-date">{{trans.date}}</p>
+            <p class="small text-muted">{{trans.date}}</p>
             {% if trans.tag%}
-                <div class="transaction-tag" style="background-color: {{trans.tag_color}}">{{trans.tag}}</div>
+                <span class="badge" style="background-color: {{trans.tag_color}}">{{trans.tag}}</span>
             {%endif%}
         </div>
         
-        <div class="transaction-amt">
+        <div class="d-flex align-items-center gap-2">
             <p>{{trans.amount}}</p>
             <p>{{trans.currency}}</p>
-            <button class="dropdown-button" onclick="toggleDropdown(event)">...</button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="toggleDropdown(event)">...</button>
         </div>
         
     </div>

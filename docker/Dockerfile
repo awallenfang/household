@@ -13,5 +13,4 @@ RUN mkdir -p /var/log/celery_beat
 
 RUN ln -sf /code/docker/nginx/household-nginx.conf /etc/nginx/sites-enabled/household-nginx.conf
 RUN ln -sf /code/docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
 CMD ["/usr/bin/supervisord", "-n"]

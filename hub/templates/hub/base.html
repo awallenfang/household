@@ -33,53 +33,59 @@
           event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
         })
     </script> 
-    <script src="{% static "hub/header.js" %}"></script>
-    <script src="{% static "hub/collapse.js" %}"></script>
     {% block header %}
 
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">{% trans 'Household Planner' %}</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-md bg-body-tertiary shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'hub:hub' %}">
+            <i class="bi bi-house-door-fill me-1"></i>
+            {% trans 'Household Planner' %}
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'hub:hub' %}">{% trans 'Hub' %}</a>
+                    <a class="nav-link" href="{% url 'hub:hub' %}">{% trans 'Hub' %}</a>
                 </li>
                 {% if selected_space %}
                     <li class="nav-item">
-                        <a href="{% url 'todos:todos' %}" class="nav-link">{% trans 'Todos' context 'Header Title' %}</a>
+                        <a class="nav-link" href="{% url 'todos:todos' %}">{% trans 'Todos' %}</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'budget:budget_dashboard' %}" class="nav-link">{% trans 'Budgeting' context 'Header Title' %}</a>
+                        <a class="nav-link" href="{% url 'budget:budget_dashboard' %}">{% trans 'Budgeting' %}</a>
                     </li>
                 {% endif %}
                 <li class="nav-item dropdown">
-                    {% if selected_space%}
-                        <a class="nav-link dropdown-toggle text-truncate" style="max-width: 10rem;"  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >{{selected_space.name}}</a>
-                    {% else %}
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >{% trans 'Spaces' context 'Header Title' %}</a>
-                    {% endif %}
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-people-fill"></i>
+                        <span class="text-truncate" style="max-width: 10rem;">
+                            {% if selected_space %}{{selected_space.name}}{% else %}{% trans 'Spaces' %}{% endif %}
+                        </span>
+                    </a>
                     <ul class="dropdown-menu" style="min-width: 15rem;">
                         {% include "space/components/quick_space_new.html" %}
                     </ul>
                 </li>
-                
             </ul>
-            <div class="dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{% trans 'Language' context 'Header Title' %}</a>
-                <div class="dropdown-menu">
-                    {% include "hub/components/locale_box.html" %}
+            <div class="d-flex align-items-center gap-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle py-1" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{% trans 'Language' %}">
+                        <i class="bi bi-globe2"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        {% include "hub/components/locale_box.html" %}
+                    </div>
                 </div>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger btn-sm py-1" type="submit" aria-label="{% trans 'Logout' %}">
+                       {% trans 'Logout' %}
+                    </button>
+                </form>
             </div>
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button class="btn btn-primary" type="submit">{% trans 'Logout' %}</button>
-            </form>
         </div>
     </div>
     </nav>

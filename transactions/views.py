@@ -95,7 +95,7 @@ def dashboard_handle_get(request):
         context['sum_currency'] = db_transactions[0].currency
     else:
         context['sum_currency'] = "EUR"
-    context['sum_state'] = "positive" if summation >= 0 else "negative"
+    context['sum_state'] = "text-bg-success" if summation >= 0 else "text-bg-danger"
     context['cummulative_sum'] = json.dumps(cummulative_sum)
 
     transaction_form = NewTransactionForm()

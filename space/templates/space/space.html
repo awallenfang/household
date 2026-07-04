@@ -1,37 +1,49 @@
-{% load static %}
 {% load i18n %}
-{% block content %}
-<div class="container">
+{% load static %}
 
-    <div class="card m-1">
-        <div class="card-header"><h2>{% trans 'Space Settings and Information' %}</h2></div>
-        <div class="card-body p-1">
-    
-            <form action="{% url 'space:space_view' space.id %}" method="post" class="col align-start gap-medium" id="space-form">
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h4 class="mb-0">{% trans 'Space Settings' %}</h4>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'space:space_view' space.id %}" method="post" id="space-form">
                 {% csrf_token %}
-                <label for="space-name"><b>{% trans 'Name:' %}</b></label>
-                <input type="text" name="name" id="space-name" value="{{space.name}}">
-                <div class="row align-center gap-medium">
-                    <b id="invite-token">{% trans 'Invite Token:' %} <samp>{{space.invite_token}}</samp></b>
-                    {% if space.owner == user %}
-                    <div class="button"            
-                    hx-post="{% url 'space:space_view' space.id %}?hxp=new_token"
-                    hx-target="#invite-token"
-                    hx-swap="innerHTML">{% trans 'Reset invite token' %}</div>
-                    {% endif %}
+                <div class="mb-4">
+                    <label for="space-name" class="form-label fw-semibold">{% trans 'Space Name' %}</label>
+                    <input type="text" class="form-control" name="name" id="space-name" value="{{space.name}}">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">{% trans 'Invite Token' %}</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <code id="invite-token" class="fs-5 bg-light px-3 py-1 rounded-2">{{space.invite_token}}</code>
+                        {% if space.owner == user %}
+                        <button class="btn btn-outline-secondary btn-sm"
+                            hx-post="{% url 'space:space_view' space.id %}?hxp=new_token"
+                            hx-target="#invite-token"
+                            hx-swap="innerHTML">
+                            {% trans 'Reset' %}
+                        </button>
+                        {% endif %}
+                    </div>
                 </div>
             </form>
-            
-            {% include "space/components/people_list.html" %}
-            {% if space.owner == user%}
-            <div class="d-flex flex-row align-items-center justify-content-between">
-                <input class="button" type="submit" value="Save" form="space-form">
-                <a class="button button-red" href="{% url 'space:delete_space' space.id%}" onclick="return confirm('{% trans 'Are you sure?' %}%')">{% trans 'DELETE SPACE' %}</a>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold mb-2">{% trans 'Members' %}</label>
+                {% include "space/components/people_list.html" %}
             </div>
-            {% else %}
-                <input class="btn btn-primary" type="submit" value="Save" form="space-form">
-            {% endif %}
+
+            <div class="d-flex justify-content-between pt-3 border-top">
+                <button type="submit" class="btn btn-primary" form="space-form">{% trans 'Save Changes' %}</button>
+                {% if space.owner == user %}
+                <a class="btn btn-outline-danger" href="{% url 'space:delete_space' space.id %}"
+                   onclick="return confirm('{% trans 'Are you sure?' %}')">
+                   {% trans 'Delete Space' %}
+                </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
-{% endblock %}

@@ -40,7 +40,7 @@
                     <a class="btn btn-primary btn-sm" 
                     hx-get="{% url 'todos:todo' todo.id %}?hxp=add_schedule"
                     hx-target="closest .card"
-                    hx-swap="innerHTML">{% trans 'Add schedule' %}</a>
+                    hx-swap="outerHTML">{% trans 'Add schedule' %}</a>
                 {%else%}
                     <a class="btn btn-primary btn-sm" 
                     hx-get="{% url 'todos:schedule_editor' todo.id %}"

@@ -1,20 +1,18 @@
 {% load i18n %}
 
-<div class="container" >
-    <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+<form action="{% url 'set_language' %}" method="post" class="px-2 py-2">
+    {% csrf_token %}
     <input name="next" type="hidden" value="/">
-    <select name="language" class="form-control">
-        {% get_current_language as LANGUAGE_CODE %}
-        {% get_available_languages as LANGUAGES %}
-        {% get_language_info_list for LANGUAGES as languages %}
+    {% get_current_language as LANGUAGE_CODE %}
+    {% get_available_languages as LANGUAGES %}
+    {% get_language_info_list for LANGUAGES as languages %}
+    <div class="d-flex flex-column align-items-center gap-1">
         {% for language in languages %}
-            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                {{ language.name_local }} ({{ language.code }})
-            </option>
+            <button type="submit" name="language" value="{{ language.code }}"
+                    class="btn shadow-sm rounded-1 {% if language.code == LANGUAGE_CODE %}active{% endif %}">
+                {{ language.name_local }}
+            </button>
         {% endfor %}
-    </select>
-    <input class="button form-control"  type="submit" value="{% trans 'Go' %}">
+    </div>
 </form>
-
-</div>
 

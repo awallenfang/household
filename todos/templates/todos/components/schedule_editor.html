@@ -158,8 +158,8 @@
     }
 
 </script>
-<div class="floating">
-    <div class="row justify-between">
+<div class="card shadow p-2 rounded-2">
+    <div class="d-flex flex-row justify-content-between">
         <div></div>
         <a hx-get="{% url 'todos:empty'%}" 
         hx-target="#schedule-block"
@@ -169,29 +169,29 @@
             <img src="{% static 'todos/assets/close.svg' %}" class="close-icon">
         </a>
     </div>
-    <div class="row mcol-reverse justify-between gap-medium overflow-hidden">
+    <div class="d-flex flex-row flex-column-reverse flex-md-row justify-content-between gap-3 overflow-hidden">
         
-        <div class="col p-1 gap-small h-40vh mh-50p overflow-scroll w-50p mw-100p">
+        <div class="d-flex flex-column p-3 gap-1 overflow-auto w-50" style="height: 40vh; max-height: 50%;">
             {% if existing_order|length > 0%}
                 <div class="user-drop-spot" 
                 pos="0"
                 ondragover="allowDrop(event)"></div>
             {%endif%}
             {% for user in existing_order%}
-            <div class="row">
+            <div class="d-flex flex-row align-items-center">
 
                 {% if forloop.counter0 == current_assignment_idx%}
-                    <div class="row select-drag-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}">
+                    <div class="d-flex flex-row align-items-center select-drag-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}">
                         <img src="{% static 'todos/assets/select.svg' %}" class="select-icon">
                     </div>
                 {% else %}
                     <div class="schedule-position-drop-spot" pos="{{forloop.counter0}}" todo-id="{{todo.id}}" ondragover="allowDrop(event)" todo-id="{{forloop.counter0}}"></div>
                 {% endif %}
-                <div class="row draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
-                    <div class="row w-10 justify-between background-mid p-05 border-radius-025">
+                <div class="d-flex flex-row align-items-center draggable-user-container" todo-id="{{todo.id}}" pos="{{forloop.counter0}}" draggable="true">
+                    <div class="d-flex flex-row justify-content-between align-items-center bg-secondary bg-opacity-25 p-2 rounded-1" style="width: 10rem;">
                         
-                        <p>{{user.user.username}}</p>
-                        <div cass="row">
+                        <p class="mb-0">{{user.user.username}}</p>
+                        <div class="d-flex flex-row align-items-center">
                             <a hx-post="{% url 'todos:schedule_editor' todo.id %}?hxp=delete_position&position={{forloop.counter0}}" 
                             hx-target="#schedule-block"
                             hx-swap="innerHTML"
@@ -209,25 +209,25 @@
             ondragover="allowDrop(event)"></div>
             {%endfor%}
         </div>
-        <div class="vertical-line" style="background-color: var(--mid-bg)"></div>
-        <div class="col p-1 gap-small mh-50p">
-            <div class="col p-05 maxh-15 gap-small">
-                <div class="col align-stretch p-05 gap-small">
-                    <div class="row align-stretch justify-between background-mid p-05 border-radius-025">
-                        <p>{% trans 'Empty space' %}</p>
+        <div class="vr" style="background-color: var(--mid-bg);"></div>
+        <div class="d-flex flex-column p-3 gap-1" style="max-height: 50%;">
+            <div class="d-flex flex-column p-2 gap-1" style="max-height: 15rem;">
+                <div class="d-flex flex-column align-items-stretch p-2 gap-1">
+                    <div class="d-flex flex-row align-items-stretch justify-content-between bg-secondary bg-opacity-25 p-2 rounded-1">
+                        <p class="mb-0">{% trans 'Empty space' %}</p>
                         <input  class="user-add-check" type="checkbox" name="-1_checked" id="-1" change="userChecked(event)">
                     </div>
                     {% for user in available_users%}
-                    <div class="row align-stretch justify-between background-mid p-05 border-radius-025">
-                        <p>{{user.user.username}}</p>
+                    <div class="d-flex flex-row align-items-stretch justify-content-between bg-secondary bg-opacity-25 p-2 rounded-1">
+                        <p class="mb-0">{{user.user.username}}</p>
                         <input  class="user-add-check" type="checkbox" name="{{user.id}}_checked" id="{{user.id}}" change="userChecked(event)">
                     </div>
                         
                     {% endfor %}
                 </div>
-                <a onclick="addSelectedUsers(event)" class="button" todo-id="{{todo.id}}">{% trans 'Add Selected Users' %}</a>
+                <a onclick="addSelectedUsers(event)" class="btn btn-primary" todo-id="{{todo.id}}">{% trans 'Add Selected Users' %}</a>
             </div>
-            <div class="horizontal-line" style="background-color: var(--mid-bg); margin: 0.5rem 0;"></div>
+            <hr style="background-color: var(--mid-bg); margin: 0.5rem 0;">
             <div>
                 <p>{% trans 'Rate in days:' %}</p>
                 <input type="number" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">
@@ -236,7 +236,7 @@
             hx-target="#todo-list"
             hx-swap="innerHTML" 
             onclick="return confirm('{% trans 'Are you sure? By removing the schedule all the settings will be lost.' %}')"
-            class="button">
+            class="btn btn-primary">
                 {% trans 'Remove Schedule' %}
             </a>
         </div>

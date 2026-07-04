@@ -1,15 +1,15 @@
-<div class="total-container">    
-    <div class="total-box {{sum_state}}">
-        <p><b>Total: {{sum}} {{sum_currency}}</b></p>
-    </div>
+<div class="d-flex justify-content-center" style="width: 80vw; margin: 0; padding: 0; transform: translate(-0.5rem, 0);">    
+    <span class="badge fs-6 {{sum_state}}">
+        <b>Total: {{sum}} {{sum_currency}}</b>
+    </span>
 </div>
 
 {% for trans in transactions %}
     {% include "transactions/components/transaction.html" %}
 {%endfor%}
 
-<div class="total-container">    
-    <div class="total-box {{sum_state}}">
-        <p><b>Total: {{sum}} {{sum_currency}}</b></p>
-    </div>
+<div class="d-flex justify-content-center" style="width: 80vw; margin: 0; padding: 0; transform: translate(-0.5rem, 0);">    
+    <span class="badge fs-6 {{sum_state}}">
+        <b>Total: {{sum}} {{sum_currency}}</b>
+    </span>
 </div>

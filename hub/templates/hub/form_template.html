@@ -1,5 +1,12 @@
+{% load hub_filters %}
 {% for field in form %}
-    {{field.errors}}
-    <label for="{{field.id_for_label}}">{{field.label}}:</label>
-    {{field}}
+    <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field|addclass:"form-control" }}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
 {% endfor %}

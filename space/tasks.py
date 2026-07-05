@@ -47,12 +47,9 @@ playground_todos = [
 
 @shared_task
 def reset_playground():
-    # Create playground if it doesn't exist
     logging.info("Resetting playground space")
-        # Reset todos
-    for todo in Todo.objects.filter(space=space):
-        todo.delete()
-
+    space = SharedSpace.objects.get(invite_token="PLAYGROUND", locked=True)
+    Todo.objects.filter(space=space).delete()
     for todo in playground_todos:
         Todo.objects.create(space=space, name=todo["name"], done=todo["done"], position=todo["position"])
 

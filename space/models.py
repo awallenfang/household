@@ -66,7 +66,8 @@ class SharedSpace(models.Model):
         user.save()
 
     def joined_people(self):
-        # Avoid a circular import with this
+        # Avoid circular import: hub.models imports SharedSpace at module level,
+        # so Profile must be imported lazily here
         from hub.models import Profile
 
         users = Profile.objects.filter(spaces__in=[self])

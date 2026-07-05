@@ -1,7 +1,5 @@
 from django.urls import path
 
-from todos import renderers
-
 from . import views
 
 app_name = "budget"

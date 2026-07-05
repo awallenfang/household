@@ -1,31 +1,49 @@
-{%extends "hub/base.html" %}
-
-
-{% load static%}
+{% extends "hub/base.html" %}
+{% load static %}
 {% load i18n %}
-{% block header %}
-{% endblock %}
-
+{% block header %}{% endblock %}
 {% block css_links %}
     <link rel="stylesheet" href="{% static 'hub/css/login.css' %}">
 {% endblock %}
-
 {% block content %}
-    <div id="login-container">
-        <div id="login">
-            <h1>{% trans 'Sign Up' %}</h1>
-            <form action="{% url 'hub:signup' %}" method="post" id="login-form">
+<div class="auth-wrapper min-vh-100 d-flex align-items-center justify-content-center p-3">
+    <div class="card shadow-sm" style="max-width: 420px; width: 100%;">
+        <div class="card-body p-4">
+            <h1 class="card-title h3 mb-4 text-center">{% trans 'Sign Up' %}</h1>
+            <form method="post" action="{% url 'hub:signup' %}">
                 {% csrf_token %}
-                {%if error_message%}
-                    <p id="error-message">{{error_message}}</p>
-                {%endif%}
-                {{form}}
-                <button class="btn btn-primary" type="submit">{% trans 'Sign Up' %}</button>
+                {% if error_message %}
+                    <div class="alert alert-danger" role="alert">{{ error_message }}</div>
+                {% endif %}
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+                <div class="mb-3 form-floating">
+                    <input type="text" name="username" class="form-control" id="id_username" placeholder="Username" maxlength="100" required>
+                    <label for="id_username">{% trans 'Username' %}</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="email" name="email" class="form-control" id="id_email" placeholder="email@example.com" required>
+                    <label for="id_email">{% trans 'Email Address' %}</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="password" name="password" class="form-control" id="id_password" placeholder="Password" required>
+                    <label for="id_password">{% trans 'Password' %}</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input type="password" name="repeat_password" class="form-control" id="id_repeat_password" placeholder="Repeat Password" required>
+                    <label for="id_repeat_password">{% trans 'Repeat password' %}</label>
+                </div>
+                <button class="btn btn-primary w-100 py-2" type="submit">
+                    <i class="bi bi-person-plus me-1"></i>{% trans 'Sign Up' %}
+                </button>
             </form>
         </div>
-        <div id="signup">
-            <p>{% trans 'Already have an account?' %} <a href="{% url 'login'%}">{% trans 'Login' %}</a></p>
+        <div class="card-footer bg-transparent border-top-0 text-center pb-3">
+            <p class="mb-0">{% trans 'Already have an account?' %} <a href="{% url 'login' %}">{% trans 'Login' %}</a></p>
         </div>
     </div>
-{%endblock content%}
-
+</div>
+{% endblock %}

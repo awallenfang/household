@@ -5,7 +5,8 @@ from django.db.models import F
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from hub.models import SharedSpace, Profile
+from space.models import SharedSpace
+from hub.models import Profile
 
 ######## Scheduled Todo helpers
 

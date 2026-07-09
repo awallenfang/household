@@ -23,6 +23,10 @@ class SpaceSettingsView(HTMXMixin, UpdateView):
     context_object_name = "space"
     pk_url_kwarg = "space_id"
 
+    def get_queryset(self):
+        user = Profile.objects.get(user=self.request.user)
+        return user.spaces.all()
+
     partials = {
         "kick_person": (render_people_list, kick_person),
         "new_token": (render_token, regen_token)
@@ -85,29 +89,6 @@ def join_space(request):
 
     return HttpResponseRedirect("/")
 
-@login_required
-@require_http_methods(['GET'])
-def kick_from_space(request, space_id, user_id):
-    user = Profile.objects.get(user = request.user)
-    space = get_object_or_404(SharedSpace, id = space_id)
-    
-    # Only the owner can kick people
-    if user == space.owner:
-        user_to_kick = get_object_or_404(Profile, user__id = user_id)
-        if user_to_kick in space.joined_people():
-
-            # If the owner is leaving, assign the space to the next person
-            if user_to_kick == space.owner:
-                try:
-                    space.owner = space.joined_people()[1]
-                    space.save()    
-                except IndexError:
-                    # Space is empty now, so remove it
-                    space.delete_space()
-                    return HttpResponseRedirect("/")
-                
-            space.leave(user_to_kick)
-    return HttpResponseRedirect("/space/" + str(space_id))
 
 @login_required
 def delete_space(request, space_id):

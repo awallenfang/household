@@ -34,6 +34,7 @@ def kick_person(request, space_id, *args, **kwargs):
 
 
 
+@login_required
 def regen_token(request, space_id, *args, **kwargs):
     user = Profile.objects.get(user=request.user)
     space = get_object_or_404(SharedSpace, id = space_id)

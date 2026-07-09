@@ -167,3 +167,5 @@ _logs/
 config.env
 redis/
 served_static/
+postgres-data/
+run_db.sh

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms import layout
@@ -42,6 +43,9 @@ class BudgetListEntryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.empty_permitted = True
         self.fields["cleared"].label = False
+        if self.instance.pk:
+            space = self.instance.list.space
+            self.fields["paid_by"].queryset = User.objects.filter(profile__spaces__in=space)
 
 
 class BudgetListEntryFormHelper(FormHelper):

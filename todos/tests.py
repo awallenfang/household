@@ -365,8 +365,8 @@ class EditTodoTest(BaseTest):
         todo.refresh_from_db()
         self.assertEqual(todo.name, "No desc")
 
-    def test_edit_form_no_ownership_check(self):
-        """Any user can edit any todo — the view does not filter by space."""
+    def test_edit_form_cross_space_blocked(self):
+        """A user in one space cannot edit a todo from another space."""
         todo, user, space = self.create_todo()
         other_user = self.create_user("other")
         other_space = SharedSpace.create_space("other", other_user)
@@ -374,9 +374,7 @@ class EditTodoTest(BaseTest):
         self.client.force_login(other_user.user)
         url = self.reverse("todos:edit_todo", args=[todo.id])
         response = self.client.post(url, {"name": "Hacked!"})
-        self.assertEqual(response.status_code, 200)
-        todo.refresh_from_db()
-        self.assertEqual(todo.name, "Hacked!")
+        self.assertEqual(response.status_code, 404)
 
 
 class ScheduleInteractionTest(BaseTest):

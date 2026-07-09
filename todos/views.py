@@ -101,6 +101,10 @@ class EditTodoView(UpdateView):
     template_name = "todos/components/todo_edit.html"
     pk_url_kwarg = "todo_id"
 
+    def get_queryset(self):
+        profile = Profile.objects.get(user=self.request.user)
+        return Todo.objects.filter(space=profile.selected_space)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profile = Profile.objects.get(user = self.request.user)

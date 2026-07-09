@@ -1,1 +1,1 @@
-.auth-wrapper::before{content:'';position:fixed;inset:0;background:#fafafa;background:linear-gradient(180deg,#fafafa 0%,#98c6ff 65%);z-index:-1}
+.auth-wrapper{position:relative}.auth-wrapper::before{content:'';position:fixed;inset:0;background:#fafafa;background:linear-gradient(180deg, #fafafa 0%, #98c6ff 65%);z-index:-1}

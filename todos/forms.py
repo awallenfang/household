@@ -9,7 +9,9 @@ class TodoForm(forms.ModelForm):
         model = Todo
         fields = ["description", "name", "assigned_user"]
         widgets = {
-            "description": forms.Textarea(attrs={"cols": 25, "rows": 10})
+            "name": forms.TextInput(attrs={"class": "form-control form-control-sm"}),
+            "description": forms.Textarea(attrs={"class": "form-control form-control-sm", "rows": 4}),
+            "assigned_user": forms.Select(attrs={"class": "form-select form-select-sm"}),
         }
         
     def __init__(self, *args, space=None,  **kwargs):

@@ -1,41 +1,39 @@
 {%load static%}
 {% load i18n %}
-<div class="accordion-item card w-25" todo-id="{{todo.id}}">
+<div class="accordion-item card todo-edit-form" todo-id="{{todo.id}}">
     <form action="{% url 'todos:edit_todo' todo.id %}" 
     method="post" id="todo-edit" 
     hx-post="{% url 'todos:edit_todo' todo.id %}"
     hx-target="closest .card"
     hx-swap="outerHTML">
         {% csrf_token %}
-        <div class="accordion-header card-header d-flex flex-row justify-content-between border">
-            <div class="d-flex flex-row justify-content-between align-items-center column-gap-2" ondblclick="editTodo({{todo.id}})" data-bs-toggle="collapse" data-bs-target="#collapse-{{todo.id}}">
+        <div class="accordion-header card-header d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 border">
+            <div class="d-flex flex-row align-items-center gap-2 flex-grow-1 min-w-0">
                 {{form.name}}
                 {% if todo.schedule_state is not None%}
-                <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
+                <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50 flex-shrink-0" >
                 {% endif %}
             </div>
-            {% if todo.schedule_state is None%}
-            <p>{{form.assigned_user}}</p>
-            {% endif %}
-            <input type="submit" value="Save" class="btn btn-primary btn-sm">
+            <div class="d-flex flex-row align-items-center gap-2 flex-shrink-0">
+                {% if todo.schedule_state is None%}
+                <div class="d-flex align-items-center gap-1">
+                    <label for="{{ form.assigned_user.id_for_label }}" class="small mb-0 text-nowrap">{% trans 'User:' %}</label>
+                    {{form.assigned_user}}
+                </div>
+                {% endif %}
+                <input type="submit" value="{% trans 'Save' %}" class="btn btn-primary btn-sm">
+                <a class="btn btn-outline-danger btn-sm" 
+                hx-delete="{% url 'todos:delete_todo' todo.id %}" 
+                hx-confirm="{% trans 'Are you sure you would like to delete this todo?' %}"
+                hx-target="#todo-block"
+                >
+                    <i class="bi bi-trash3"></i>
+                </a>
+            </div>
         </div>
-        <div class="card-body accordion-collapse collapse" id="collapse-{{todo.id}}" data-bs-parent="#open-accordion-parent">
-            <div class="accordion-body d-flex flex-row justify-content-between">
-                <div class="w-75">
-                    {{form.description}}
-                </div>
-                
-                <div class="w-25 d-flex flex-column align-items-center row-gap-1">
-                    
-
-                    <a class="btn btn-primary btn-sm" 
-                    hx-delete="{% url 'todos:delete_todo' todo.id %}" 
-                    hx-confirm="{% trans 'Are you sure you would like to delete this todo?' %}"
-                    hx-target="#todo-block"
-                    >
-                        {% trans 'Delete!' %}
-                    </a>
-                </div>
+        <div class="card-body accordion-collapse collapse show" id="collapse-{{todo.id}}" data-bs-parent="#open-accordion-parent">
+            <div class="accordion-body">
+                {{form.description}}
             </div>
         </div>
     </form>

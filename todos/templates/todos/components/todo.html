@@ -1,13 +1,14 @@
 {% load static%}
 {% load i18n %}
-<div class="accordion-item card w-25" todo-id="{{todo.id}}">
-    <div class="accordion-header card-header d-flex flex-row justify-content-between border" >
-        <div class="d-flex flex-row justify-content-between align-items-center column-gap-2" ondblclick="editTodo({{todo.id}})" data-bs-toggle="collapse" data-bs-target="#collapse-{{todo.id}}">
-            {{ todo.name }}
+<div class="accordion-item card" todo-id="{{todo.id}}">
+    <div class="accordion-header card-header d-flex flex-row justify-content-between align-items-center gap-2 border">
+        <div class="d-flex flex-row align-items-center gap-2 text-truncate" ondblclick="editTodo({{todo.id}})" data-bs-toggle="collapse" data-bs-target="#collapse-{{todo.id}}" style="cursor: pointer;">
+            <span class="text-truncate">{{ todo.name }}</span>
             {% if todo.schedule_state is not None%}
-                <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50" >
+                <img src="{% static 'todos/assets/refresh.svg' %}" class="opacity-50 flex-shrink-0" >
             {% endif %}
-            <div class="vr"></div>
+            <div class="vr flex-shrink-0"></div>
+            <span class="text-nowrap small">
             {% if todo.schedule_state is None %}
                 {{ todo.assigned_user.user.username }}
             {% else %}
@@ -15,67 +16,69 @@
                     {{ current.user.username }}
                 {% endwith %}
             {% endif %}
+            </span>
         </div>
         {% if not todo.done %}
-            <a class="btn btn-primary btn-sm" 
+            <a class="btn btn-primary btn-sm flex-shrink-0" 
             hx-post="{% url 'todos:todo' todo.id %}?hxp=close_todo"
             hx-target="#todo-list">{% trans 'Done' %}</a>
         {% else %}
-            <a class="btn btn-primary btn-sm" 
+            <a class="btn btn-primary btn-sm flex-shrink-0" 
             hx-post="{% url 'todos:todo' todo.id %}?hxp=open_todo"
             hx-target="#todo-list">{% trans 'Reopen' %}</a>
         {% endif %}
     </div>
     <div class="card-body accordion-collapse collapse" id="collapse-{{todo.id}}" data-bs-parent="#open-accordion-parent">
-        <div class="accordion-body d-flex flex-row justify-content-between">
-            <div class="w-75">
-                <p>{{todo.description}} </p>
+        <div class="accordion-body d-flex flex-column flex-sm-row gap-3">
+            <div class="flex-grow-1">
+                <p class="mb-0">{{todo.description}}</p>
             </div>
-            <div class="w-25 d-flex flex-column align-items-center row-gap-1">
-                
-                <a class="btn btn-primary btn-sm" hx-post="{% url 'todos:edit_todo' todo.id %}"
+            <div class="d-flex flex-row flex-sm-column align-items-center gap-1 flex-shrink-0">
+                <a class="btn btn-primary btn-sm w-100" hx-post="{% url 'todos:edit_todo' todo.id %}"
                 hx-target="closest .card"
                 hx-swap="outerHTML">{% trans 'Edit' %}</a>
                 {% if todo.schedule_state is None%}
-                    <a class="btn btn-primary btn-sm" 
+                    <a class="btn btn-primary btn-sm w-100" 
                     hx-get="{% url 'todos:todo' todo.id %}?hxp=add_schedule"
                     hx-target="closest .card"
                     hx-swap="outerHTML">{% trans 'Add schedule' %}</a>
                 {%else%}
-                    <a class="btn btn-primary btn-sm" 
+                    <a class="btn btn-primary btn-sm w-100" 
                     hx-get="{% url 'todos:schedule_editor' todo.id %}"
                     hx-target="#schedule-block"
                     hx-swap="innerHTML"
                     onclick="clearSelectedUsers()">{% trans 'Schedule' %}</a>
                 {% endif %}
-                <a class="btn btn-primary btn-sm" 
+                <a class="btn btn-primary btn-sm w-100" 
                 hx-get="{% url 'todos:delete_todo' todo.id %}?hxp=todo_list" 
                 hx-confirm="{% trans 'Are you sure you would like to delete this todo?' %}"
                 hx-target="#todo-list"
                 >
                     {% trans 'Delete!' %}
                 </a>
-                <b>{% trans 'Assigned user:' %}</b>
-                {% if todo.schedule_state is None %}
-                    <p>{{ todo.assigned_user }}</p>
-                {% else %}
-                    {% with current=todo.schedule_state.get_current_user %}
-                        <p>{{ current.user.username }}</p>
-                    {% endwith %}
-                {% endif %}
+                <div class="small text-center">
+                    <div>{% trans 'Assigned:' %}</div>
+                    {% if todo.schedule_state is None %}
+                        <div>{{ todo.assigned_user }}</div>
+                    {% else %}
+                        {% with current=todo.schedule_state.get_current_user %}
+                            <div>{{ current.user.username }}</div>
+                        {% endwith %}
+                    {% endif %}
 
-                {% if todo.schedule_state is not None %}
-                    {% with next=todo.schedule_state.get_next_user %}
-                    <b>Next user:</b>
-                        {% if next is not None %}
-                            <br>
-                            <p>{{ next.user.username }}</p>
-                        {% else %}
-                            <br>
-                            <p>{% trans 'No one' %}</p>
-                        {% endif %}
-                    {% endwith %}
-                {% endif %}
+                    {% if todo.schedule_state is not None %}
+                        {% with next=todo.schedule_state.get_next_user %}
+                        <div class="mt-1">
+                            <div>{% trans 'Next:' %}</div>
+                            {% if next is not None %}
+                                <div>{{ next.user.username }}</div>
+                            {% else %}
+                                <div>{% trans 'No one' %}</div>
+                            {% endif %}
+                        </div>
+                        {% endwith %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

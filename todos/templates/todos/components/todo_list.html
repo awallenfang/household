@@ -1,19 +1,7 @@
 {% load i18n %}
 {% load static %}
 {% load filters %}
-<style>
-#todo-block .accordion-item {
-    border: 1px solid rgba(0, 0, 0, .125);
-    border-radius: .25rem;
-    margin-bottom: 1rem;
-}
-
-#todo-block .accordion-item:has(.card-body:not(.show)) {
-    background-color: transparent;
-    box-shadow: none;
-    border: none;
-}
-</style>
+<link rel="stylesheet" href="{% static 'todos/css/todos.css' %}">
 <div class="container" id="todo-list">
     <div id="schedule-block"></div>
     <h2>{% trans 'Open Todos' %}</h2>
@@ -23,7 +11,6 @@
             <div class="todo-drop-spot" 
             ondrop="drop(event)"  
             ondragover="allowDrop(event)" 
-            {% comment %} This is definitely not pretty. But this avoids pushing extra empty space {% endcomment %}
             left="{% if forloop.counter0 == 0 %}-1{%else%}{{todos|prev:forloop.counter0|position}}{%endif%}"
             right = "{{todo.position}}"
             todo-status="open"></div>
@@ -31,7 +18,7 @@
             {% include "todos/components/todo.html" with counter=forloop.counter todo=todo%}
         {% endfor %}
 
-        <div class="d-flex align-items-center justify-content-center w-25">
+        <div class="todo-new-container d-flex align-items-center justify-content-center">
 
             <a class="btn btn-primary " hx-post="{% url 'todos:add_todo' %}?hxp=create_todo"
             hx-target="#todo-list"
@@ -45,7 +32,6 @@
             <div class="todo-drop-spot" 
             ondrop="drop(event)"  
             ondragover="allowDrop(event)" 
-            {% comment %} This is definitely not pretty. But this avoids pushing extra empty space {% endcomment %}
             left="{% if forloop.counter0 == 0 %}-1{%else%}{{finished_todos|prev:forloop.counter0|position}}{%endif%}"
             right = "{{todo.position}}"
             todo-status="done"></div>

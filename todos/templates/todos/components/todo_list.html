@@ -1,7 +1,19 @@
 {% load i18n %}
 {% load static %}
 {% load filters %}
+<style>
+#todo-block .accordion-item {
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    margin-bottom: 1rem;
+}
 
+#todo-block .accordion-item:has(.card-body:not(.show)) {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+}
+</style>
 <div class="container" id="todo-list">
     <div id="schedule-block"></div>
     <h2>{% trans 'Open Todos' %}</h2>

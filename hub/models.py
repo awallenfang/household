@@ -23,7 +23,7 @@ class Profile(models.Model):
     playground_account = models.BooleanField(_("Playground Account"), default=False)
 
     def __str__(self):
-        return f'Profile: {self.user.username}'
+        return f'{self.user.username}'
     
     def select_space(self, space_id):
         space = get_object_or_404(SharedSpace, id=space_id)

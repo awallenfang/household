@@ -1,22 +1,5 @@
 @import 'hub/scss/colors';
 
-/* ############### General todo view ###############  */
-main {
-    margin: 2rem;
-
-}
-
-.new-todo-container {
-    width: 25vw;
-    display: flex;
-    justify-content: space-around;
-}
-
-h2 {
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-}
-
 .todo-drag-handle:hover {
     background-color: $black-400;
     border-radius: 0.5rem;
@@ -32,13 +15,6 @@ h2 {
     height: 3.5rem;
     display: none;
 }
-
-
-textarea {
-    max-width: 15vw
-}
-
-/* ############### Schedule view ################## */
 
 .trash-container {
     display: inline-block;

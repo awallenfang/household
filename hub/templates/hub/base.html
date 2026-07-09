@@ -61,12 +61,12 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-people-fill"></i>
-                        <span class="text-truncate" style="max-width: 10rem;">
+                        <span class="text-truncate mw-30">
                             {% if selected_space %}{{selected_space.name}}{% else %}{% trans 'Spaces' %}{% endif %}
                         </span>
                     </a>
                     <ul class="dropdown-menu" style="min-width: 15rem;">
-                        {% include "space/components/quick_space_new.html" %}
+                        {% include "space/components/quick_space.html" %}
                     </ul>
                 </li>
             </ul>

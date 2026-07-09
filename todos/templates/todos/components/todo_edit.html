@@ -1,6 +1,6 @@
 {%load static%}
 {% load i18n %}
-<div class="accordion-item card" style="width: 30%;" todo-id="{{todo.id}}">
+<div class="accordion-item card w-25" todo-id="{{todo.id}}">
     <form action="{% url 'todos:edit_todo' todo.id %}" 
     method="post" id="todo-edit" 
     hx-post="{% url 'todos:edit_todo' todo.id %}"

@@ -25,7 +25,6 @@
         var checks = document.getElementsByClassName("user-add-check")
 
         for (var check of checks) {
-            console.log(check)
             check.addEventListener("change", (event) => {
                 userChecked(event)
             })
@@ -55,7 +54,6 @@
         var handles = document.getElementsByClassName("user-drag-handle")
         for (var handle of handles) {
             var draggable_elem = handle.closest('.draggable-user-container')
-            console.log(draggable_elem)
             handle.onmousedown = function(e) {
                 draggable_elem.setAttribute('draggable', 'true');
                 
@@ -66,7 +64,6 @@
             }
 
             draggable_elem.ondragstart = function(e) {
-                console.log(e.target)
                 var todo_id = e.target.getAttribute("todo-id")
                 var pos = e.target.getAttribute("pos")
                 e.dataTransfer.setData('todo-id', todo_id)
@@ -133,7 +130,7 @@
                 var position_drop_spots = document.getElementsByClassName("schedule-position-drop-spot")
 
                 for (var drop_spot of position_drop_spots) {
-                    console.log(drop_spot)
+
 
                     drop_spot.style.visibility = "visible"
                     drop_spot.ondrop = function(e) {
@@ -209,7 +206,7 @@
             ondragover="allowDrop(event)"></div>
             {%endfor%}
         </div>
-        <div class="vr" style="background-color: var(--mid-bg);"></div>
+        <div class="vr"></div>
         <div class="d-flex flex-column p-3 gap-1" style="max-height: 50%;">
             <div class="d-flex flex-column p-2 gap-1" style="max-height: 15rem;">
                 <div class="d-flex flex-column align-items-stretch p-2 gap-1">
@@ -227,7 +224,7 @@
                 </div>
                 <a onclick="addSelectedUsers(event)" class="btn btn-primary" todo-id="{{todo.id}}">{% trans 'Add Selected Users' %}</a>
             </div>
-            <hr style="background-color: var(--mid-bg); margin: 0.5rem 0;">
+            <hr style="margin: 0.5rem 0;">
             <div>
                 <p>{% trans 'Rate in days:' %}</p>
                 <input type="number" value="{{rate}}" min="1" id="rate-change-input" todo-id="{{todo.id}}">

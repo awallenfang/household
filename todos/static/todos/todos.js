@@ -69,7 +69,6 @@ function userChecked(e) {
     } else {
         selected_users.splice(index, 1)
     }
-    console.log(selected_users)
 }
 
 function clearSelectedUsers() {
@@ -93,5 +92,4 @@ document.addEventListener('htmx:afterSwap', function(e) {
 function editTodo(todo_id) {
     let url = `/todos/${todo_id}/edit`
     htmx.ajax("GET", url, {target: htmx.find('.card[todo-id="' + todo_id + '"'), swap:"outerHTML"})
-    console.log("Edit" + todo_id)
 }

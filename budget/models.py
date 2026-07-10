@@ -51,10 +51,10 @@ class BudgetWeekList(models.Model):
                     people_sum["open"] += item.cost
                 continue
         
-            if item.paid_by not in people_sum.keys():
-                people_sum[item.paid_by] = item.cost
+            if item.paid_by.username not in people_sum.keys():
+                people_sum[item.paid_by.username] = item.cost
             else:
-                people_sum[item.paid_by] += item.cost
+                people_sum[item.paid_by.username] += item.cost
         return people_sum
 
     def get_distribution(self):

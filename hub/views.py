@@ -1,17 +1,13 @@
-from django.db import IntegrityError
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
-
-# Create your views here.
 from django.http import HttpResponseRedirect
 from django.contrib import auth
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.utils import translation
 from django.utils.timezone import now
-from django.views import generic
+from django.views.generic import CreateView
 from datetime import timedelta
-from .forms import LoginForm, SignupForm
 from .models import Profile
 from todos.models import Todo
 from budget.models import BudgetWeekList
@@ -59,27 +55,15 @@ def hub(request):
                     "hub/hub.html", 
                     context)
     
-class SignupView(generic.FormView):
-    template_name="registration/signup.html"
-    form_class = SignupForm
+class SignupView(CreateView):
+    form_class = UserCreationForm
     success_url = reverse_lazy("login")
+    template_name = "registration/signup.html"
 
     def form_valid(self, form):
-        # Catch invalid repeat password
-        if form.cleaned_data["password"]  != form.cleaned_data["repeat_password"]:
-            return render(request, "registration/signup.html", {"form": form, "error_message": "The passwords don't match."})
-        
-        # Create the user. If the username is already taken, return an error stating it
-        try:
-            auth_user = User.objects.create_user(form.cleaned_data["username"], form.cleaned_data["email"], form.cleaned_data["password"])
-        except IntegrityError:
-            return render(self.request, "registration/signup.html", {"form": form, "error_message": "The username is already taken."})
-        
-        # If the auth_user was created, also create out user model
-        Profile.objects.create(user=auth_user)
-
-        # If everything was successful return to the hub
-        return redirect("login")
+        response = super().form_valid(form)
+        Profile.objects.create(user=self.object)
+        return response
 
 @login_required
 def logout(request):

@@ -37,8 +37,7 @@
                 hx-target="closest .card"
                 hx-swap="outerHTML">{% trans 'Edit' %}</a>
                 {% if todo.schedule_state is None%}
-                    <a class="btn btn-primary btn-sm w-100" 
-                    <a class="btn btn-primary btn-sm w-100" 
+                    <a class="btn btn-primary btn-sm w-100"
                     hx-get="{% url 'todos:todo' todo.id %}?hxp=add_schedule"
                     hx-target="closest .card"
                     hx-swap="outerHTML">{% trans 'Add schedule' %}</a>

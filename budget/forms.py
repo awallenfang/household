@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms import layout
-from django.contrib.auth.models import User
 
 from .models import BudgetWeekListItem, BudgetWeekList
 
@@ -44,9 +43,14 @@ class BudgetListEntryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.empty_permitted = True
         self.fields["cleared"].label = False
-        if self.instance.pk:
-            space = self.instance.list.space
-            self.fields["paid_by"].queryset = User.objects.filter(profile__spaces=space)
+        if space is None and self.instance.pk:
+            try:
+                space = self.instance.list.space
+            except AttributeError:
+                space = None
+        if space is not None:
+            member_user_ids = space.profile_set.values_list("user__id", flat=True)
+            self.fields["paid_by"].queryset = User.objects.filter(id__in=member_user_ids)
 
 
 class BudgetListEntryFormHelper(FormHelper):

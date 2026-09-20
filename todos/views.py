@@ -76,10 +76,6 @@ class CreateTodoView(HTMXMixin, View):
         "create_todo": (render_todo_list, create_todo)
     }
 
-    def get(self, request, *args, **kwargs):
-        create_todo(request, *args, **kwargs)
-        return redirect("todos:todos")
-    
     def post(self, request, *args, **kwargs):
         create_todo(request, *args, **kwargs)
         return redirect("todos:todos")

@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -25,7 +26,7 @@ class SpaceSettingsView(HTMXMixin, UpdateView):
 
     def get_queryset(self):
         user = Profile.objects.get(user=self.request.user)
-        return user.spaces.all()
+        return SharedSpace.objects.filter(pk__in=user.spaces.values_list("pk", flat=True))
 
     partials = {
         "kick_person": (render_people_list, kick_person),
@@ -50,12 +51,12 @@ class SpaceSettingsView(HTMXMixin, UpdateView):
                 "joined_people": joined_people
             })
         else:
-            return HttpResponseRedirect("/")
+            raise PermissionDenied
 
         return context
 
 @login_required
-@require_http_methods(['GET', 'POST'])
+@require_http_methods(['POST'])
 def select_space(request, space_id):
     user = Profile.objects.get(user = request.user)
 
@@ -63,7 +64,7 @@ def select_space(request, space_id):
     return HttpResponseRedirect("/")
 
 @login_required
-@require_http_methods(['GET', 'POST'])
+@require_http_methods(['POST'])
 def create_space(request):
     user = Profile.objects.get(user = request.user)
     space = SharedSpace.create_space("My Space", user)
@@ -89,20 +90,45 @@ def join_space(request):
 
     return HttpResponseRedirect("/")
 
+@login_required
+@require_http_methods(['POST'])
+def kick_from_space(request, space_id, user_id):
+    user = Profile.objects.get(user = request.user)
+    space = get_object_or_404(SharedSpace, id=space_id, pk__in=user.spaces.values_list("pk", flat=True))
+    
+    # Only the owner can kick people
+    if user == space.owner:
+        user_to_kick = get_object_or_404(Profile, user__id = user_id)
+        if user_to_kick in space.joined_people():
+
+            # If the owner is leaving, assign the space to the next person
+            if user_to_kick == space.owner:
+                try:
+                    space.owner = space.joined_people()[1]
+                    space.save()    
+                except IndexError:
+                    # Space is empty now, so remove it
+                    space.delete_space()
+                    return HttpResponseRedirect("/")
+                
+            space.leave(user_to_kick)
+    return HttpResponseRedirect("/space/" + str(space_id))
 
 @login_required
+@require_http_methods(['POST'])
 def delete_space(request, space_id):
     user = Profile.objects.get(user = request.user)
-    space = get_object_or_404(SharedSpace, id = space_id)
+    space = get_object_or_404(SharedSpace, id=space_id, pk__in=user.spaces.values_list("pk", flat=True))
 
     if space.owner == user:
         space.delete_space()
     return HttpResponseRedirect("/")
 
 @login_required
+@require_http_methods(['POST'])
 def leave_space(request, space_id):
     user = Profile.objects.get(user=request.user)
-    space = get_object_or_404(SharedSpace, id = space_id)
+    space = get_object_or_404(SharedSpace, id=space_id, pk__in=user.spaces.values_list("pk", flat=True))
     if user in space.profile_set.all():
         space.leave(user)
     return redirect("hub:hub")

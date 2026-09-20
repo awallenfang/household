@@ -1,15 +1,21 @@
 services:
     db:
-        image: postgres
+        image: postgres:17
         volumes:
-            - ./data/db:/var/lib/postgresql/data
+            - ./data/db-test:/var/lib/postgresql/data
         env_file:
             - config.env
-        ports:
-            - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres}"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
     web:
         build: .
         command: bash test_startup.sh
+        environment:
+            DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-root.settings}
         volumes:
             - .:/code
         ports:
@@ -17,4 +23,5 @@ services:
         env_file:
             - config.env
         depends_on:
-            - db
+            db:
+                condition: service_healthy

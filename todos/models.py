@@ -240,11 +240,11 @@ class Todo(models.Model):
         """
         Create a todo with the name "New Todo" and an empty description
         """
-        todos = Todo.objects.all()
+        todos = Todo.objects.filter(space=space)
         max_pos = 0
         if len(todos) > 0:
-            Todo.minimize_positions()
-            max_pos = Todo.objects.all().order_by('-position')[0].position
+            Todo.minimize_positions(space)
+            max_pos = Todo.objects.filter(space=space).order_by('-position')[0].position
         todo = Todo.objects.create(name="New Todo", description = "", position = max_pos+1, space=space)
 
         return todo
@@ -263,11 +263,10 @@ class Todo(models.Model):
         return Todo.objects.filter(done=True, space=space).order_by("position")
     
     @staticmethod
-    def minimize_positions():
-        """
-        This minimizes all the values for the positions to not leave any holes
-        """
+    def minimize_positions(space=None):
         todos = Todo.objects.all().order_by('position')
+        if space is not None:
+            todos = todos.filter(space=space)
 
         for (i,t) in enumerate(todos):
             t.position = i
@@ -282,16 +281,16 @@ class Todo(models.Model):
         if left == -1:
             self.position = int(right)
 
-            todos_to_increment = Todo.objects.filter(position__gte=int(right))
+            todos_to_increment = Todo.objects.filter(space=self.space, position__gte=int(right))
             todos_to_increment.update(position=F('position') + 1)
         # Right border
         elif right == -1:
             self.position = int(left)+1
             
-            todos_to_increment = Todo.objects.filter(position__gte=int(left)+1)
+            todos_to_increment = Todo.objects.filter(space=self.space, position__gte=int(left)+1)
             todos_to_increment.update(position=F('position') + 1)
         else:
-            todos_to_increment = Todo.objects.filter(position__gte=int(right))
+            todos_to_increment = Todo.objects.filter(space=self.space, position__gte=int(right))
 
             todos_to_increment.update(position=F('position') + 1)
 
@@ -299,7 +298,7 @@ class Todo(models.Model):
         
         self.save()
 
-        Todo.minimize_positions()
+        Todo.minimize_positions(self.space)
 
     def assign_user(self, user):
         """

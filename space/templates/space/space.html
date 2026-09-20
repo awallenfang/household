@@ -43,10 +43,13 @@
                         <i class="bi bi-check-lg me-1"></i>{% trans 'Save Changes' %}
                     </button>
                     {% if space.owner == user %}
-                    <a class="btn btn-outline-danger px-4" href="{% url 'space:delete_space' space.id %}"
-                       onclick="return confirm('{% trans 'Are you sure?' %}')">
-                       <i class="bi bi-trash3 me-1"></i>{% trans 'Delete Space' %}
-                    </a>
+                    <form action="{% url 'space:delete_space' space.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger px-4"
+                           onclick="return confirm('{% trans 'Are you sure?' %}')">
+                            <i class="bi bi-trash3 me-1"></i>{% trans 'Delete Space' %}
+                        </button>
+                    </form>
                     {% endif %}
                 </div>
             </form>

@@ -7,6 +7,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils import translation
 from django.utils.timezone import now
 from django.views.generic import CreateView
+from django.views import generic
+from django.views.decorators.http import require_POST
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from datetime import timedelta
 from .models import Profile
 from todos.models import Todo
@@ -61,17 +65,41 @@ class SignupView(CreateView):
     template_name = "registration/signup.html"
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        Profile.objects.create(user=self.object)
-        return response
+        # Catch invalid repeat password
+        if form.cleaned_data["password"] != form.cleaned_data["repeat_password"]:
+            return render(self.request, "registration/signup.html", {"form": form, "error_message": "The passwords don't match."})
+        try:
+            validate_password(form.cleaned_data["password"])
+        except DjangoValidationError as exc:
+            return render(
+                self.request,
+                "registration/signup.html",
+                {"form": form, "error_message": " ".join(exc.messages)},
+            )
+
+        if User.objects.filter(email=form.cleaned_data["email"]).exists():
+            return render(self.request, "registration/signup.html", {"form": form, "error_message": "An account with this email already exists."})
+
+        # Create the user. If the username is already taken, return an error stating it
+        try:
+            auth_user = User.objects.create_user(form.cleaned_data["username"], form.cleaned_data["email"], form.cleaned_data["password"])
+        except IntegrityError:
+            return render(self.request, "registration/signup.html", {"form": form, "error_message": "The username is already taken."})
+        
+        Profile.objects.get_or_create(user=auth_user)
+
+        # If everything was successful return to the hub
+        return redirect("login")
 
 @login_required
+@require_POST
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
 
+@require_POST
 def set_language(request):
-    if request.method == 'POST':
-        language = request.POST.get('language')
-        if language:
-            translation.activate(language)
+    language = request.POST.get('language')
+    if language and language in ('en', 'de'):
+        translation.activate(language)
+    return HttpResponseRedirect("/")

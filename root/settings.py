@@ -14,6 +14,7 @@ from pathlib import Path
 import sys
 from celery.schedules import crontab
 
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,23 +25,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s8-u1#9unm%f6+o%rsnhgo1r+ptpww$+l=5!5q_6wxjsu=tz9&'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-s8-u1#9unm%f6+o%rsnhgo1r+ptpww$+l=5!5q_6wxjsu=tz9&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-if DEBUG:
-    # `debug` is only True in templates if the vistor IP is in INTERNAL_IPS.
-    INTERNAL_IPS = type(str("c"), (), {"__contains__": lambda *a: True, "copy": lambda self: self})()
-else:
-    INTERNAL_IPS = [
-        "127.0.0.1",
-        "0.0.0.0"
-    ]
-ALLOWED_HOSTS = [
-    "0.0.0.0",
+INTERNAL_IPS = [
     "127.0.0.1",
-    ]
+]
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "0.0.0.0,127.0.0.1,localhost",
+).split(",")
 
 
 # Application definition
@@ -53,7 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_htmx',
-    'debug_toolbar',
     'django_celery_beat',
     'django_sass',
     'gmailapi_backend',
@@ -65,6 +60,9 @@ INSTALLED_APPS = [
     'budget'
 ]
 
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,9 +72,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 ROOT_URLCONF = 'root.urls'
 
@@ -102,7 +102,12 @@ WSGI_APPLICATION = 'root.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if 'test' in sys.argv:
+TESTING = (
+    (len(sys.argv) > 1 and sys.argv[1] == "test")
+    or os.environ.get("DJANGO_TEST", "False") == "True"
+)
+
+if TESTING:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -116,11 +121,18 @@ else:
     DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                'NAME': os.environ.get("POSTGRES_DB", "household"),
-                'USER': os.environ.get("POSTGRES_USER", "postgres"),
-                'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "mysecretpassword"),
-                'HOST': os.environ.get("POSTGRES_HOST", "127.0.0.1"),
+                'NAME': os.environ.get("POSTGRES_DB", "household" if DEBUG else None),
+                'USER': os.environ.get("POSTGRES_USER", "postgres" if DEBUG else None),
+                'PASSWORD': os.environ.get(
+                    "POSTGRES_PASSWORD", "mysecretpassword" if DEBUG else None
+                ),
+                'HOST': os.environ.get("POSTGRES_HOST", "localhost"),
                 'PORT': os.environ.get("POSTGRES_PORT", "5432"),
+                'CONN_MAX_AGE': int(os.environ.get("DB_CONN_MAX_AGE", "60")),
+                'CONN_HEALTH_CHECKS': True,
+                'OPTIONS': {
+                    'connect_timeout': int(os.environ.get("DB_CONNECT_TIMEOUT", "5")),
+                },
             }
         }
 
@@ -168,6 +180,18 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "served_static")
 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -178,13 +202,77 @@ CURRENCIES = [
     "USD"
 ]
 
-LOGIN_URL = "/accounts/login"
+LOGIN_URL = reverse_lazy("login")
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/accounts/login"
+LOGOUT_REDIRECT_URL = reverse_lazy("login")
 
-CELERY_BROKER_URL = "redis://redis:6379/0"
-CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+X_FRAME_OPTIONS = "DENY"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "format": "[{asctime}] {levelname} {name}: {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO" if not DEBUG else "DEBUG",
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "celery": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "household@localhost")
+SERVER_EMAIL = os.environ.get("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
+if DEBUG and not os.environ.get("GMAIL_API_CLIENT_ID"):
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+elif not os.environ.get("GMAIL_API_CLIENT_ID"):
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", "localhost")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "25"))
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+    EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "False") == "True"
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://redis:6379/0")
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "visibility_timeout": int(os.environ.get("CELERY_VISIBILITY_TIMEOUT", "3600")),
+    "socket_timeout": int(os.environ.get("CELERY_SOCKET_TIMEOUT", "10")),
+}
+CELERY_TASK_ACKS_LATE = True
+CELERY_TASK_REJECT_ON_WORKER_LOST = True
+CELERY_WORKER_PREFETCH_MULTIPLIER = int(os.environ.get("CELERY_PREFETCH_MULTIPLIER", "1"))
+CELERY_TASK_TIME_LIMIT = int(os.environ.get("CELERY_TASK_TIME_LIMIT", "300"))
+CELERY_TASK_SOFT_TIME_LIMIT = int(os.environ.get("CELERY_TASK_SOFT_TIME_LIMIT", "240"))
+CELERY_RESULT_EXPIRES = int(os.environ.get("CELERY_RESULT_EXPIRES", "86400"))
 
 CELERY_BEAT_SCHEDULE = {
     "Update todos": {

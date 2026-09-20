@@ -166,6 +166,10 @@ data/
 _logs/
 config.env
 redis/
+redis_cache/
+*.rdb
+dump.rdb
+media/
 served_static/
 postgres-data/
 run_db.sh

@@ -14,13 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import include, path
-from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf.urls.i18n import i18n_patterns
 
 
+def healthz(request):
+    return JsonResponse({"status": "ok"})
+
+
 urlpatterns = [
+    path("healthz/", healthz, name="healthz"),
     path("i18n/", include("django.conf.urls.i18n"), name="set_language"),
 ] + i18n_patterns(
     path('admin/', admin.site.urls),
@@ -29,4 +35,8 @@ urlpatterns = [
     path('space/', include(("space.urls", "space"), namespace="space")),
     path('budget/', include(("budget.urls", "budget"), namespace="budget")),
     path('accounts/', include("django.contrib.auth.urls"))
-) + debug_toolbar_urls()
+)
+
+if settings.DEBUG:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+    urlpatterns += debug_toolbar_urls()

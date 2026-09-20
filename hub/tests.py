@@ -6,7 +6,7 @@ from .models import Profile
 class UserTest(TestCase):
     def create_testuser(self, name):
         auth_user = User.objects.create_user(username=name, password="test")
-        user = Profile.objects.create(user=auth_user)
+        user = Profile.objects.get_or_create(user=auth_user)[0]
         return user
 
     def test_user_creation(self):
@@ -21,7 +21,7 @@ class SharedSpaceTest(TestCase):
     
     def create_testuser(self, name):
         auth_user = User.objects.create_user(username=name, password="test")
-        user = Profile.objects.create(user=auth_user)
+        user = Profile.objects.get_or_create(user=auth_user)[0]
         return user
     
     def test_space_creation(self):

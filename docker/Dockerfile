@@ -1,7 +1,7 @@
-FROM debian:bookworm
-RUN apt update -y
-RUN apt upgrade -y
-RUN apt install python3-pip python3-full nginx supervisor -y
+FROM debian:bookworm-slim
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends python3-pip python3-full nginx supervisor \
+    && rm -rf /var/lib/apt/lists/*
 COPY ./docker/uwsgi/uwsgi.ini /code/
 COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

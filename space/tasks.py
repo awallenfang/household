@@ -1,4 +1,6 @@
 import logging
+import os
+import secrets
 
 from celery import shared_task
 from django.contrib.auth.models import User
@@ -55,6 +57,14 @@ def reset_playground():
 
 @shared_task
 def create_playground():
+    if os.environ.get("PLAYGROUND_ENABLED", "True") != "True":
+        logging.info("Playground creation disabled, skipping.")
+        return
+    from django.conf import settings as django_settings
+
+    if not django_settings.DEBUG:
+        logging.warning("Refusing to create playground accounts with DEBUG=False.")
+        return
     invite_key = "PLAYGROUND"
     locked = True
     owner = None
@@ -63,23 +73,25 @@ def create_playground():
     space, created = SharedSpace.objects.get_or_create(invite_token=invite_key, locked=locked, owner=owner, name=name)
     # Create playground accounts
     # Alice, Bob, Charlie
+    def _ensure_playground_user(username, env_var):
+        user, user_created = User.objects.get_or_create(username=username)
+        if user_created:
+            password = os.environ.get(env_var) or secrets.token_urlsafe(24)
+            user.set_password(password)
+            user.save()
+        return user
 
+    alice = _ensure_playground_user("alice", "PLAYGROUND_ALICE_PASSWORD")
+    bob = _ensure_playground_user("bob", "PLAYGROUND_BOB_PASSWORD")
+    charlie = _ensure_playground_user("charlie", "PLAYGROUND_CHARLIE_PASSWORD")
 
-    alice, _ = User.objects.get_or_create(username="alice")
-    alice.set_password("secure_password_1")
-    alice.save()
-
-    bob, _ = User.objects.get_or_create(username="bob")
-    bob.set_password("secure_password_2")
-    bob.save()
-
-    charlie, _ = User.objects.get_or_create(username="charlie")
-    charlie.set_password("secure_password_3")
-    charlie.save()
-
-    alice_profile, _ = Profile.objects.get_or_create(user=alice, playground_account=True)
-    bob_profile, _ = Profile.objects.get_or_create(user=bob, playground_account=True)
-    charlie_profile, _ = Profile.objects.get_or_create(user=charlie, playground_account=True)
+    alice_profile, _ = Profile.objects.get_or_create(user=alice)
+    bob_profile, _ = Profile.objects.get_or_create(user=bob)
+    charlie_profile, _ = Profile.objects.get_or_create(user=charlie)
+    for playground_profile in (alice_profile, bob_profile, charlie_profile):
+        if not playground_profile.playground_account:
+            playground_profile.playground_account = True
+            playground_profile.save()
 
     alice_profile.spaces.add(space)
     bob_profile.spaces.add(space)

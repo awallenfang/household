@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms import layout
+from django.contrib.auth.models import User
 
 from .models import BudgetWeekListItem, BudgetWeekList
 
@@ -39,7 +40,7 @@ class BudgetListEntryForm(forms.ModelForm):
         model = BudgetWeekListItem
         fields = ["title", "cost", "cleared", "paid_by"]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, space=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.empty_permitted = True
         self.fields["cleared"].label = False

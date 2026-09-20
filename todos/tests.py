@@ -12,7 +12,7 @@ from .models import Todo, TodoSchedule, SubTask
 class BaseTest(TestCase):
     def create_user(self, name="testuser", password="pass"):
         auth_user = User.objects.create_user(username=name, password=password)
-        return Profile.objects.create(user=auth_user)
+        return Profile.objects.get_or_create(user=auth_user)[0]
 
     def create_space_and_user(self):
         user = self.create_user()

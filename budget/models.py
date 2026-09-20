@@ -33,6 +33,28 @@ class BudgetWeekList(models.Model):
         return BudgetWeekList.objects.get_or_create(week=monday, space = selected_space)[0]
 
     @staticmethod
+    def peek_current_list(request):
+        user = Profile.objects.get(user=request.user)
+        selected_space = user.selected_space
+
+        cur_date = now().date()
+        monday = cur_date - timedelta(days=cur_date.weekday())
+        existing = BudgetWeekList.objects.filter(week=monday, space=selected_space).first()
+        if existing is not None:
+            return existing
+        return BudgetWeekList(week=monday, space=selected_space)
+
+    @staticmethod
+    def peek_list_from_date(request, list_date: date):
+        user = Profile.objects.get(user=request.user)
+        selected_space = user.selected_space
+        monday = list_date - timedelta(days=list_date.weekday())
+        existing = BudgetWeekList.objects.filter(week=monday, space=selected_space).first()
+        if existing is not None:
+            return existing
+        return BudgetWeekList(week=monday, space=selected_space)
+
+    @staticmethod
     def get_list_from_date(request, list_date: date):
         user = Profile.objects.get(user = request.user)
         selected_space = user.selected_space
@@ -41,6 +63,9 @@ class BudgetWeekList(models.Model):
 
     def get_sum(self, include_cleared = False):
         people_sum = {}
+        if self.pk is None:
+            # Unsaved placeholder from peek_* helpers: no rows can exist.
+            return people_sum
         for item in self.week_items.all():
             if not include_cleared and item.cleared:
                 continue

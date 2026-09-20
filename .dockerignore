@@ -1,0 +1,15 @@
+# Keep secrets, local data and logs out of the image.
+config.env
+.env
+data/
+db.sqlite3
+db.sqlite3-journal
+_logs/
+redis_cache/
+redis/
+media/
+served_static/
+.git/
+.venv/
+__pycache__/
+*.pyc

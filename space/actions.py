@@ -1,10 +1,11 @@
 import random
 import string
 
-from space.models import SharedSpace
-from hub.models import Profile
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+
+from space.models import SharedSpace
+from hub.models import Profile
 from hub.decorators import space_required
 
 @login_required

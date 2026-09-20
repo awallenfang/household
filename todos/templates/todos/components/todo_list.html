@@ -1,7 +1,14 @@
 {% load i18n %}
 {% load static %}
 {% load filters %}
-<link rel="stylesheet" href="{% static 'todos/css/todos.css' %}">
+<style>
+    #todo-block .card {
+        margin-bottom: 1rem;
+        min-width: 20rem;
+    }
+
+
+</style>
 <div class="container" id="todo-list">
     <div id="schedule-block"></div>
     <h2>{% trans 'Open Todos' %}</h2>
